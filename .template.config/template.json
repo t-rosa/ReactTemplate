@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Toma Rosa",
+  "classifications": ["Web"],
+  "identity": "ReactTemplate",
+  "name": "React with ASP.NET Core and authentication ready",
+  "shortName": "react-aspnetcore-auth",
+  "sourceName": "ReactTemplate",
+  "tags": {
+    "language": "C#, React, TypeScript",
+    "type": "solution"
+  },
+  "preferNameDirectory": true,
+  "symbols": {
+    "title": {
+      "type": "parameter",
+      "defaultValue": "react-template",
+      "replaces": "react-template"
+    }
+  }
+}
