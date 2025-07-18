@@ -1,4 +1,4 @@
-import { Loader2Icon } from "lucide-react";
+import { Loader } from "./loader";
 
 export function PendingScreen() {
   return (
@@ -7,7 +7,7 @@ export function PendingScreen() {
         <div className="p-6">
           <div className="flex items-center justify-center gap-2 text-base/6 font-medium">
             <span>Chargement en cours.</span>
-            <Loader2Icon className="animate-spin" />
+            <Loader />
           </div>
           <p className="text-muted-foreground mt-2 text-sm/5">Veuillez patienter...</p>
         </div>

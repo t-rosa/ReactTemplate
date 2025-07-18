@@ -1,3 +1,4 @@
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -10,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { $api } from "@/lib/api/client";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { SuccessState } from "./reset-password.ui";
@@ -133,7 +133,7 @@ export function ResetPassword() {
         />
         <Button type="submit" disabled={status === "pending"}>
           Réinitialiser
-          {status === "pending" && <Loader2Icon className="animate-spin" />}
+          {status === "pending" && <Loader />}
         </Button>
       </form>
     </Form>

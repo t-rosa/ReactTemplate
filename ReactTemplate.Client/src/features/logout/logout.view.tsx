@@ -1,30 +1,15 @@
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
-import { $api } from "@/lib/api/client";
-import { useNavigate } from "@tanstack/react-router";
-import { Loader2Icon, LogOutIcon } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
+import { useLogoutView } from "./logout.hook";
 
 export function Logout() {
-  const navigate = useNavigate();
-
-  const { mutate, status } = $api.useMutation("post", "/logout", {
-    meta: {
-      successMessage: "Déconnecté",
-      errorMessage: "Il y a eu une érreur.",
-      invalidatesQuery: ["get", "manage/info"],
-    },
-    async onSuccess() {
-      await navigate({ to: "/" });
-    },
-  });
-
-  function handleClick() {
-    mutate({ body: {} });
-  }
+  const { status, handleClick } = useLogoutView();
 
   if (status === "pending") {
     return (
       <Button disabled>
-        <Loader2Icon className="animate-spin" />
+        <Loader />
       </Button>
     );
   }

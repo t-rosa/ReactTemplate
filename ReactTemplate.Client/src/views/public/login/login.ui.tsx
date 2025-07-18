@@ -1,9 +1,10 @@
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import type { components } from "@/lib/api/schema";
 import { Link } from "@tanstack/react-router";
-import { FrameIcon, Loader2Icon } from "lucide-react";
+import { FrameIcon } from "lucide-react";
 import * as React from "react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import type { LoginFormSchema } from "./login.types";
@@ -117,7 +118,7 @@ function LoginFormSubmitButton(props: LoginFormSubmitButtonProps) {
   return (
     <Button type="submit" disabled={props.isPending} className="w-full rounded-full">
       Connexion
-      {props.isPending && <Loader2Icon className="animate-spin" />}
+      {props.isPending && <Loader />}
     </Button>
   );
 }

@@ -1,3 +1,4 @@
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -10,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { $api } from "@/lib/api/client";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { SuccessState } from "./register.ui";
@@ -114,7 +114,7 @@ export function Register() {
           )}
         />
         <Button type="submit" disabled={status === "pending"}>
-          {status === "pending" && <Loader2Icon className="animate-spin" />}
+          {status === "pending" && <Loader />}
           S&apos;enregistrer
         </Button>
       </form>
