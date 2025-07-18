@@ -1,74 +1,25 @@
-import { Loader } from "@/components/loader";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { $api } from "@/lib/api/client";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useNavigate } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const formSchema = z.object({
-  email: z
-    .string({
-      error: "L'email est invalide",
-    })
-    .email({
-      error: "L'email est invalide",
-    }),
-});
-
-type ForgotPasswordFormSchema = z.infer<typeof formSchema>;
+import { FormField } from "@/components/ui/form";
+import { Link } from "@tanstack/react-router";
+import { useForgotPasswordView } from "./forgot-password.hook";
+import { ForgotPasswordCard, ForgotPasswordForm, ForgotPasswordLayout } from "./forgot-password.ui";
 
 export function ForgotPassword() {
-  const navigate = useNavigate();
-  const { mutate, status } = $api.useMutation("post", "/forgotPassword", {
-    async onSuccess() {
-      await navigate({ to: "/reset-password" });
-    },
-  });
-
-  const form = useForm<ForgotPasswordFormSchema>({
-    resolver: standardSchemaResolver(formSchema),
-    defaultValues: {
-      email: "",
-    },
-  });
-
-  function onSubmit(values: ForgotPasswordFormSchema) {
-    mutate({
-      body: values,
-    });
-  }
+  const { status, form, handleSubmit } = useForgotPasswordView();
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="example@react-template.fr" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={status === "pending"}>
-          Envoyer
-          {status === "pending" && <Loader />}
-        </Button>
-      </form>
-    </Form>
+    <ForgotPasswordLayout>
+      <ForgotPasswordCard>
+        <ForgotPasswordCard.Content>
+          <ForgotPasswordCard.Header />
+          <ForgotPasswordForm form={form} onSubmit={handleSubmit}>
+            <FormField control={form.control} name="email" render={ForgotPasswordForm.Email} />
+            <ForgotPasswordForm.SubmitButton isPending={status === "pending"} />
+          </ForgotPasswordForm>
+        </ForgotPasswordCard.Content>
+        <ForgotPasswordCard.Footer>
+          <Link to="/login">Se connecter</Link>
+        </ForgotPasswordCard.Footer>
+      </ForgotPasswordCard>
+    </ForgotPasswordLayout>
   );
 }
