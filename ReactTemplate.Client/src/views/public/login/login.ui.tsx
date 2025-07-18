@@ -6,7 +6,7 @@ import { Link } from "@tanstack/react-router";
 import { FrameIcon, Loader2Icon } from "lucide-react";
 import * as React from "react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
-import type { LoginFormSchema } from "./login.view";
+import type { LoginFormSchema } from "./login.types";
 
 export function LoginLayout(props: React.PropsWithChildren) {
   return (
