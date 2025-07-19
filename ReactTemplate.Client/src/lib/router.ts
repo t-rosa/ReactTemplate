@@ -1,7 +1,7 @@
 import { NotFoundScreen } from "@/components/not-found-screen";
 import { PendingScreen } from "@/components/pending-screen";
+import { Error } from "@/features/error/error.view";
 import { routeTree } from "@/routeTree.gen";
-import { Error } from "@/views/error/error.view";
 import { createRouter } from "@tanstack/react-router";
 import { queryClient } from "./query-client";
 

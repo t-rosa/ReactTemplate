@@ -12,11 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteImport } from './routes/_public'
 import { Route as PrivateRouteImport } from './routes/_private'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PublicResetPasswordRouteImport } from './routes/_public/reset-password'
-import { Route as PublicRegisterRouteImport } from './routes/_public/register'
-import { Route as PublicLoginRouteImport } from './routes/_public/login'
-import { Route as PublicForgotPasswordRouteImport } from './routes/_public/forgot-password'
-import { Route as PrivateDashboardRouteImport } from './routes/_private/dashboard'
+import { Route as PublicResetPasswordRouteRouteImport } from './routes/_public/reset-password/route'
+import { Route as PublicRegisterRouteRouteImport } from './routes/_public/register/route'
+import { Route as PublicLoginRouteRouteImport } from './routes/_public/login/route'
+import { Route as PublicForgotPasswordRouteRouteImport } from './routes/_public/forgot-password/route'
+import { Route as PrivateDashboardRouteRouteImport } from './routes/_private/dashboard/route'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -31,27 +31,29 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PublicResetPasswordRoute = PublicResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => PublicRoute,
-} as any)
-const PublicRegisterRoute = PublicRegisterRouteImport.update({
+const PublicResetPasswordRouteRoute =
+  PublicResetPasswordRouteRouteImport.update({
+    id: '/reset-password',
+    path: '/reset-password',
+    getParentRoute: () => PublicRoute,
+  } as any)
+const PublicRegisterRouteRoute = PublicRegisterRouteRouteImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => PublicRoute,
 } as any)
-const PublicLoginRoute = PublicLoginRouteImport.update({
+const PublicLoginRouteRoute = PublicLoginRouteRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => PublicRoute,
 } as any)
-const PublicForgotPasswordRoute = PublicForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => PublicRoute,
-} as any)
-const PrivateDashboardRoute = PrivateDashboardRouteImport.update({
+const PublicForgotPasswordRouteRoute =
+  PublicForgotPasswordRouteRouteImport.update({
+    id: '/forgot-password',
+    path: '/forgot-password',
+    getParentRoute: () => PublicRoute,
+  } as any)
+const PrivateDashboardRouteRoute = PrivateDashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => PrivateRoute,
@@ -59,30 +61,30 @@ const PrivateDashboardRoute = PrivateDashboardRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof PrivateDashboardRoute
-  '/forgot-password': typeof PublicForgotPasswordRoute
-  '/login': typeof PublicLoginRoute
-  '/register': typeof PublicRegisterRoute
-  '/reset-password': typeof PublicResetPasswordRoute
+  '/dashboard': typeof PrivateDashboardRouteRoute
+  '/forgot-password': typeof PublicForgotPasswordRouteRoute
+  '/login': typeof PublicLoginRouteRoute
+  '/register': typeof PublicRegisterRouteRoute
+  '/reset-password': typeof PublicResetPasswordRouteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof PrivateDashboardRoute
-  '/forgot-password': typeof PublicForgotPasswordRoute
-  '/login': typeof PublicLoginRoute
-  '/register': typeof PublicRegisterRoute
-  '/reset-password': typeof PublicResetPasswordRoute
+  '/dashboard': typeof PrivateDashboardRouteRoute
+  '/forgot-password': typeof PublicForgotPasswordRouteRoute
+  '/login': typeof PublicLoginRouteRoute
+  '/register': typeof PublicRegisterRouteRoute
+  '/reset-password': typeof PublicResetPasswordRouteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_private': typeof PrivateRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
-  '/_private/dashboard': typeof PrivateDashboardRoute
-  '/_public/forgot-password': typeof PublicForgotPasswordRoute
-  '/_public/login': typeof PublicLoginRoute
-  '/_public/register': typeof PublicRegisterRoute
-  '/_public/reset-password': typeof PublicResetPasswordRoute
+  '/_private/dashboard': typeof PrivateDashboardRouteRoute
+  '/_public/forgot-password': typeof PublicForgotPasswordRouteRoute
+  '/_public/login': typeof PublicLoginRouteRoute
+  '/_public/register': typeof PublicRegisterRouteRoute
+  '/_public/reset-password': typeof PublicResetPasswordRouteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -146,63 +148,63 @@ declare module '@tanstack/react-router' {
       id: '/_public/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
-      preLoaderRoute: typeof PublicResetPasswordRouteImport
+      preLoaderRoute: typeof PublicResetPasswordRouteRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_public/register': {
       id: '/_public/register'
       path: '/register'
       fullPath: '/register'
-      preLoaderRoute: typeof PublicRegisterRouteImport
+      preLoaderRoute: typeof PublicRegisterRouteRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_public/login': {
       id: '/_public/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof PublicLoginRouteImport
+      preLoaderRoute: typeof PublicLoginRouteRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_public/forgot-password': {
       id: '/_public/forgot-password'
       path: '/forgot-password'
       fullPath: '/forgot-password'
-      preLoaderRoute: typeof PublicForgotPasswordRouteImport
+      preLoaderRoute: typeof PublicForgotPasswordRouteRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_private/dashboard': {
       id: '/_private/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof PrivateDashboardRouteImport
+      preLoaderRoute: typeof PrivateDashboardRouteRouteImport
       parentRoute: typeof PrivateRoute
     }
   }
 }
 
 interface PrivateRouteChildren {
-  PrivateDashboardRoute: typeof PrivateDashboardRoute
+  PrivateDashboardRouteRoute: typeof PrivateDashboardRouteRoute
 }
 
 const PrivateRouteChildren: PrivateRouteChildren = {
-  PrivateDashboardRoute: PrivateDashboardRoute,
+  PrivateDashboardRouteRoute: PrivateDashboardRouteRoute,
 }
 
 const PrivateRouteWithChildren =
   PrivateRoute._addFileChildren(PrivateRouteChildren)
 
 interface PublicRouteChildren {
-  PublicForgotPasswordRoute: typeof PublicForgotPasswordRoute
-  PublicLoginRoute: typeof PublicLoginRoute
-  PublicRegisterRoute: typeof PublicRegisterRoute
-  PublicResetPasswordRoute: typeof PublicResetPasswordRoute
+  PublicForgotPasswordRouteRoute: typeof PublicForgotPasswordRouteRoute
+  PublicLoginRouteRoute: typeof PublicLoginRouteRoute
+  PublicRegisterRouteRoute: typeof PublicRegisterRouteRoute
+  PublicResetPasswordRouteRoute: typeof PublicResetPasswordRouteRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
-  PublicForgotPasswordRoute: PublicForgotPasswordRoute,
-  PublicLoginRoute: PublicLoginRoute,
-  PublicRegisterRoute: PublicRegisterRoute,
-  PublicResetPasswordRoute: PublicResetPasswordRoute,
+  PublicForgotPasswordRouteRoute: PublicForgotPasswordRouteRoute,
+  PublicLoginRouteRoute: PublicLoginRouteRoute,
+  PublicRegisterRouteRoute: PublicRegisterRouteRoute,
+  PublicResetPasswordRouteRoute: PublicResetPasswordRouteRoute,
 }
 
 const PublicRouteWithChildren =
