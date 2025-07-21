@@ -1,19 +1,13 @@
+import { useErrorView } from "./error.hooks";
 import { ErrorCard, ErrorLayout } from "./error.ui";
 
 interface ErrorProps {
   error: { message?: string };
   reset: () => void;
 }
-export function Error(props: ErrorProps) {
-  async function handleCopyClick() {
-    if (props.error.message) {
-      await navigator.clipboard.writeText(props.error.message);
-    }
-  }
 
-  function handleReload() {
-    location.reload();
-  }
+export function ErrorView(props: ErrorProps) {
+  const { handleReload, handleCopyClick } = useErrorView(props.error.message);
 
   return (
     <ErrorLayout>

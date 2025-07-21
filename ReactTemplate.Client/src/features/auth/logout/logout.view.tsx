@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { LogOutIcon } from "lucide-react";
 import { useLogoutView } from "./logout.hook";
 
-export function Logout() {
+export function LogoutView() {
   const { status, handleClick } = useLogoutView();
 
   if (status === "pending") {

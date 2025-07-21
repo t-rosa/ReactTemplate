@@ -1,7 +1,7 @@
 import { FormField } from "@/components/ui/form";
 import { Link } from "@tanstack/react-router";
-import { AuthCard } from "../../-components/auth-card";
-import { AuthLayout } from "../../-components/auth-layout";
+import { AuthCard } from "../../../../features/auth/components/auth-card";
+import { AuthLayout } from "../../../../features/auth/components/auth-layout";
 import { ResetPasswordForm } from "./components/form";
 import { SuccessState } from "./components/success-state";
 import { useResetPasswordView } from "./reset-password.hooks";
