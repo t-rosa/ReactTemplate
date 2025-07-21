@@ -1,7 +1,7 @@
 import { $api } from "@/lib/api/client";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
-import { formSchema, type ResetPasswordFormSchema } from "./types";
+import { formSchema, type ResetPasswordFormSchema } from "./reset-password.types";
 
 export function useResetPasswordView() {
   const { mutate, status } = $api.useMutation("post", "/resetPassword");

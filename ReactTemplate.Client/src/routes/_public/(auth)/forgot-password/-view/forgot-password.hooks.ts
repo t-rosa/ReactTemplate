@@ -2,33 +2,27 @@ import { $api } from "@/lib/api/client";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import { formSchema, type LoginFormSchema } from "./types";
+import { formSchema, type ForgotPasswordFormSchema } from "./forgot-password.types";
 
-export function useLoginView() {
+export function useForgotPasswordView() {
   const navigate = useNavigate();
 
-  const { mutate, status } = $api.useMutation("post", "/login", {
+  const { mutate, status } = $api.useMutation("post", "/forgotPassword", {
     async onSuccess() {
-      await navigate({ to: "/dashboard" });
+      await navigate({ to: "/reset-password" });
     },
   });
 
-  const form = useForm<LoginFormSchema>({
+  const form = useForm<ForgotPasswordFormSchema>({
     resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
-  function handleSubmit(values: LoginFormSchema) {
+  function handleSubmit(values: ForgotPasswordFormSchema) {
     mutate({
       body: values,
-      params: {
-        query: {
-          useCookies: true,
-        },
-      },
     });
   }
 

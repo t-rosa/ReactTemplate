@@ -1,7 +1,7 @@
 import { $api } from "@/lib/api/client";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
-import { formSchema, type RegisterFormSchema } from "./types";
+import { formSchema, type RegisterFormSchema } from "./register.types";
 
 export function useRegisterView() {
   const { mutate, status } = $api.useMutation("post", "/register", {});

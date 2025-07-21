@@ -1,27 +1,30 @@
 import { FormField } from "@/components/ui/form";
 import { Link } from "@tanstack/react-router";
-import { ForgotPasswordCard } from "./components/card";
+import { AuthCard } from "../../-components/auth-card";
+import { AuthLayout } from "../../-components/auth-layout";
 import { ForgotPasswordForm } from "./components/form";
-import { ForgotPasswordLayout } from "./components/layout";
-import { useForgotPasswordView } from "./hooks";
+import { useForgotPasswordView } from "./forgot-password.hooks";
 
 export function ForgotPasswordView() {
   const { status, form, handleSubmit } = useForgotPasswordView();
 
   return (
-    <ForgotPasswordLayout>
-      <ForgotPasswordCard>
-        <ForgotPasswordCard.Content>
-          <ForgotPasswordCard.Header />
+    <AuthLayout>
+      <AuthCard>
+        <AuthCard.Content>
+          <AuthCard.Header>
+            <AuthCard.Title>Mot de passe oublié.</AuthCard.Title>
+            <AuthCard.Description>Saisissez votre adresse e-mail.</AuthCard.Description>
+          </AuthCard.Header>
           <ForgotPasswordForm form={form} onSubmit={handleSubmit}>
             <FormField control={form.control} name="email" render={ForgotPasswordForm.Email} />
             <ForgotPasswordForm.Submit isPending={status === "pending"} />
           </ForgotPasswordForm>
-        </ForgotPasswordCard.Content>
-        <ForgotPasswordCard.Footer>
+        </AuthCard.Content>
+        <AuthCard.Footer>
           <Link to="/login">Se connecter</Link>
-        </ForgotPasswordCard.Footer>
-      </ForgotPasswordCard>
-    </ForgotPasswordLayout>
+        </AuthCard.Footer>
+      </AuthCard>
+    </AuthLayout>
   );
 }

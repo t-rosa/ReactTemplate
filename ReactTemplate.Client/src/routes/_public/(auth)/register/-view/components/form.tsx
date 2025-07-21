@@ -4,7 +4,7 @@ import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import * as React from "react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
-import type { RegisterFormSchema } from "../types";
+import type { RegisterFormSchema } from "../register.types";
 
 interface RegisterFormProps extends React.PropsWithChildren {
   form: UseFormReturn<RegisterFormSchema>;
