@@ -1,6 +1,9 @@
-import { Form } from "@/components/ui/form";
+import { Loader } from "@/components/loader";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import * as React from "react";
-import type { UseFormReturn } from "react-hook-form";
+import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import type { ForgotPasswordFormSchema } from "../types";
 
 interface ForgotPasswordFormProps extends React.PropsWithChildren {
@@ -8,7 +11,7 @@ interface ForgotPasswordFormProps extends React.PropsWithChildren {
   onSubmit: (values: ForgotPasswordFormSchema) => void;
 }
 
-export function _ForgotPasswordForm(props: ForgotPasswordFormProps) {
+function _ForgotPasswordForm(props: ForgotPasswordFormProps) {
   return (
     <Form {...props.form}>
       <form onSubmit={props.form.handleSubmit(props.onSubmit)} className="grid gap-6">
@@ -17,3 +20,37 @@ export function _ForgotPasswordForm(props: ForgotPasswordFormProps) {
     </Form>
   );
 }
+
+interface ForgotPasswordFormEmailProps {
+  field: ControllerRenderProps<ForgotPasswordFormSchema, "email">;
+}
+
+function _ForgotPasswordFormEmail(props: ForgotPasswordFormEmailProps) {
+  return (
+    <FormItem>
+      <FormLabel>Email</FormLabel>
+      <FormControl>
+        <Input placeholder="email@react-template.com" {...props.field} />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  );
+}
+
+interface ForgotPasswordFormSubmitProps {
+  isPending: boolean;
+}
+
+function _ForgotPasswordFormSubmit(props: ForgotPasswordFormSubmitProps) {
+  return (
+    <Button type="submit" disabled={props.isPending} className="w-full rounded-full">
+      Envoyer
+      {props.isPending && <Loader />}
+    </Button>
+  );
+}
+
+export const ForgotPasswordForm = Object.assign(_ForgotPasswordForm, {
+  Email: _ForgotPasswordFormEmail,
+  Submit: _ForgotPasswordFormSubmit,
+});
