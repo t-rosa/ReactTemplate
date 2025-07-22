@@ -1,7 +1,7 @@
 import { NotFoundScreen } from "@/components/not-found-screen";
 import { PendingScreen } from "@/components/pending-screen";
 import { routeTree } from "@/routeTree.gen";
-import { Error } from "@/views/error/error.view";
+import { ErrorView } from "@/views/error/error.view";
 import { createRouter } from "@tanstack/react-router";
 import { queryClient } from "./query-client";
 
@@ -9,11 +9,13 @@ export const router = createRouter({
   routeTree,
   defaultNotFoundComponent: NotFoundScreen,
   defaultPendingComponent: PendingScreen,
-  defaultErrorComponent: Error,
-  defaultPreloadStaleTime: 0,
-  scrollRestoration: true,
+  defaultErrorComponent: ErrorView,
   defaultViewTransition: true,
+  defaultPreloadStaleTime: 0,
   defaultPreload: "intent",
+  defaultPendingMs: 0,
+  defaultPendingMinMs: 0,
+  scrollRestoration: true,
   context: {
     queryClient,
   },

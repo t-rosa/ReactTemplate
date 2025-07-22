@@ -1,9 +1,9 @@
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Outlet } from "@tanstack/react-router";
-import { Toaster } from "sonner";
 
-export function Root() {
+export function RootView() {
   return (
     <ThemeProvider>
       <TooltipProvider delayDuration={0}>
