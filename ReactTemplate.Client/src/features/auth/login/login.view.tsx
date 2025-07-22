@@ -1,7 +1,7 @@
 import { FormField } from "@/components/ui/form";
+import { AuthCard } from "@/features/auth/components/auth-card";
+import { AuthLayout } from "@/features/auth/components/auth-layout";
 import { Link } from "@tanstack/react-router";
-import { AuthCard } from "../../../../features/auth/components/auth-card";
-import { AuthLayout } from "../../../../features/auth/components/auth-layout";
 import { LoginForm } from "./components/form";
 import { useLoginView } from "./login.hooks";
 

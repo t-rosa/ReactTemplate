@@ -1,7 +1,7 @@
 import { FormField } from "@/components/ui/form";
+import { AuthCard } from "@/features/auth/components/auth-card";
+import { AuthLayout } from "@/features/auth/components/auth-layout";
 import { Link } from "@tanstack/react-router";
-import { AuthCard } from "../../../../features/auth/components/auth-card";
-import { AuthLayout } from "../../../../features/auth/components/auth-layout";
 import { RegisterForm } from "./components/form";
 import { SuccessState } from "./components/success-state";
 import { useRegisterView } from "./register.hooks";
