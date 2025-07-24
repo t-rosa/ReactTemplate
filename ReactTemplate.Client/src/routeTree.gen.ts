@@ -8,203 +8,203 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as PrivateRouteRouteImport } from './routes/_private/route'
-import { Route as AuthRouteRouteImport } from './routes/_auth/route'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as MarketingHomeRouteImport } from './routes/_marketing/home'
-import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
-import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
-import { Route as AuthLoginRouteImport } from './routes/_auth/login'
-import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
-import { Route as PrivateDashboardIndexRouteImport } from './routes/_private/dashboard/index'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as PrivateRouteRouteImport } from "./routes/_private/route";
+import { Route as AuthRouteRouteImport } from "./routes/_auth/route";
+import { Route as IndexRouteImport } from "./routes/index";
+import { Route as MarketingHomeRouteImport } from "./routes/_marketing/home";
+import { Route as AuthResetPasswordRouteImport } from "./routes/_auth/reset-password";
+import { Route as AuthRegisterRouteImport } from "./routes/_auth/register";
+import { Route as AuthLoginRouteImport } from "./routes/_auth/login";
+import { Route as AuthForgotPasswordRouteImport } from "./routes/_auth/forgot-password";
+import { Route as PrivateDashboardIndexRouteImport } from "./routes/_private/dashboard/index";
 
 const PrivateRouteRoute = PrivateRouteRouteImport.update({
-  id: '/_private',
+  id: "/_private",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/_auth',
+  id: "/_auth",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const MarketingHomeRoute = MarketingHomeRouteImport.update({
-  id: '/_marketing/home',
-  path: '/home',
+  id: "/_marketing/home",
+  path: "/home",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
+  id: "/reset-password",
+  path: "/reset-password",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
+  id: "/register",
+  path: "/register",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+  id: "/login",
+  path: "/login",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
+  id: "/forgot-password",
+  path: "/forgot-password",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const PrivateDashboardIndexRoute = PrivateDashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
+  id: "/dashboard/",
+  path: "/dashboard/",
   getParentRoute: () => PrivateRouteRoute,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/forgot-password': typeof AuthForgotPasswordRoute
-  '/login': typeof AuthLoginRoute
-  '/register': typeof AuthRegisterRoute
-  '/reset-password': typeof AuthResetPasswordRoute
-  '/home': typeof MarketingHomeRoute
-  '/dashboard': typeof PrivateDashboardIndexRoute
+  "/": typeof IndexRoute;
+  "/forgot-password": typeof AuthForgotPasswordRoute;
+  "/login": typeof AuthLoginRoute;
+  "/register": typeof AuthRegisterRoute;
+  "/reset-password": typeof AuthResetPasswordRoute;
+  "/home": typeof MarketingHomeRoute;
+  "/dashboard": typeof PrivateDashboardIndexRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/forgot-password': typeof AuthForgotPasswordRoute
-  '/login': typeof AuthLoginRoute
-  '/register': typeof AuthRegisterRoute
-  '/reset-password': typeof AuthResetPasswordRoute
-  '/home': typeof MarketingHomeRoute
-  '/dashboard': typeof PrivateDashboardIndexRoute
+  "/": typeof IndexRoute;
+  "/forgot-password": typeof AuthForgotPasswordRoute;
+  "/login": typeof AuthLoginRoute;
+  "/register": typeof AuthRegisterRoute;
+  "/reset-password": typeof AuthResetPasswordRoute;
+  "/home": typeof MarketingHomeRoute;
+  "/dashboard": typeof PrivateDashboardIndexRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/_auth': typeof AuthRouteRouteWithChildren
-  '/_private': typeof PrivateRouteRouteWithChildren
-  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
-  '/_auth/login': typeof AuthLoginRoute
-  '/_auth/register': typeof AuthRegisterRoute
-  '/_auth/reset-password': typeof AuthResetPasswordRoute
-  '/_marketing/home': typeof MarketingHomeRoute
-  '/_private/dashboard/': typeof PrivateDashboardIndexRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexRoute;
+  "/_auth": typeof AuthRouteRouteWithChildren;
+  "/_private": typeof PrivateRouteRouteWithChildren;
+  "/_auth/forgot-password": typeof AuthForgotPasswordRoute;
+  "/_auth/login": typeof AuthLoginRoute;
+  "/_auth/register": typeof AuthRegisterRoute;
+  "/_auth/reset-password": typeof AuthResetPasswordRoute;
+  "/_marketing/home": typeof MarketingHomeRoute;
+  "/_private/dashboard/": typeof PrivateDashboardIndexRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/'
-    | '/forgot-password'
-    | '/login'
-    | '/register'
-    | '/reset-password'
-    | '/home'
-    | '/dashboard'
-  fileRoutesByTo: FileRoutesByTo
+    | "/"
+    | "/forgot-password"
+    | "/login"
+    | "/register"
+    | "/reset-password"
+    | "/home"
+    | "/dashboard";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/'
-    | '/forgot-password'
-    | '/login'
-    | '/register'
-    | '/reset-password'
-    | '/home'
-    | '/dashboard'
+    | "/"
+    | "/forgot-password"
+    | "/login"
+    | "/register"
+    | "/reset-password"
+    | "/home"
+    | "/dashboard";
   id:
-    | '__root__'
-    | '/'
-    | '/_auth'
-    | '/_private'
-    | '/_auth/forgot-password'
-    | '/_auth/login'
-    | '/_auth/register'
-    | '/_auth/reset-password'
-    | '/_marketing/home'
-    | '/_private/dashboard/'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/_auth"
+    | "/_private"
+    | "/_auth/forgot-password"
+    | "/_auth/login"
+    | "/_auth/register"
+    | "/_auth/reset-password"
+    | "/_marketing/home"
+    | "/_private/dashboard/";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  PrivateRouteRoute: typeof PrivateRouteRouteWithChildren
-  MarketingHomeRoute: typeof MarketingHomeRoute
+  IndexRoute: typeof IndexRoute;
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren;
+  PrivateRouteRoute: typeof PrivateRouteRouteWithChildren;
+  MarketingHomeRoute: typeof MarketingHomeRoute;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/_private': {
-      id: '/_private'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof PrivateRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_marketing/home': {
-      id: '/_marketing/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof MarketingHomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth/reset-password': {
-      id: '/_auth/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof AuthResetPasswordRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/register': {
-      id: '/_auth/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof AuthRegisterRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/login': {
-      id: '/_auth/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/forgot-password': {
-      id: '/_auth/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof AuthForgotPasswordRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_private/dashboard/': {
-      id: '/_private/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof PrivateDashboardIndexRouteImport
-      parentRoute: typeof PrivateRouteRoute
-    }
+    "/_private": {
+      id: "/_private";
+      path: "";
+      fullPath: "";
+      preLoaderRoute: typeof PrivateRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_auth": {
+      id: "/_auth";
+      path: "";
+      fullPath: "";
+      preLoaderRoute: typeof AuthRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_marketing/home": {
+      id: "/_marketing/home";
+      path: "/home";
+      fullPath: "/home";
+      preLoaderRoute: typeof MarketingHomeRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_auth/reset-password": {
+      id: "/_auth/reset-password";
+      path: "/reset-password";
+      fullPath: "/reset-password";
+      preLoaderRoute: typeof AuthResetPasswordRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/_auth/register": {
+      id: "/_auth/register";
+      path: "/register";
+      fullPath: "/register";
+      preLoaderRoute: typeof AuthRegisterRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/_auth/login": {
+      id: "/_auth/login";
+      path: "/login";
+      fullPath: "/login";
+      preLoaderRoute: typeof AuthLoginRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/_auth/forgot-password": {
+      id: "/_auth/forgot-password";
+      path: "/forgot-password";
+      fullPath: "/forgot-password";
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/_private/dashboard/": {
+      id: "/_private/dashboard/";
+      path: "/dashboard";
+      fullPath: "/dashboard";
+      preLoaderRoute: typeof PrivateDashboardIndexRouteImport;
+      parentRoute: typeof PrivateRouteRoute;
+    };
   }
 }
 
 interface AuthRouteRouteChildren {
-  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
-  AuthLoginRoute: typeof AuthLoginRoute
-  AuthRegisterRoute: typeof AuthRegisterRoute
-  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute;
+  AuthLoginRoute: typeof AuthLoginRoute;
+  AuthRegisterRoute: typeof AuthRegisterRoute;
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute;
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
@@ -212,30 +212,26 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
-}
+};
 
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-  AuthRouteRouteChildren,
-)
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(AuthRouteRouteChildren);
 
 interface PrivateRouteRouteChildren {
-  PrivateDashboardIndexRoute: typeof PrivateDashboardIndexRoute
+  PrivateDashboardIndexRoute: typeof PrivateDashboardIndexRoute;
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
   PrivateDashboardIndexRoute: PrivateDashboardIndexRoute,
-}
+};
 
-const PrivateRouteRouteWithChildren = PrivateRouteRoute._addFileChildren(
-  PrivateRouteRouteChildren,
-)
+const PrivateRouteRouteWithChildren = PrivateRouteRoute._addFileChildren(PrivateRouteRouteChildren);
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   PrivateRouteRoute: PrivateRouteRouteWithChildren,
   MarketingHomeRoute: MarketingHomeRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();

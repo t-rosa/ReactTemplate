@@ -1,12 +1,34 @@
 import { FormField } from "@/components/ui/form";
 import { AuthCard } from "@/features/auth/components/auth-card";
 import { AuthLayout } from "@/features/auth/components/auth-layout";
-import { Link } from "@tanstack/react-router";
+import { $api } from "@/lib/api/client";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
 import { ForgotPasswordForm } from "./components/form";
-import { useForgotPasswordView } from "./forgot-password.hooks";
+import { formSchema, type ForgotPasswordFormSchema } from "./forgot-password.types";
 
 export function ForgotPasswordView() {
-  const { status, form, handleSubmit } = useForgotPasswordView();
+  const navigate = useNavigate();
+
+  const { mutate, status } = $api.useMutation("post", "/forgotPassword", {
+    async onSuccess() {
+      await navigate({ to: "/reset-password" });
+    },
+  });
+
+  const form = useForm<ForgotPasswordFormSchema>({
+    resolver: standardSchemaResolver(formSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  function handleSubmit(values: ForgotPasswordFormSchema) {
+    mutate({
+      body: values,
+    });
+  }
 
   return (
     <AuthLayout>

@@ -1,13 +1,36 @@
 import { FormField } from "@/components/ui/form";
 import { AuthCard } from "@/features/auth/components/auth-card";
 import { AuthLayout } from "@/features/auth/components/auth-layout";
+import { $api } from "@/lib/api/client";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Link } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
 import { ResetPasswordForm } from "./components/form";
 import { SuccessState } from "./components/success-state";
-import { useResetPasswordView } from "./reset-password.hooks";
+import { formSchema, type ResetPasswordFormSchema } from "./reset-password.types";
 
 export function ResetPasswordView() {
-  const { status, form, handleSubmit } = useResetPasswordView();
+  const { mutate, status } = $api.useMutation("post", "/resetPassword");
+
+  const form = useForm<ResetPasswordFormSchema>({
+    resolver: standardSchemaResolver(formSchema),
+    defaultValues: {
+      email: "",
+      resetCode: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
+
+  function handleSubmit(values: ResetPasswordFormSchema) {
+    mutate({
+      body: {
+        email: values.email,
+        newPassword: values.newPassword,
+        resetCode: values.resetCode,
+      },
+    });
+  }
 
   if (status === "success") {
     return (

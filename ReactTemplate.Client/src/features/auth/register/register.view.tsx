@@ -1,13 +1,34 @@
 import { FormField } from "@/components/ui/form";
 import { AuthCard } from "@/features/auth/components/auth-card";
 import { AuthLayout } from "@/features/auth/components/auth-layout";
+import { $api } from "@/lib/api/client";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Link } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
 import { RegisterForm } from "./components/form";
 import { SuccessState } from "./components/success-state";
-import { useRegisterView } from "./register.hooks";
+import { formSchema, type RegisterFormSchema } from "./register.types";
 
 export function RegisterView() {
-  const { status, form, handleSubmit } = useRegisterView();
+  const { mutate, status } = $api.useMutation("post", "/register", {});
+
+  const form = useForm<RegisterFormSchema>({
+    resolver: standardSchemaResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  function handleSubmit(values: RegisterFormSchema) {
+    mutate({
+      body: {
+        email: values.email,
+        password: values.password,
+      },
+    });
+  }
 
   if (status === "success") {
     return (

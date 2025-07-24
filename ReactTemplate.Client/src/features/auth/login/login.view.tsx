@@ -1,12 +1,40 @@
 import { FormField } from "@/components/ui/form";
 import { AuthCard } from "@/features/auth/components/auth-card";
 import { AuthLayout } from "@/features/auth/components/auth-layout";
-import { Link } from "@tanstack/react-router";
+import { $api } from "@/lib/api/client";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
 import { LoginForm } from "./components/form";
-import { useLoginView } from "./login.hooks";
+import { formSchema, type LoginFormSchema } from "./login.types";
 
 export function LoginView() {
-  const { status, form, handleSubmit } = useLoginView();
+  const navigate = useNavigate();
+
+  const { mutate, status } = $api.useMutation("post", "/login", {
+    async onSuccess() {
+      await navigate({ to: "/dashboard" });
+    },
+  });
+
+  const form = useForm<LoginFormSchema>({
+    resolver: standardSchemaResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  function handleSubmit(values: LoginFormSchema) {
+    mutate({
+      body: values,
+      params: {
+        query: {
+          useCookies: true,
+        },
+      },
+    });
+  }
 
   return (
     <AuthLayout>
