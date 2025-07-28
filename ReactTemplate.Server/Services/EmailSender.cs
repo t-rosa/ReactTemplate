@@ -14,8 +14,8 @@ namespace ReactTemplate.Server.Services
 
         public async Task Execute(string subject, string message, string toEmail)
         {
-            var username = configuration["Smtp:Username"];
-            var password = configuration["Smtp:Password"];
+            var username = configuration["Smtp:Gmail:Username"];
+            var password = configuration["Smtp:Gmail:Password"];
 
             if (username == null && password == null)
             {
