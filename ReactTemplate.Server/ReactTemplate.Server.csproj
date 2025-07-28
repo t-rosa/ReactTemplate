@@ -1,9 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
     <SpaRoot>..\ReactTemplate.Client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:50000</SpaProxyServerUrl>
@@ -28,15 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ReactTemplate.Authentication\ReactTemplate.Authentication.csproj" />
     <ProjectReference Include="..\ReactTemplate.Client\ReactTemplate.Client.esproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EditorConfigFiles Remove="C:\Users\tomar\source\repos\ReactTemplate\ReactTemplate.Server\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="C:\Users\tomar\source\repos\ReactTemplate\ReactTemplate.Server\.editorconfig" />
+    <ProjectReference Include="..\ReactTemplate.WeatherForecast\ReactTemplate.WeatherForecast.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,38 +1,16 @@
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ReactTemplate.Server;
+using ReactTemplate.Authentication;
 using ReactTemplate.Server.Services;
+using ReactTemplate.WeatherForecast;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options
-        .UseNpgsql(builder.Configuration["Database:ReactTemplate:ConnectionString"])
-        .UseSnakeCaseNamingConvention());
-
-builder.Services.AddAuthorization();
-
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("./keys/storage"));
-}
-else
-{
-    builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("keys/storage"));
-}
-
-builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
-
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.SignIn.RequireConfirmedEmail = true;
-    options.User.RequireUniqueEmail = true;
-});
+// Module Services
+builder.Services.AddWeatherForecastServices(builder.Configuration);
+builder.Services.AddAuthenticationServices(builder.Configuration, builder.Environment);
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
@@ -41,6 +19,7 @@ builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("SmtpOp
 builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
