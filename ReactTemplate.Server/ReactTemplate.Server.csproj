@@ -27,7 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ReactTemplate.Authentication\ReactTemplate.Authentication.csproj" />
     <ProjectReference Include="..\ReactTemplate.Client\ReactTemplate.Client.esproj" />
-    <ProjectReference Include="..\ReactTemplate.WeatherForecast\ReactTemplate.WeatherForecast.csproj" />
+    <ProjectReference Include="..\ReactTemplate.WeatherForecasts\ReactTemplate.WeatherForecasts.csproj" />
   </ItemGroup>
 
 </Project>

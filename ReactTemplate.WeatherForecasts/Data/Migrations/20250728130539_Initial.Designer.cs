@@ -9,9 +9,9 @@ using ReactTemplate.WeatherForecast;
 
 #nullable disable
 
-namespace ReactTemplate.WeatherForecast.Data.Migrations
+namespace ReactTemplate.WeatherForecasts.Data.Migrations
 {
-    [DbContext(typeof(WeatherForecastDbContext))]
+    [DbContext(typeof(WeatherForecastContext))]
     [Migration("20250728130539_Initial")]
     partial class Initial
     {

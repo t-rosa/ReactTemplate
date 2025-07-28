@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using ReactTemplate.Authentication;
 using ReactTemplate.Server.Services;
-using ReactTemplate.WeatherForecast;
+using ReactTemplate.WeatherForecasts;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,3 +55,5 @@ app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager,
 app.MapFallbackToFile("/index.html");
 
 app.Run();
+
+public partial class Program { } // needed for tests

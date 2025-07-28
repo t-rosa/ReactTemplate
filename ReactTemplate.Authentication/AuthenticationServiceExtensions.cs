@@ -11,14 +11,14 @@ public static class AuthenticationServiceExtensions
 {
     public static IServiceCollection AddAuthenticationServices(this IServiceCollection services, ConfigurationManager configuration, IHostEnvironment environment)
     {
-        services.AddDbContext<AuthenticationDbContext>(options =>
+        services.AddDbContext<AuthenticationContext>(options =>
             options.UseNpgsql(configuration["Database:ReactTemplate:ConnectionString"])
                     .UseSnakeCaseNamingConvention()
         );
 
         services.AddAuthorization();
 
-        services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<AuthenticationDbContext>();
+        services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<AuthenticationContext>();
 
         services.Configure<IdentityOptions>(options =>
         {

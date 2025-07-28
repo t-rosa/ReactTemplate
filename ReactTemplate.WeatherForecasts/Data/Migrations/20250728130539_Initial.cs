@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ReactTemplate.WeatherForecast.Data.Migrations
+namespace ReactTemplate.WeatherForecasts.Data.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration

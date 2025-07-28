@@ -1,6 +1,6 @@
 namespace ReactTemplate.WeatherForecast.Dtos;
 
-internal class GetWeatherForecastResponse
+public class GetWeatherForecastResponse
 {
     public Guid Id { get; set; }
 

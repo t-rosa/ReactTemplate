@@ -1,6 +1,6 @@
 using Ardalis.GuardClauses;
 
-namespace ReactTemplate.WeatherForecast;
+namespace ReactTemplate.WeatherForecasts;
 
 internal class WeatherForecast
 {

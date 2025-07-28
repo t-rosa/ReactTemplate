@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ReactTemplate.Authentication;
 
-public class AuthenticationDbContext(DbContextOptions<AuthenticationDbContext> options) : IdentityDbContext<IdentityUser>(options)
+public class AuthenticationContext(DbContextOptions<AuthenticationContext> options) : IdentityDbContext<IdentityUser>(options)
 {
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("identity");

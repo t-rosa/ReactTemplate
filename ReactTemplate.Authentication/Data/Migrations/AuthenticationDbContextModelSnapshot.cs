@@ -10,7 +10,7 @@ using ReactTemplate.Authentication;
 
 namespace ReactTemplate.Authentication.Data.Migrations
 {
-    [DbContext(typeof(AuthenticationDbContext))]
+    [DbContext(typeof(AuthenticationContext))]
     partial class AuthenticationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

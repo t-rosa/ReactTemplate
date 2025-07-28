@@ -72,5 +72,5 @@ dotnet ef migrations add Initial -c AuthenticationDbContext -p ../ReactTemplate.
 ```
 
 ```bash
-dotnet ef migrations add Initial -c WeatherForecastDbContext -p ../ReactTemplate.WeatherForecast/ReactTemplate.WeatherForecast.csproj -s ./ReactTemplate.Server.csproj -o Data/Migrations
+dotnet ef migrations add Initial -c WeatherForecastDbContext -p ../ReactTemplate.WeatherForecasts/ReactTemplate.WeatherForecasts.csproj -s ./ReactTemplate.Server.csproj -o Data/Migrations
 ```

@@ -11,7 +11,7 @@ using ReactTemplate.Authentication;
 
 namespace ReactTemplate.Authentication.Data.Migrations
 {
-    [DbContext(typeof(AuthenticationDbContext))]
+    [DbContext(typeof(AuthenticationContext))]
     [Migration("20250728130613_Initial")]
     partial class Initial
     {

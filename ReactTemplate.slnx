@@ -13,5 +13,6 @@
     <Platform Project="AnyCPU" />
   </Project>
   <Project Path="ReactTemplate.Server/ReactTemplate.Server.csproj" />
-  <Project Path="ReactTemplate.WeatherForecast/ReactTemplate.WeatherForecast.csproj" />
+  <Project Path="ReactTemplate.WeatherForecasts.Tests/ReactTemplate.WeatherForecasts.Tests.csproj" />
+  <Project Path="ReactTemplate.WeatherForecasts/ReactTemplate.WeatherForecasts.csproj" />
 </Solution>

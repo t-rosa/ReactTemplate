@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReactTemplate.WeatherForecast.Dtos;
 
-namespace ReactTemplate.WeatherForecast;
+namespace ReactTemplate.WeatherForecasts;
 
 [ApiController]
 [Authorize]
 [Route("api/weather-forecast")]
-public class WeatherForecastController(WeatherForecastDbContext context) : ControllerBase
+public class WeatherForecastController(WeatherForecastContext context) : ControllerBase
 {
     [HttpGet()]
     [ProducesResponseType(typeof(IEnumerable<GetWeatherForecastResponse>), StatusCodes.Status200OK)]

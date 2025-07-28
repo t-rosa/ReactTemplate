@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace ReactTemplate.WeatherForecast;
+namespace ReactTemplate.WeatherForecasts;
 
-public class WeatherForecastDbContext(DbContextOptions<WeatherForecastDbContext> options) : DbContext(options)
+public class WeatherForecastContext(DbContextOptions<WeatherForecastContext> options) : DbContext(options)
 {
     internal DbSet<WeatherForecast> WeatherForecasts { get; set; }
 
