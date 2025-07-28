@@ -8,7 +8,7 @@ public class WeatherForecastDbContext(DbContextOptions<WeatherForecastDbContext>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("WeatherForecasts");
+        modelBuilder.HasDefaultSchema("weather_forecasts");
 
         // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }

@@ -13,11 +13,11 @@ namespace ReactTemplate.Authentication.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "Identity");
+                name: "identity");
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
-                schema: "Identity",
+                schema: "identity",
                 columns: table => new
                 {
                     id = table.Column<string>(type: "text", nullable: false),
@@ -32,7 +32,7 @@ namespace ReactTemplate.Authentication.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
-                schema: "Identity",
+                schema: "identity",
                 columns: table => new
                 {
                     id = table.Column<string>(type: "text", nullable: false),
@@ -58,7 +58,7 @@ namespace ReactTemplate.Authentication.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
-                schema: "Identity",
+                schema: "identity",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -73,7 +73,7 @@ namespace ReactTemplate.Authentication.Data.Migrations
                     table.ForeignKey(
                         name: "fk_asp_net_role_claims_asp_net_roles_role_id",
                         column: x => x.role_id,
-                        principalSchema: "Identity",
+                        principalSchema: "identity",
                         principalTable: "AspNetRoles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -81,7 +81,7 @@ namespace ReactTemplate.Authentication.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
-                schema: "Identity",
+                schema: "identity",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -96,7 +96,7 @@ namespace ReactTemplate.Authentication.Data.Migrations
                     table.ForeignKey(
                         name: "fk_asp_net_user_claims_asp_net_users_user_id",
                         column: x => x.user_id,
-                        principalSchema: "Identity",
+                        principalSchema: "identity",
                         principalTable: "AspNetUsers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -104,7 +104,7 @@ namespace ReactTemplate.Authentication.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
-                schema: "Identity",
+                schema: "identity",
                 columns: table => new
                 {
                     login_provider = table.Column<string>(type: "text", nullable: false),
@@ -118,7 +118,7 @@ namespace ReactTemplate.Authentication.Data.Migrations
                     table.ForeignKey(
                         name: "fk_asp_net_user_logins_asp_net_users_user_id",
                         column: x => x.user_id,
-                        principalSchema: "Identity",
+                        principalSchema: "identity",
                         principalTable: "AspNetUsers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -126,7 +126,7 @@ namespace ReactTemplate.Authentication.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
-                schema: "Identity",
+                schema: "identity",
                 columns: table => new
                 {
                     user_id = table.Column<string>(type: "text", nullable: false),
@@ -138,14 +138,14 @@ namespace ReactTemplate.Authentication.Data.Migrations
                     table.ForeignKey(
                         name: "fk_asp_net_user_roles_asp_net_roles_role_id",
                         column: x => x.role_id,
-                        principalSchema: "Identity",
+                        principalSchema: "identity",
                         principalTable: "AspNetRoles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "fk_asp_net_user_roles_asp_net_users_user_id",
                         column: x => x.user_id,
-                        principalSchema: "Identity",
+                        principalSchema: "identity",
                         principalTable: "AspNetUsers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -153,7 +153,7 @@ namespace ReactTemplate.Authentication.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
-                schema: "Identity",
+                schema: "identity",
                 columns: table => new
                 {
                     user_id = table.Column<string>(type: "text", nullable: false),
@@ -167,7 +167,7 @@ namespace ReactTemplate.Authentication.Data.Migrations
                     table.ForeignKey(
                         name: "fk_asp_net_user_tokens_asp_net_users_user_id",
                         column: x => x.user_id,
-                        principalSchema: "Identity",
+                        principalSchema: "identity",
                         principalTable: "AspNetUsers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -175,44 +175,44 @@ namespace ReactTemplate.Authentication.Data.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "ix_asp_net_role_claims_role_id",
-                schema: "Identity",
+                schema: "identity",
                 table: "AspNetRoleClaims",
                 column: "role_id");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
-                schema: "Identity",
+                schema: "identity",
                 table: "AspNetRoles",
                 column: "normalized_name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_asp_net_user_claims_user_id",
-                schema: "Identity",
+                schema: "identity",
                 table: "AspNetUserClaims",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_asp_net_user_logins_user_id",
-                schema: "Identity",
+                schema: "identity",
                 table: "AspNetUserLogins",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_asp_net_user_roles_role_id",
-                schema: "Identity",
+                schema: "identity",
                 table: "AspNetUserRoles",
                 column: "role_id");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                schema: "Identity",
+                schema: "identity",
                 table: "AspNetUsers",
                 column: "normalized_email");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                schema: "Identity",
+                schema: "identity",
                 table: "AspNetUsers",
                 column: "normalized_user_name",
                 unique: true);
@@ -223,31 +223,31 @@ namespace ReactTemplate.Authentication.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims",
-                schema: "Identity");
+                schema: "identity");
 
             migrationBuilder.DropTable(
                 name: "AspNetUserClaims",
-                schema: "Identity");
+                schema: "identity");
 
             migrationBuilder.DropTable(
                 name: "AspNetUserLogins",
-                schema: "Identity");
+                schema: "identity");
 
             migrationBuilder.DropTable(
                 name: "AspNetUserRoles",
-                schema: "Identity");
+                schema: "identity");
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens",
-                schema: "Identity");
+                schema: "identity");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles",
-                schema: "Identity");
+                schema: "identity");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers",
-                schema: "Identity");
+                schema: "identity");
         }
     }
 }

@@ -480,9 +480,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["GetWeatherForecast"][];
-                        "application/json": components["schemas"]["GetWeatherForecast"][];
-                        "text/json": components["schemas"]["GetWeatherForecast"][];
+                        "text/plain": components["schemas"]["GetWeatherForecastResponse"][];
+                        "application/json": components["schemas"]["GetWeatherForecastResponse"][];
+                        "text/json": components["schemas"]["GetWeatherForecastResponse"][];
                     };
                 };
                 /** @description Internal Server Error */
@@ -495,8 +495,194 @@ export interface paths {
             };
         };
         put?: never;
-        post?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CreateWeatherForecastRequest"];
+                    "text/json": components["schemas"]["CreateWeatherForecastRequest"];
+                    "application/*+json": components["schemas"]["CreateWeatherForecastRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GetWeatherForecastResponse"];
+                        "application/json": components["schemas"]["GetWeatherForecastResponse"];
+                        "text/json": components["schemas"]["GetWeatherForecastResponse"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/weather-forecast/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GetWeatherForecastResponse"];
+                        "application/json": components["schemas"]["GetWeatherForecastResponse"];
+                        "text/json": components["schemas"]["GetWeatherForecastResponse"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UpdateWeatherForecastRequest"];
+                    "text/json": components["schemas"]["UpdateWeatherForecastRequest"];
+                    "application/*+json": components["schemas"]["UpdateWeatherForecastRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GetWeatherForecastResponse"];
+                        "application/json": components["schemas"]["GetWeatherForecastResponse"];
+                        "text/json": components["schemas"]["GetWeatherForecastResponse"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description No Content */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;
@@ -513,16 +699,23 @@ export interface components {
             expiresIn: number;
             refreshToken: string;
         };
-        ForgotPasswordRequest: {
-            email: string;
-        };
-        GetWeatherForecast: {
+        CreateWeatherForecastRequest: {
             /** Format: date */
             date?: string;
             /** Format: int32 */
             temperatureC?: number;
+            summary?: string | null;
+        };
+        ForgotPasswordRequest: {
+            email: string;
+        };
+        GetWeatherForecastResponse: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: date */
+            date?: string;
             /** Format: int32 */
-            temperatureF?: number;
+            temperatureC?: number;
             summary?: string | null;
         };
         HttpValidationProblemDetails: {
@@ -550,6 +743,14 @@ export interface components {
             password: string;
             twoFactorCode?: string | null;
             twoFactorRecoveryCode?: string | null;
+        };
+        ProblemDetails: {
+            type?: string | null;
+            title?: string | null;
+            /** Format: int32 */
+            status?: number | null;
+            detail?: string | null;
+            instance?: string | null;
         };
         RefreshRequest: {
             refreshToken: string;
@@ -580,6 +781,13 @@ export interface components {
             recoveryCodes?: string[] | null;
             isTwoFactorEnabled: boolean;
             isMachineRemembered: boolean;
+        };
+        UpdateWeatherForecastRequest: {
+            /** Format: date */
+            date?: string;
+            /** Format: int32 */
+            temperatureC?: number;
+            summary?: string | null;
         };
     };
     responses: never;

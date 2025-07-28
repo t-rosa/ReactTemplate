@@ -6,16 +6,16 @@ internal class WeatherForecast
 {
     public Guid Id { get; private set; } = Guid.NewGuid();
 
-    public DateTime Date { get; private set; } = DateTime.UtcNow;
+    public DateOnly Date { get; private set; } = DateOnly.FromDateTime(DateTime.UtcNow);
 
     public int TemperatureC { get; private set; }
 
     public string? Summary { get; private set; }
 
-    internal WeatherForecast(Guid id, DateTime date, int temperatureC, string? summary)
+    internal WeatherForecast(Guid id, DateOnly date, int temperatureC, string? summary)
     {
         Id = Guard.Against.Default(id);
-        Date = Guard.Against.NullOrOutOfSQLDateRange(date);
+        Date = Guard.Against.Null(date);
         TemperatureC = Guard.Against.Null(temperatureC);
         Summary = summary;
     }

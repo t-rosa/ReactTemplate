@@ -12,15 +12,15 @@ namespace ReactTemplate.WeatherForecast.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "WeatherForecasts");
+                name: "weather_forecasts");
 
             migrationBuilder.CreateTable(
                 name: "weather_forecasts",
-                schema: "WeatherForecasts",
+                schema: "weather_forecasts",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    date = table.Column<DateOnly>(type: "date", nullable: false),
                     temperature_c = table.Column<int>(type: "integer", nullable: false),
                     summary = table.Column<string>(type: "text", nullable: true)
                 },
@@ -35,7 +35,7 @@ namespace ReactTemplate.WeatherForecast.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "weather_forecasts",
-                schema: "WeatherForecasts");
+                schema: "weather_forecasts");
         }
     }
 }

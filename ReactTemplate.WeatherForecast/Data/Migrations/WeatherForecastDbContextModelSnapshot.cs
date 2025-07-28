@@ -17,7 +17,7 @@ namespace ReactTemplate.WeatherForecast.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("WeatherForecasts")
+                .HasDefaultSchema("weather_forecasts")
                 .HasAnnotation("ProductVersion", "9.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -30,8 +30,8 @@ namespace ReactTemplate.WeatherForecast.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date")
                         .HasColumnName("date");
 
                     b.Property<string>("Summary")
@@ -45,7 +45,7 @@ namespace ReactTemplate.WeatherForecast.Data.Migrations
                     b.HasKey("Id")
                         .HasName("pk_weather_forecasts");
 
-                    b.ToTable("weather_forecasts", "WeatherForecasts");
+                    b.ToTable("weather_forecasts", "weather_forecasts");
                 });
 #pragma warning restore 612, 618
         }

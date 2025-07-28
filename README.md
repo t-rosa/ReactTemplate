@@ -51,7 +51,8 @@ dotnet user-secrets set "Database:ReactTemplate:ConnectionString" "value"
 
 ```bash
 # From ./ReactTemplate.Server/
-dotnet ef database update
+dotnet ef database update -c AuthenticationDbContext
+dotnet ef database update -c WeatherForecastDbContext
 ```
 
 4. Launch the Debug configuration
@@ -60,4 +61,16 @@ dotnet ef database update
 
 ```bash
 rm -rf ReactTemplate.Server/bin/Publish && dotnet publish ReactTemplate.Server -t:PublishContainer -p ContainerArchiveOutputPath=../react-template.tar.gz -o ReactTemplate.Server/bin/Publish
+```
+
+## Migrations
+
+From the "HOST" ReactTemplate.Server
+
+```bash
+dotnet ef migrations add Initial -c AuthenticationDbContext -p ../ReactTemplate.Authentication/ReactTemplate.Authentication.csproj -s ./ReactTemplate.Server.csproj -o Data/Migrations
+```
+
+```bash
+dotnet ef migrations add Initial -c WeatherForecastDbContext -p ../ReactTemplate.WeatherForecast/ReactTemplate.WeatherForecast.csproj -s ./ReactTemplate.Server.csproj -o Data/Migrations
 ```

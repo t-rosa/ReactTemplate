@@ -1,8 +1,10 @@
 namespace ReactTemplate.WeatherForecast.Dtos;
 
-internal class GetWeatherForecast
+internal class GetWeatherForecastResponse
 {
-    public DateTime Date { get; set; }
+    public Guid Id { get; set; }
+
+    public DateOnly Date { get; set; }
 
     public int TemperatureC { get; set; }
 

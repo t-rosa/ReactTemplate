@@ -98,12 +98,6 @@ csharp_style_conditional_delegate_call = true:suggestion
 csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
 #### Naming styles ####
 
-# Naming rules
-
-dotnet_naming_rule.suffix_async_should_be_asyncsuffix.severity = error #suggestion
-dotnet_naming_rule.suffix_async_should_be_asyncsuffix.symbols = suffix_async
-dotnet_naming_rule.suffix_async_should_be_asyncsuffix.style = asyncsuffix
-
 # Symbol specifications
 
 dotnet_naming_symbols.suffix_async.applicable_kinds = method

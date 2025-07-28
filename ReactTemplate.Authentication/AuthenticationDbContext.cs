@@ -9,7 +9,7 @@ public class AuthenticationDbContext(DbContextOptions<AuthenticationDbContext> o
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("Identity");
+        modelBuilder.HasDefaultSchema("identity");
 
         base.OnModelCreating(modelBuilder);
     }
