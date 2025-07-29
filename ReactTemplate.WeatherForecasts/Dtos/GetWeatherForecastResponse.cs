@@ -1,4 +1,4 @@
-namespace ReactTemplate.WeatherForecast.Dtos;
+namespace ReactTemplate.WeatherForecasts.Dtos;
 
 public class GetWeatherForecastResponse
 {

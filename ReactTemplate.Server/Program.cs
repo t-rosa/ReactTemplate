@@ -29,6 +29,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+    app.ApplyAuthenticationMigrations();
+    app.ApplyWeatherForecastMigrations();
 }
 
 app.UseHttpsRedirection();
