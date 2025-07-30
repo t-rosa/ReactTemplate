@@ -50,6 +50,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   test: {
+    include: ["./tests/browser/**/*.{spec,test}.{ts,tsx}"],
     browser: {
       headless: true,
       enabled: true,

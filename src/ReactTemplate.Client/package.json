@@ -10,7 +10,9 @@
     "format": "prettier . --write",
     "preview": "vite preview",
     "openapi": "openapi-typescript ../ReactTemplate.Server/obj/ReactTemplate.Server.json -o src/lib/api/schema.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "test:e2e": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -30,6 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+    "@playwright/test": "^1.54.1",
     "@tailwindcss/vite": "^4.1.11",
     "@tanstack/router-plugin": "^1.130.8",
     "@types/node": "^24.1.0",
