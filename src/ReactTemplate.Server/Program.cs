@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ public interface Program
 
         builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("SmtpOptions"));
 
-        builder.Services.AddProblemDetails();
+        builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
         builder.Services.AddControllers();
 
@@ -43,10 +44,9 @@ public interface Program
 
         app.UseAuthorization();
 
-        app.MapIdentityApi<IdentityUser>();
-
         app.MapControllers();
 
+        app.MapIdentityApi<IdentityUser>();
         app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager,
             [FromBody] object empty) =>
         {

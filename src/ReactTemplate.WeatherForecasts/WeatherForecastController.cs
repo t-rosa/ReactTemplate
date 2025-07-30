@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,8 +8,8 @@ using ReactTemplate.WeatherForecasts.Dtos;
 namespace ReactTemplate.WeatherForecasts;
 
 [ApiController]
-[Authorize]
 [Route("api/weather-forecast")]
+[Authorize]
 public class WeatherForecastController(WeatherForecastContext context) : ControllerBase
 {
     [HttpGet()]
@@ -53,10 +54,19 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
 
     [HttpPost()]
     [ProducesResponseType(typeof(GetWeatherForecastResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateWeatherForecast([FromBody] CreateWeatherForecastRequest request)
+    public async Task<IActionResult> CreateWeatherForecast(
+        [FromBody] CreateWeatherForecastRequest request,
+        [FromServices] IValidator<CreateWeatherForecastRequest> validator)
     {
+        var validation = await validator.ValidateAsync(request);
+        if (!validation.IsValid)
+        {
+            var problem = new ValidationProblemDetails(validation.ToDictionary());
+            return ValidationProblem(problem);
+        }
+
         var response = new WeatherForecast(Guid.NewGuid(), request.Date, request.TemperatureC, request.Summary);
 
         await context.WeatherForecasts.AddAsync(response);
@@ -75,10 +85,19 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
 
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(GetWeatherForecastResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateWeatherForecast([FromRoute] Guid id, [FromBody] UpdateWeatherForecastRequest request)
+    public async Task<IActionResult> UpdateWeatherForecast(
+        [FromRoute] Guid id,
+        [FromBody] UpdateWeatherForecastRequest request,
+        [FromServices] IValidator<UpdateWeatherForecastRequest> validator)
     {
+        var validation = await validator.ValidateAsync(request);
+        if (!validation.IsValid)
+        {
+            var problem = new ValidationProblemDetails(validation.ToDictionary());
+            return ValidationProblem(problem);
+        }
         var forecast = await context.WeatherForecasts.Where(e => e.Id == id).SingleOrDefaultAsync();
 
         if (forecast is null)
