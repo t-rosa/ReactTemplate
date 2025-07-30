@@ -46,8 +46,8 @@ public interface Program
 
         app.MapControllers();
 
-        app.MapIdentityApi<IdentityUser>();
-        app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager,
+        app.MapIdentityApi<User>();
+        app.MapPost("/logout", async (SignInManager<User> signInManager,
             [FromBody] object empty) =>
         {
             if (empty != null)

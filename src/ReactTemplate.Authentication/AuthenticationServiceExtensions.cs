@@ -18,7 +18,7 @@ public static class AuthenticationServiceExtensions
 
         services.AddAuthorization();
 
-        services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<AuthenticationContext>();
+        services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<AuthenticationContext>();
 
         services.Configure<IdentityOptions>(options =>
         {
