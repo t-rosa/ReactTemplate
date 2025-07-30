@@ -6,7 +6,7 @@ import fs from "fs";
 import { fileURLToPath, URL } from "node:url";
 import path from "path";
 import { env } from "process";
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 
 const baseFolder =
   env.APPDATA !== undefined && env.APPDATA !== "" ?
@@ -49,6 +49,15 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  test: {
+    browser: {
+      headless: true,
+      enabled: true,
+      provider: "playwright",
+      // https://vitest.dev/guide/browser/playwright
+      instances: [{ browser: "chromium" }, { browser: "firefox" }, { browser: "webkit" }],
+    },
+  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
