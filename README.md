@@ -60,7 +60,7 @@ dotnet ef database update -c WeatherForecastDbContext
 ## Deployment
 
 ```bash
-rm -rf ReactTemplate.Server/bin/Publish && dotnet publish ReactTemplate.Server -t:PublishContainer -p ContainerArchiveOutputPath=../react-template.tar.gz -o ReactTemplate.Server/bin/Publish
+rm -rf src/ReactTemplate.Server/bin/Publish && dotnet publish src/ReactTemplate.Server -t:PublishContainer -p ContainerArchiveOutputPath=../../react-template.tar.gz -o src/ReactTemplate.Server/bin/Publish
 ```
 
 ## Migrations

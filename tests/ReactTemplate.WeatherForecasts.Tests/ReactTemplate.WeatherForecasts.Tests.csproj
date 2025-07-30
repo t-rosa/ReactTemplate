@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ReactTemplate.Server\ReactTemplate.Server.csproj" />
+    <ProjectReference Include="..\..\src\ReactTemplate.Server\ReactTemplate.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>

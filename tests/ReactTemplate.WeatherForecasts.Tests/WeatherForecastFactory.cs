@@ -1,11 +1,11 @@
 ﻿using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ReactTemplate.Authentication;
+using ReactTemplate.Server;
 using Testcontainers.PostgreSql;
 
 namespace ReactTemplate.WeatherForecasts.Tests;

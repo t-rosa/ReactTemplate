@@ -13,8 +13,8 @@ export const router = createRouter({
   defaultViewTransition: true,
   defaultPreloadStaleTime: 0,
   defaultPreload: "intent",
-  defaultPendingMs: 0,
-  defaultPendingMinMs: 0,
+  defaultPendingMs: 150,
+  defaultPendingMinMs: 150,
   scrollRestoration: true,
   context: {
     queryClient,
