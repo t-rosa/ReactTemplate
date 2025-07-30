@@ -14,7 +14,7 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
 {
     [HttpGet()]
     [ProducesResponseType(typeof(IEnumerable<GetWeatherForecastResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public IActionResult GetWeatherForecasts()
     {
         var response = context.WeatherForecasts.AsNoTracking().Select((forecast) => new GetWeatherForecastResponse
@@ -30,8 +30,8 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(GetWeatherForecastResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetWeatherForecast([FromRoute] Guid id)
     {
         var query = context.WeatherForecasts.Where(e => e.Id == id).Select((forecast) => new GetWeatherForecastResponse
@@ -43,7 +43,6 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
         });
 
         var response = await query.SingleOrDefaultAsync();
-
         if (response is null)
         {
             return NotFound();
@@ -55,7 +54,7 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
     [HttpPost()]
     [ProducesResponseType(typeof(GetWeatherForecastResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateWeatherForecast(
         [FromBody] CreateWeatherForecastRequest request,
         [FromServices] IValidator<CreateWeatherForecastRequest> validator)
@@ -75,9 +74,9 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
         {
             await context.SaveChangesAsync();
         }
-        catch (Exception)
+        catch (Exception exception)
         {
-            return BadRequest();
+            return StatusCode(500, exception);
         }
 
         return CreatedAtAction(nameof(GetWeatherForecast), new { id = response.Id }, response);
@@ -86,7 +85,7 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(GetWeatherForecastResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateWeatherForecast(
         [FromRoute] Guid id,
         [FromBody] UpdateWeatherForecastRequest request,
@@ -98,8 +97,8 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
             var problem = new ValidationProblemDetails(validation.ToDictionary());
             return ValidationProblem(problem);
         }
-        var forecast = await context.WeatherForecasts.Where(e => e.Id == id).SingleOrDefaultAsync();
 
+        var forecast = await context.WeatherForecasts.Where(e => e.Id == id).SingleOrDefaultAsync();
         if (forecast is null)
         {
             return NotFound();
@@ -130,12 +129,11 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
 
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RemoveWeatherForecast([FromRoute] Guid id)
     {
         var forecast = await context.WeatherForecasts.Where(e => e.Id == id).SingleOrDefaultAsync();
-
         if (forecast is null)
         {
             return NotFound();

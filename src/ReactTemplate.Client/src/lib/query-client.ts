@@ -33,7 +33,9 @@ export const queryClient = new QueryClient({
 
 declare module "@tanstack/react-query" {
   interface Register {
-    defaultError: components["schemas"]["HttpValidationProblemDetails"];
+    defaultError:
+      | components["schemas"]["HttpValidationProblemDetails"]
+      | components["schemas"]["ProblemDetails"];
     mutationMeta: {
       invalidatesQuery?: QueryKey;
       successMessage?: string;
