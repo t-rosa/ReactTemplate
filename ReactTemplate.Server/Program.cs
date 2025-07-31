@@ -9,8 +9,8 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using ReactTemplate.Server.Modules.Email;
 using ReactTemplate.Server.Modules.Users;
-using ReactTemplate.Server.Services;
 using Scalar.AspNetCore;
 
 namespace ReactTemplate.Server;
