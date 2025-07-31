@@ -7,16 +7,10 @@
   "env": {
     "builtin": true
   },
-  "ignorePatterns": [
-    "dist",
-    "src/lib/api",
-    "src/components/ui"
-  ],
+  "ignorePatterns": ["dist", "src/lib/api", "src/components/ui"],
   "overrides": [
     {
-      "files": [
-        "**/*.{ts,tsx}"
-      ],
+      "files": ["**/*.{ts,tsx}"],
       "rules": {
         "for-direction": "error",
         "no-async-promise-executor": "error",
@@ -75,9 +69,7 @@
       }
     },
     {
-      "files": [
-        "**/*.{ts,tsx}"
-      ],
+      "files": ["**/*.{ts,tsx}"],
       "rules": {
         "no-class-assign": "off",
         "no-const-assign": "off",
@@ -98,9 +90,7 @@
       }
     },
     {
-      "files": [
-        "**/*.{ts,tsx}"
-      ],
+      "files": ["**/*.{ts,tsx}"],
       "rules": {
         "@typescript-eslint/ban-ts-comment": "error",
         "no-array-constructor": "error",
@@ -126,14 +116,10 @@
         "require-await": "off",
         "@typescript-eslint/triple-slash-reference": "error"
       },
-      "plugins": [
-        "typescript"
-      ]
+      "plugins": ["typescript"]
     },
     {
-      "files": [
-        "**/*.{ts,tsx}"
-      ],
+      "files": ["**/*.{ts,tsx}"],
       "rules": {
         "no-class-assign": "off",
         "no-const-assign": "off",
@@ -154,9 +140,7 @@
       }
     },
     {
-      "files": [
-        "**/*.{ts,tsx}"
-      ],
+      "files": ["**/*.{ts,tsx}"],
       "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": "error",
@@ -170,26 +154,18 @@
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error"
       },
-      "plugins": [
-        "typescript"
-      ]
+      "plugins": ["typescript"]
     },
     {
-      "files": [
-        "**/*.{ts,tsx}"
-      ],
+      "files": ["**/*.{ts,tsx}"],
       "rules": {
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn"
       },
-      "plugins": [
-        "react"
-      ]
+      "plugins": ["react"]
     },
     {
-      "files": [
-        "**/*.{ts,tsx}"
-      ],
+      "files": ["**/*.{ts,tsx}"],
       "rules": {
         "@typescript-eslint/consistent-type-imports": "error"
       },
@@ -1291,9 +1267,7 @@
         "es2020": true,
         "shared-node-browser": true
       },
-      "plugins": [
-        "typescript"
-      ]
+      "plugins": ["typescript"]
     }
   ]
 }

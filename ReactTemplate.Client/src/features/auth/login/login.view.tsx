@@ -12,6 +12,11 @@ export function LoginView() {
   const navigate = useNavigate();
 
   const { mutate, status } = $api.useMutation("post", "/login", {
+    meta: {
+      successMessage: "Connecté",
+      errorMessage: "Il y a eu une érreur.",
+      invalidatesQuery: ["get", "manage/info"],
+    },
     async onSuccess() {
       await navigate({ to: "/dashboard" });
     },

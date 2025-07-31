@@ -1,4 +1,5 @@
-import { $client } from "@/lib/api/client";
+import { $api, $client } from "@/lib/api/client";
+import { PrivateView } from "@/views/private/private.view";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_private")({
@@ -11,4 +12,8 @@ export const Route = createFileRoute("/_private")({
       });
     }
   },
+  loader({ context }) {
+    return context.queryClient.ensureQueryData($api.queryOptions("get", "/manage/info"));
+  },
+  component: PrivateView,
 });

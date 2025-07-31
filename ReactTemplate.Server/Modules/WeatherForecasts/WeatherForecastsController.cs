@@ -9,9 +9,9 @@ using ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
 namespace ReactTemplate.Server.Modules.WeatherForecasts;
 
 [ApiController]
-[Route("api/weather-forecast")]
+[Route("api/weather-forecasts")]
 [Authorize]
-public class WeatherForecastController(ApplicationDbContext context, ILogger<WeatherForecastController> logger, UserManager<User> userManager) : ControllerBase
+public class WeatherForecastsController(ApplicationDbContext context, ILogger<WeatherForecastsController> logger, UserManager<User> userManager) : ControllerBase
 {
     [HttpGet()]
     [ProducesResponseType(typeof(IEnumerable<GetWeatherForecastResponse>), StatusCodes.Status200OK)]

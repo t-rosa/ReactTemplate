@@ -1,5 +1,5 @@
 import { Loader } from "@/components/loader";
-import { Button } from "@/components/ui/button";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { $api } from "@/lib/api/client";
 import { useNavigate } from "@tanstack/react-router";
 import { LogOutIcon } from "lucide-react";
@@ -24,15 +24,17 @@ export function LogoutView() {
 
   if (status === "pending") {
     return (
-      <Button disabled>
+      <DropdownMenuItem disabled>
         <Loader />
-      </Button>
+        Déconnexion
+      </DropdownMenuItem>
     );
   }
 
   return (
-    <Button onClick={handleClick}>
+    <DropdownMenuItem onClick={handleClick}>
       <LogOutIcon />
-    </Button>
+      Déconnexion
+    </DropdownMenuItem>
   );
 }
