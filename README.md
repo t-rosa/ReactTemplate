@@ -40,11 +40,11 @@ npm install
 
 ```bash
 # From ./ReactTemplate.Server/
-# SMTP (Gmail)
 dotnet user-secrets init
 dotnet user-secrets set "Smtp:Gmail:Username" "value"
 dotnet user-secrets set "Smtp:Gmail:Password" "value"
 dotnet user-secrets set "Database:ReactTemplate:ConnectionString" "value"
+dotnet user-secrets set "OtlpKey" "value"
 ```
 
 3. Setup the database

@@ -1,7 +1,13 @@
 using FluentValidation;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using ReactTemplate.Authentication;
 using ReactTemplate.Server.Services;
 using ReactTemplate.WeatherForecasts;
@@ -15,9 +21,46 @@ public interface Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // Open Telemetry
+        builder.Services.AddOpenTelemetry()
+            .ConfigureResource(resource => resource.AddService("ReactTemplate"))
+            .WithMetrics(metrics =>
+            {
+                metrics
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation();
+
+                metrics.AddOtlpExporter();
+            })
+            .WithTracing((tracing) =>
+            {
+                tracing
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddEntityFrameworkCoreInstrumentation();
+
+                tracing.AddOtlpExporter();
+            });
+
+        builder.Logging.AddOpenTelemetry(logging => logging.AddOtlpExporter());
+
+        builder.Services.Configure<OtlpExporterOptions>(options =>
+        {
+            options.Headers = $"x-otlp-api-key={builder.Configuration["Otlp:Key"]}";
+        });
+
         // Module Services
         builder.Services.AddWeatherForecastServices(builder.Configuration);
         builder.Services.AddAuthenticationServices(builder.Configuration, builder.Environment);
+
+        if (builder.Environment.IsDevelopment())
+        {
+            builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("./keys/storage"));
+        }
+        else
+        {
+            builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("keys/storage"));
+        }
 
         builder.Services.AddTransient<IEmailSender, EmailSender>();
 

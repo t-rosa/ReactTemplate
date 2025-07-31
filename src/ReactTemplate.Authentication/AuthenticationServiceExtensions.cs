@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.DataProtection;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,15 +26,13 @@ public static class AuthenticationServiceExtensions
             options.User.RequireUniqueEmail = true;
         });
 
-        if (environment.IsDevelopment())
-        {
-            services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("./keys/storage"));
-        }
-        else
-        {
-            services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("keys/storage"));
-        }
-
         return services;
+    }
+
+    public static void ApplyAuthenticationMigrations(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AuthenticationContext>();
+        context.Database.Migrate();
     }
 }

@@ -1,11 +1,10 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ReactTemplate.WeatherForecasts;
-
-// public interface Marker { }
 
 public static class WeatherForecastServiceExtensions
 {
@@ -16,9 +15,15 @@ public static class WeatherForecastServiceExtensions
                     .UseSnakeCaseNamingConvention()
         );
 
-
         services.AddValidatorsFromAssembly(typeof(WeatherForecast).Assembly, includeInternalTypes: true);
 
         return services;
+    }
+
+    public static void ApplyWeatherForecastMigrations(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<WeatherForecastContext>();
+        context.Database.Migrate();
     }
 }

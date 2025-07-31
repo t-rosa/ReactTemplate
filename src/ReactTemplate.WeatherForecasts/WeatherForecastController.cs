@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ReactTemplate.WeatherForecasts.Dtos;
 
 namespace ReactTemplate.WeatherForecasts;
@@ -10,13 +11,14 @@ namespace ReactTemplate.WeatherForecasts;
 [ApiController]
 [Route("api/weather-forecast")]
 [Authorize]
-public class WeatherForecastController(WeatherForecastContext context) : ControllerBase
+public class WeatherForecastController(WeatherForecastContext context, ILogger<WeatherForecastController> logger) : ControllerBase
 {
     [HttpGet()]
     [ProducesResponseType(typeof(IEnumerable<GetWeatherForecastResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public IActionResult GetWeatherForecasts()
     {
+        logger.LogInformation("Retrieving all weather forecasts");
         var response = context.WeatherForecasts.AsNoTracking().Select((forecast) => new GetWeatherForecastResponse
         {
             Id = forecast.Id,
@@ -34,6 +36,7 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetWeatherForecast([FromRoute] Guid id)
     {
+        logger.LogInformation("Retrieving weather forecasts with ID: {ID}", id);
         var query = context.WeatherForecasts.Where(e => e.Id == id).Select((forecast) => new GetWeatherForecastResponse
         {
             Id = forecast.Id,
@@ -45,6 +48,7 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
         var response = await query.SingleOrDefaultAsync();
         if (response is null)
         {
+            logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
             return NotFound();
         }
 
@@ -59,16 +63,19 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
         [FromBody] CreateWeatherForecastRequest request,
         [FromServices] IValidator<CreateWeatherForecastRequest> validator)
     {
+        logger.LogInformation("Creating weather forecast");
+
         var validation = await validator.ValidateAsync(request);
         if (!validation.IsValid)
         {
+            logger.LogError("Error validating request");
             var problem = new ValidationProblemDetails(validation.ToDictionary());
             return ValidationProblem(problem);
         }
 
         var response = new WeatherForecast(Guid.NewGuid(), request.Date, request.TemperatureC, request.Summary);
-
         await context.WeatherForecasts.AddAsync(response);
+        logger.LogInformation("Creating weather forecast with ID: {ID}", response.Id);
 
         try
         {
@@ -76,9 +83,11 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
         }
         catch (Exception exception)
         {
+            logger.LogError("Error creating weather forecast with ID: {ID}", response.Id);
             return StatusCode(500, exception);
         }
 
+        logger.LogInformation("Weather forecast with ID: {ID} successfully created", response.Id);
         return CreatedAtAction(nameof(GetWeatherForecast), new { id = response.Id }, response);
     }
 
@@ -91,9 +100,12 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
         [FromBody] UpdateWeatherForecastRequest request,
         [FromServices] IValidator<UpdateWeatherForecastRequest> validator)
     {
+        logger.LogInformation("Updating weather forecast with ID: {ID}", id);
+
         var validation = await validator.ValidateAsync(request);
         if (!validation.IsValid)
         {
+            logger.LogError("Error validating request");
             var problem = new ValidationProblemDetails(validation.ToDictionary());
             return ValidationProblem(problem);
         }
@@ -101,6 +113,7 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
         var forecast = await context.WeatherForecasts.Where(e => e.Id == id).SingleOrDefaultAsync();
         if (forecast is null)
         {
+            logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
             return NotFound();
         }
 
@@ -113,8 +126,11 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
         }
         catch (Exception exception)
         {
+            logger.LogError("Error updating weather forecast with ID: {ID}", id);
             return StatusCode(500, exception);
         }
+
+        logger.LogInformation("Weather forecast with ID: {ID} successfully updated", id);
 
         var response = context.WeatherForecasts.Where(e => e.Id == id).Select((forecast) => new GetWeatherForecastResponse
         {
@@ -133,9 +149,12 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RemoveWeatherForecast([FromRoute] Guid id)
     {
+        logger.LogInformation("Removing weather forecast with ID: {ID}", id);
+
         var forecast = await context.WeatherForecasts.Where(e => e.Id == id).SingleOrDefaultAsync();
         if (forecast is null)
         {
+            logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
             return NotFound();
         }
 
@@ -147,9 +166,11 @@ public class WeatherForecastController(WeatherForecastContext context) : Control
         }
         catch (Exception exception)
         {
+            logger.LogError("Error removing weather forecast with ID: {ID}", id);
             return StatusCode(500, exception);
         }
 
+        logger.LogInformation("Weather forecast with ID: {ID} successfully removed", id);
         return NoContent();
     }
 }
