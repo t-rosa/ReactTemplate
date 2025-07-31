@@ -2,23 +2,18 @@
 using System.Net.Http.Json;
 using Bogus;
 using FluentAssertions;
-using ReactTemplate.WeatherForecasts.Dtos;
+using ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
 
-namespace ReactTemplate.WeatherForecasts.Tests;
+namespace ReactTemplate.Tests.Modules.WeatherForecasts;
 
-public class WeatherForecastControllerTests : IClassFixture<WeatherForecastFactory>
+public class WeatherForecastControllerTests(BaseFactory factory) : IClassFixture<BaseFactory>
 {
-    private readonly HttpClient _client;
+    private readonly HttpClient _client = factory.CreateClient();
 
     private readonly Faker<CreateWeatherForecastRequest> _createWeatherForecastFaker = new Faker<CreateWeatherForecastRequest>()
         .RuleFor(x => x.Date, faker => faker.Date.RecentDateOnly())
         .RuleFor(x => x.TemperatureC, faker => faker.Random.Int())
         .RuleFor(x => x.Summary, faker => faker.Lorem.Paragraph());
-
-    public WeatherForecastControllerTests(WeatherForecastFactory factory)
-    {
-        _client = factory.CreateClient();
-    }
 
     [Fact]
     public async Task GetWeatherForecasts_ReturnUnauthorized()

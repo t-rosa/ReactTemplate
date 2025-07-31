@@ -8,7 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" Version="5.0.0" />
     <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
+    <PackageReference Include="FluentValidation" Version="12.0.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.7" />
@@ -30,9 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ReactTemplate.Authentication\ReactTemplate.Authentication.csproj" />
     <ProjectReference Include="..\ReactTemplate.Client\ReactTemplate.Client.esproj" />
-    <ProjectReference Include="..\ReactTemplate.WeatherForecasts\ReactTemplate.WeatherForecasts.csproj" />
   </ItemGroup>
 
 </Project>

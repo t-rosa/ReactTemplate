@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using ReactTemplate.Authentication;
+using ReactTemplate.Server.Modules.Users;
 using ReactTemplate.Server.Services;
-using ReactTemplate.WeatherForecasts;
 using Scalar.AspNetCore;
 
 namespace ReactTemplate.Server;
@@ -49,9 +49,25 @@ public interface Program
             options.Headers = $"x-otlp-api-key={builder.Configuration["Otlp:Key"]}";
         });
 
-        // Module Services
-        builder.Services.AddWeatherForecastServices(builder.Configuration);
-        builder.Services.AddAuthenticationServices(builder.Configuration, builder.Environment);
+        // Database
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options
+                .UseNpgsql(builder.Configuration["Database:ReactTemplate:ConnectionString"])
+                .UseSnakeCaseNamingConvention();
+        });
+
+        // Authentication
+        builder.Services.AddAuthorization();
+
+        builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+        builder.Services.Configure<IdentityOptions>(options =>
+        {
+            options.SignIn.RequireConfirmedEmail = true;
+            options.User.RequireUniqueEmail = true;
+        });
+
 
         if (builder.Environment.IsDevelopment())
         {
@@ -62,10 +78,12 @@ public interface Program
             builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("keys/storage"));
         }
 
+        // Email
         builder.Services.AddTransient<IEmailSender, EmailSender>();
 
         builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("SmtpOptions"));
 
+        // Validation
         builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
         builder.Services.AddControllers();
@@ -79,8 +97,10 @@ public interface Program
         {
             app.MapOpenApi();
             app.MapScalarApiReference();
-            app.ApplyAuthenticationMigrations();
-            app.ApplyWeatherForecastMigrations();
+
+            using var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            context.Database.Migrate();
         }
 
         app.UseHttpsRedirection();

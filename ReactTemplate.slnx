@@ -8,15 +8,9 @@
     <File Path=".editorconfig" />
     <File Path="README.md" />
   </Folder>
-  <Folder Name="/src/">
-    <Project Path="src/ReactTemplate.Authentication/ReactTemplate.Authentication.csproj" />
-    <Project Path="src/ReactTemplate.Client/ReactTemplate.Client.esproj">
-      <Platform Project="AnyCPU" />
-    </Project>
-    <Project Path="src/ReactTemplate.Server/ReactTemplate.Server.csproj" />
-    <Project Path="src/ReactTemplate.WeatherForecasts/ReactTemplate.WeatherForecasts.csproj" />
-  </Folder>
-  <Folder Name="/tests/">
-    <Project Path="tests/ReactTemplate.WeatherForecasts.Tests/ReactTemplate.WeatherForecasts.Tests.csproj" />
-  </Folder>
+  <Project Path="ReactTemplate.Client/ReactTemplate.Client.esproj">
+    <Platform Project="AnyCPU" />
+  </Project>
+  <Project Path="ReactTemplate.Server/ReactTemplate.Server.csproj" />
+  <Project Path="ReactTemplate.Tests/ReactTemplate.Tests.csproj" />
 </Solution>

@@ -1,8 +1,8 @@
 using FluentValidation;
 
-namespace ReactTemplate.WeatherForecasts.Dtos;
+namespace ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
 
-public class CreateWeatherForecastRequest
+public class UpdateWeatherForecastRequest
 {
     public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -11,9 +11,9 @@ public class CreateWeatherForecastRequest
     public string? Summary { get; set; }
 }
 
-public class CreateWeatherForecastRequestValidator : AbstractValidator<CreateWeatherForecastRequest>
+public class UpdateWeatherForecastRequestValidator : AbstractValidator<UpdateWeatherForecastRequest>
 {
-    public CreateWeatherForecastRequestValidator()
+    public UpdateWeatherForecastRequestValidator()
     {
         RuleFor(e => e.Date).NotEmpty().WithMessage("La date doit être renseignée.");
         RuleFor(e => e.TemperatureC).NotEmpty().WithMessage("La température doit être renseignée.");

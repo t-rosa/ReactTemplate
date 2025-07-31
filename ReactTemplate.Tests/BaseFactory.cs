@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using ReactTemplate.Authentication;
 using ReactTemplate.Server;
 using Testcontainers.PostgreSql;
 
-namespace ReactTemplate.WeatherForecasts.Tests;
+namespace ReactTemplate.Tests;
 
-public class WeatherForecastFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public class BaseFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly PostgreSqlContainer _container = new PostgreSqlBuilder()
         .WithDatabase("react-template-test")
@@ -34,26 +33,15 @@ public class WeatherForecastFactory : WebApplicationFactory<Program>, IAsyncLife
     {
         builder.ConfigureTestServices(services =>
         {
-            var authDescriptor = services.SingleOrDefault(s => s.ServiceType == typeof(DbContextOptions<AuthenticationContext>));
-            if (authDescriptor is not null)
+            var descriptor = services.SingleOrDefault(s => s.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+            if (descriptor is not null)
             {
-                services.Remove(authDescriptor);
+                services.Remove(descriptor);
             }
 
-            var weatherForecastDescriptor = services.SingleOrDefault(s => s.ServiceType == typeof(DbContextOptions<WeatherForecastContext>));
-            if (weatherForecastDescriptor is not null)
-            {
-                services.Remove(weatherForecastDescriptor);
-            }
-
-            services.AddDbContext<AuthenticationContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(_container.GetConnectionString())
                         .UseSnakeCaseNamingConvention());
-
-            services.AddDbContext<WeatherForecastContext>(options =>
-                options.UseNpgsql(_container.GetConnectionString())
-                        .UseSnakeCaseNamingConvention());
-
         });
 
         base.ConfigureWebHost(builder);
