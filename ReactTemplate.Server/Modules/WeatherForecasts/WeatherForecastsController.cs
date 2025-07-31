@@ -28,13 +28,16 @@ public class WeatherForecastsController(ApplicationDbContext context, ILogger<We
             return Unauthorized();
         }
 
-        var response = context.WeatherForecasts.AsNoTracking().Where(e => e.UserId == user.Id).Select((forecast) => new GetWeatherForecastResponse
-        {
-            Id = forecast.Id,
-            Date = forecast.Date,
-            Summary = forecast.Summary,
-            TemperatureC = forecast.TemperatureC
-        });
+        var response = context.WeatherForecasts
+            .AsNoTracking()
+            .Where(e => e.UserId == user.Id)
+            .Select((forecast) => new GetWeatherForecastResponse
+            {
+                Id = forecast.Id,
+                Date = forecast.Date,
+                Summary = forecast.Summary,
+                TemperatureC = forecast.TemperatureC
+            });
 
         return Ok(response);
     }
@@ -99,9 +102,16 @@ public class WeatherForecastsController(ApplicationDbContext context, ILogger<We
             return ValidationProblem(problem);
         }
 
-        var response = new WeatherForecast(Guid.NewGuid(), user.Id, request.Date, request.TemperatureC, request.Summary);
-        await context.WeatherForecasts.AddAsync(response);
-        logger.LogInformation("Creating weather forecast with ID: {ID}", response.Id);
+        var forecast = new WeatherForecast()
+        {
+            Date = request.Date,
+            Summary = request.Summary,
+            TemperatureC = request.TemperatureC,
+            UserId = user.Id
+        };
+
+        await context.WeatherForecasts.AddAsync(forecast);
+        logger.LogInformation("Creating weather forecast with ID: {ID}", forecast.Id);
 
         try
         {
@@ -109,9 +119,17 @@ public class WeatherForecastsController(ApplicationDbContext context, ILogger<We
         }
         catch (Exception exception)
         {
-            logger.LogError("Error creating weather forecast with ID: {ID}", response.Id);
+            logger.LogError("Error creating weather forecast with ID: {ID}", forecast.Id);
             return StatusCode(500, exception);
         }
+
+        var response = new GetWeatherForecastResponse
+        {
+            Id = forecast.Id,
+            Date = forecast.Date,
+            Summary = forecast.Summary,
+            TemperatureC = forecast.TemperatureC,
+        };
 
         logger.LogInformation("Weather forecast with ID: {ID} successfully created", response.Id);
         return CreatedAtAction(nameof(GetWeatherForecast), new { id = response.Id }, response);

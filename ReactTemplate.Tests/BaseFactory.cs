@@ -46,5 +46,4 @@ public class BaseFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
         base.ConfigureWebHost(builder);
     }
-
 }

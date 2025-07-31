@@ -12,7 +12,7 @@ using ReactTemplate.Server;
 namespace ReactTemplate.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250731121021_Initial")]
+    [Migration("20250731190433_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

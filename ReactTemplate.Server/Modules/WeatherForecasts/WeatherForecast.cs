@@ -5,25 +5,16 @@ namespace ReactTemplate.Server.Modules.WeatherForecasts;
 
 public class WeatherForecast
 {
-    public Guid Id { get; private set; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
-    public Guid UserId { get; private set; }
+    public Guid UserId { get; set; }
 
-    public DateOnly Date { get; private set; } = DateOnly.FromDateTime(DateTime.UtcNow);
+    public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
 
-    public int TemperatureC { get; private set; }
+    public int TemperatureC { get; set; }
 
-    public string? Summary { get; private set; }
+    public string? Summary { get; set; }
 
-    public User User { get; private set; } = null!;
-
-    internal WeatherForecast(Guid id, Guid userId, DateOnly date, int temperatureC, string? summary)
-    {
-        Id = Guard.Against.Default(id);
-        UserId = Guard.Against.Default(userId);
-        Date = Guard.Against.Null(date);
-        TemperatureC = Guard.Against.Null(temperatureC);
-        Summary = summary;
-    }
+    public User User { get; set; } = default!;
 }
 

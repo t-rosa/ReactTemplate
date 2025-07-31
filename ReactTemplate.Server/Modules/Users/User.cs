@@ -5,9 +5,9 @@ namespace ReactTemplate.Server.Modules.Users;
 
 public class User : IdentityUser<Guid>
 {
-    public string? FirstName { get; private set; }
+    public string? FirstName { get; set; }
 
-    public string? LastName { get; private set; }
+    public string? LastName { get; set; }
 
-    public IEnumerable<WeatherForecast> WeatherForecasts { get; } = [];
+    public ICollection<WeatherForecast> WeatherForecasts { get; } = default!;
 }
