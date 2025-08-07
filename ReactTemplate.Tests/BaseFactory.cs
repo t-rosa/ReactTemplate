@@ -1,10 +1,12 @@
 ﻿using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ReactTemplate.Server;
+using ReactTemplate.Server.Modules.Users;
 using Testcontainers.PostgreSql;
 
 namespace ReactTemplate.Tests;
@@ -42,8 +44,33 @@ public class BaseFactory : WebApplicationFactory<Program>, IAsyncLifetime
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(_container.GetConnectionString())
                         .UseSnakeCaseNamingConvention());
+
         });
+
+        builder.Build();
 
         base.ConfigureWebHost(builder);
     }
+
+    // public static async Task SeedUsersAsync(UserManager<User> userManager)
+    // {
+    //     var adminEmail = "admin@example.com";
+    //     var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    //     if (adminUser == null)
+    //     {
+    //         var user = new User
+    //         {
+    //             UserName = adminEmail,
+    //             Email = adminEmail,
+    //             EmailConfirmed = true
+    //         };
+
+    //         var result = await userManager.CreateAsync(user, "Admin123!");
+
+    //         if (!result.Succeeded)
+    //         {
+    //             throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+    //         }
+    //     }
+    // }
 }

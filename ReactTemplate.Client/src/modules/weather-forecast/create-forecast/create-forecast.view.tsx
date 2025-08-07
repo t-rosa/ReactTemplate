@@ -1,3 +1,4 @@
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -20,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { forecastsCollection } from "@/lib/collections";
+import { $api } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { format, formatISO } from "date-fns";
@@ -41,17 +42,25 @@ export function CreateForecast() {
     },
   });
 
-  function onSubmit(values: CreateForecastFormSchema) {
-    const transction = forecastsCollection.insert({
-      id: crypto.randomUUID(),
-      ...values,
-      temperatureC: parseInt(values.temperatureC),
-      date: formatISO(values.date, { representation: "date" }),
-    });
+  const { mutate, isPending } = $api.useMutation("post", "/api/weather-forecasts", {
+    meta: {
+      invalidatesQuery: ["get", "/api/weather-forecasts"],
+      successMessage: "Prévision ajouté",
+      errorMessage: "Il y a eu une erreur.",
+    },
+    onSuccess() {
+      setOpen(!open);
+    },
+  });
 
-    if (!transction.error) {
-      setOpen(false);
-    }
+  async function onSubmit(values: CreateForecastFormSchema) {
+    mutate({
+      body: {
+        temperatureC: parseInt(values.temperatureC),
+        date: formatISO(values.date, { representation: "date" }),
+        summary: values.summary,
+      },
+    });
   }
 
   return (
@@ -137,7 +146,8 @@ export function CreateForecast() {
                   Anuler
                 </Button>
               </DialogClose>
-              <Button onClick={() => form.handleSubmit(onSubmit)} type="submit">
+              <Button type="submit" disabled={isPending}>
+                {isPending && <Loader />}
                 Valider
               </Button>
             </DialogFooter>

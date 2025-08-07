@@ -41,10 +41,10 @@ npm install
 ```bash
 # From ./ReactTemplate.Server/
 dotnet user-secrets init
-dotnet user-secrets set "Smtp:Gmail:Username" "value"
-dotnet user-secrets set "Smtp:Gmail:Password" "value"
-dotnet user-secrets set "Database:ReactTemplate:ConnectionString" "value"
-dotnet user-secrets set "OtlpKey" "value"
+dotnet user-secrets set "SMTP_USERNAME" "value"
+dotnet user-secrets set "SMTP_PASSWORD" "value"
+dotnet user-secrets set "CONNECTION_STRING" "value"
+dotnet user-secrets set "OTEL_API_KEY" "value"
 ```
 
 3. Launch the Debug configuration

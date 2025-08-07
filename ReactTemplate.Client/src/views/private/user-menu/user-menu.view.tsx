@@ -5,8 +5,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { $api } from "@/lib/api/client";
+import { LogoutView } from "@/modules/users/logout/logout.view";
 import { UserCircleIcon } from "lucide-react";
-import { LogoutView } from "../../../features/auth/logout/logout.view";
 import { UserMenuDropdown } from "./user-menu.ui";
 
 export function UserMenu() {

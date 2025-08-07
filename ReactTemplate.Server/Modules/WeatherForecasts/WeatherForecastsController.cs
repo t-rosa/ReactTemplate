@@ -11,24 +11,35 @@ namespace ReactTemplate.Server.Modules.WeatherForecasts;
 [ApiController]
 [Route("api/weather-forecasts")]
 [Authorize]
-public class WeatherForecastsController(ApplicationDbContext context, ILogger<WeatherForecastsController> logger, UserManager<User> userManager) : ControllerBase
+public class WeatherForecastsController : ControllerBase
 {
+    private readonly ApplicationDbContext _context;
+    private readonly ILogger<WeatherForecastsController> _logger;
+    private readonly UserManager<User> _userManager;
+
+    public WeatherForecastsController(ApplicationDbContext context, ILogger<WeatherForecastsController> logger, UserManager<User> userManager)
+    {
+        _context = context;
+        _logger = logger;
+        _userManager = userManager;
+    }
+
     [HttpGet()]
     [ProducesResponseType(typeof(IEnumerable<GetWeatherForecastResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetWeatherForecasts()
     {
-        logger.LogInformation("Retrieving all weather forecasts");
+        _logger.LogInformation("Retrieving all weather forecasts");
 
-        logger.LogInformation("Retrieving the user");
-        var user = await userManager.GetUserAsync(HttpContext.User);
+        _logger.LogInformation("Retrieving the user");
+        var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
-            logger.LogError("User not found");
+            _logger.LogError("User not found");
             return Unauthorized();
         }
 
-        var response = context.WeatherForecasts
+        var response = _context.WeatherForecasts
             .AsNoTracking()
             .Where(e => e.UserId == user.Id)
             .Select((forecast) => new GetWeatherForecastResponse
@@ -48,17 +59,17 @@ public class WeatherForecastsController(ApplicationDbContext context, ILogger<We
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetWeatherForecast([FromRoute] Guid id)
     {
-        logger.LogInformation("Retrieving weather forecasts with ID: {ID}", id);
+        _logger.LogInformation("Retrieving weather forecasts with ID: {ID}", id);
 
-        logger.LogInformation("Retrieving the user");
-        var user = await userManager.GetUserAsync(HttpContext.User);
+        _logger.LogInformation("Retrieving the user");
+        var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
-            logger.LogError("User not found");
+            _logger.LogError("User not found");
             return Unauthorized();
         }
 
-        var query = context.WeatherForecasts.Where(e => e.UserId == user.Id).Where(e => e.Id == id).Select((forecast) => new GetWeatherForecastResponse
+        var query = _context.WeatherForecasts.Where(e => e.UserId == user.Id).Where(e => e.Id == id).Select((forecast) => new GetWeatherForecastResponse
         {
             Id = forecast.Id,
             Date = forecast.Date,
@@ -69,7 +80,7 @@ public class WeatherForecastsController(ApplicationDbContext context, ILogger<We
         var response = await query.SingleOrDefaultAsync();
         if (response is null)
         {
-            logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
+            _logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
             return NotFound();
         }
 
@@ -84,20 +95,20 @@ public class WeatherForecastsController(ApplicationDbContext context, ILogger<We
         [FromBody] CreateWeatherForecastRequest request,
         [FromServices] IValidator<CreateWeatherForecastRequest> validator)
     {
-        logger.LogInformation("Creating weather forecast");
+        _logger.LogInformation("Creating weather forecast");
 
-        logger.LogInformation("Retrieving the user");
-        var user = await userManager.GetUserAsync(HttpContext.User);
+        _logger.LogInformation("Retrieving the user");
+        var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
-            logger.LogError("User not found");
+            _logger.LogError("User not found");
             return Unauthorized();
         }
 
         var validation = await validator.ValidateAsync(request);
         if (!validation.IsValid)
         {
-            logger.LogError("Error validating request");
+            _logger.LogError("Error validating request");
             var problem = new ValidationProblemDetails(validation.ToDictionary());
             return ValidationProblem(problem);
         }
@@ -110,16 +121,16 @@ public class WeatherForecastsController(ApplicationDbContext context, ILogger<We
             UserId = user.Id
         };
 
-        await context.WeatherForecasts.AddAsync(forecast);
-        logger.LogInformation("Creating weather forecast with ID: {ID}", forecast.Id);
+        await _context.WeatherForecasts.AddAsync(forecast);
+        _logger.LogInformation("Creating weather forecast with ID: {ID}", forecast.Id);
 
         try
         {
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
         catch (Exception exception)
         {
-            logger.LogError("Error creating weather forecast with ID: {ID}", forecast.Id);
+            _logger.LogError("Error creating weather forecast with ID: {ID}", forecast.Id);
             return StatusCode(500, exception);
         }
 
@@ -131,7 +142,7 @@ public class WeatherForecastsController(ApplicationDbContext context, ILogger<We
             TemperatureC = forecast.TemperatureC,
         };
 
-        logger.LogInformation("Weather forecast with ID: {ID} successfully created", response.Id);
+        _logger.LogInformation("Weather forecast with ID: {ID} successfully created", response.Id);
         return CreatedAtAction(nameof(GetWeatherForecast), new { id = response.Id }, response);
     }
 
@@ -144,47 +155,47 @@ public class WeatherForecastsController(ApplicationDbContext context, ILogger<We
         [FromBody] UpdateWeatherForecastRequest request,
         [FromServices] IValidator<UpdateWeatherForecastRequest> validator)
     {
-        logger.LogInformation("Updating weather forecast with ID: {ID}", id);
+        _logger.LogInformation("Updating weather forecast with ID: {ID}", id);
 
-        logger.LogInformation("Retrieving the user");
-        var user = await userManager.GetUserAsync(HttpContext.User);
+        _logger.LogInformation("Retrieving the user");
+        var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
-            logger.LogError("User not found");
+            _logger.LogError("User not found");
             return Unauthorized();
         }
 
         var validation = await validator.ValidateAsync(request);
         if (!validation.IsValid)
         {
-            logger.LogError("Error validating request");
+            _logger.LogError("Error validating request");
             var problem = new ValidationProblemDetails(validation.ToDictionary());
             return ValidationProblem(problem);
         }
 
-        var forecast = await context.WeatherForecasts.Where(e => e.UserId == user.Id).Where(e => e.Id == id).SingleOrDefaultAsync();
+        var forecast = await _context.WeatherForecasts.Where(e => e.UserId == user.Id).Where(e => e.Id == id).SingleOrDefaultAsync();
         if (forecast is null)
         {
-            logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
+            _logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
             return NotFound();
         }
 
-        context.Entry(forecast).CurrentValues.SetValues(request);
-        context.Entry(forecast).State = EntityState.Modified;
+        _context.Entry(forecast).CurrentValues.SetValues(request);
+        _context.Entry(forecast).State = EntityState.Modified;
 
         try
         {
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
         catch (Exception exception)
         {
-            logger.LogError("Error updating weather forecast with ID: {ID}", id);
+            _logger.LogError("Error updating weather forecast with ID: {ID}", id);
             return StatusCode(500, exception);
         }
 
-        logger.LogInformation("Weather forecast with ID: {ID} successfully updated", id);
+        _logger.LogInformation("Weather forecast with ID: {ID} successfully updated", id);
 
-        var response = context.WeatherForecasts.Where(e => e.Id == id).Select((forecast) => new GetWeatherForecastResponse
+        var response = _context.WeatherForecasts.Where(e => e.Id == id).Select((forecast) => new GetWeatherForecastResponse
         {
             Id = forecast.Id,
             Date = forecast.Date,
@@ -201,36 +212,36 @@ public class WeatherForecastsController(ApplicationDbContext context, ILogger<We
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RemoveWeatherForecast([FromRoute] Guid id)
     {
-        logger.LogInformation("Removing weather forecast with ID: {ID}", id);
+        _logger.LogInformation("Removing weather forecast with ID: {ID}", id);
 
-        logger.LogInformation("Retrieving the user");
-        var user = await userManager.GetUserAsync(HttpContext.User);
+        _logger.LogInformation("Retrieving the user");
+        var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
-            logger.LogError("User not found");
+            _logger.LogError("User not found");
             return Unauthorized();
         }
 
-        var forecast = await context.WeatherForecasts.Where(e => e.UserId == user.Id).Where(e => e.Id == id).SingleOrDefaultAsync();
+        var forecast = await _context.WeatherForecasts.Where(e => e.UserId == user.Id).Where(e => e.Id == id).SingleOrDefaultAsync();
         if (forecast is null)
         {
-            logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
+            _logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
             return NotFound();
         }
 
-        context.WeatherForecasts.Remove(forecast);
+        _context.WeatherForecasts.Remove(forecast);
 
         try
         {
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
         catch (Exception exception)
         {
-            logger.LogError("Error removing weather forecast with ID: {ID}", id);
+            _logger.LogError("Error removing weather forecast with ID: {ID}", id);
             return StatusCode(500, exception);
         }
 
-        logger.LogInformation("Weather forecast with ID: {ID} successfully removed", id);
+        _logger.LogInformation("Weather forecast with ID: {ID} successfully removed", id);
         return NoContent();
     }
 }

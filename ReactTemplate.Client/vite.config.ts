@@ -1,6 +1,6 @@
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
-import react from "@vitejs/plugin-react-oxc";
+import react from "@vitejs/plugin-react";
 import child_process from "child_process";
 import fs from "fs";
 import { fileURLToPath, URL } from "node:url";
@@ -63,41 +63,6 @@ export default defineConfig({
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
-  },
-  build: {
-    rollupOptions: {
-      output: {
-        advancedChunks: {
-          groups: [
-            {
-              test: /node_modules\/react/,
-              name: "react",
-            },
-            {
-              test: /node_modules\/react-dom/,
-              name: "react-dom",
-            },
-            {
-              test: /node_modules\/@tanstack/,
-              name: "tanstack",
-            },
-            {
-              test: /node_modules\/react-hook-form/,
-              name: "react-hook-form",
-            },
-            {
-              test: /node_modules\/radix-ui/,
-              name: "radix-ui",
-            },
-            {
-              test: /node_modules\/zod/,
-              name: "zod",
-            },
-          ],
-        },
-      },
-    },
-    minify: true,
   },
   server: {
     proxy: {

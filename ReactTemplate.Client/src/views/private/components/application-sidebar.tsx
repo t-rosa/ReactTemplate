@@ -9,10 +9,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ThemeSwitcher } from "@/features/theme-switcher/theme-switcher.view";
 import { UserMenu } from "@/views/private/user-menu/user-menu.view";
 import { Link } from "@tanstack/react-router";
 import { FrameIcon, LayoutDashboardIcon } from "lucide-react";
+import { ThemeSwitcher } from "../theme-switcher/theme-switcher.view";
 
 function _ApplicationSidebar(props: React.PropsWithChildren) {
   return (
@@ -50,13 +50,13 @@ function _ApplicationSidebarContent() {
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Cartes" asChild>
                 <Link
-                  to="/dashboard"
+                  to="/forecasts"
                   activeProps={{
                     className: "bg-muted",
                   }}
                 >
                   <LayoutDashboardIcon />
-                  <span>Dashboard</span>
+                  <span>Prévisions</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

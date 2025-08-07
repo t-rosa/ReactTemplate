@@ -46,14 +46,14 @@ public interface Program
 
         builder.Services.Configure<OtlpExporterOptions>(options =>
         {
-            options.Headers = $"x-otlp-api-key={builder.Configuration["Otlp:Key"]}";
+            options.Headers = $"x-otlp-api-key={builder.Configuration["OTEL_API_KEY"]}";
         });
 
         // Database
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
         {
             options
-                .UseNpgsql(builder.Configuration["Database:ReactTemplate:ConnectionString"])
+                .UseNpgsql(builder.Configuration["CONNECTION_STRING"])
                 .UseSnakeCaseNamingConvention();
         });
 

@@ -5,7 +5,7 @@ export const Route = createFileRoute("/_auth")({
   async beforeLoad() {
     const query = await $client.GET("/manage/info");
     if (query.response.ok) {
-      redirect({ to: "/dashboard", throw: true });
+      redirect({ to: "/forecasts", throw: true });
     }
   },
 });

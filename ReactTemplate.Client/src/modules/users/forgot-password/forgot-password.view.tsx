@@ -1,7 +1,7 @@
 import { FormField } from "@/components/ui/form";
-import { AuthCard } from "@/features/auth/components/auth-card";
-import { AuthLayout } from "@/features/auth/components/auth-layout";
 import { $api } from "@/lib/api/client";
+import { AuthCard } from "@/modules/users/components/auth-card";
+import { AuthLayout } from "@/modules/users/components/auth-layout";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";

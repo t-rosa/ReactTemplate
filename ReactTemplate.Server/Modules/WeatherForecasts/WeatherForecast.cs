@@ -1,4 +1,3 @@
-using Ardalis.GuardClauses;
 using ReactTemplate.Server.Modules.Users;
 
 namespace ReactTemplate.Server.Modules.WeatherForecasts;

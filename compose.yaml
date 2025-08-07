@@ -24,7 +24,7 @@ services:
       - 4317:18889
     environment:
       - DASHBOARD__OTLP__AUTHMODE=ApiKey
-      - DASHBOARD__OTLP__PRIMARYAPIKEY=ReactTemplateTest
+      - DASHBOARD__OTLP__PRIMARYAPIKEY=768ba790-4261-4b9f-91d9-0fc21838463c
 
 volumes:
   react-template-db-data:

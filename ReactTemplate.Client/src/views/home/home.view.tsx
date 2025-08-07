@@ -16,7 +16,7 @@ export function HomeView() {
         <Link to="/forgot-password">forgot-password</Link>
       </li>
       <li>
-        <Link to="/dashboard">dashboard</Link>
+        <Link to="/forecasts">forecasts</Link>
       </li>
     </ul>
   );

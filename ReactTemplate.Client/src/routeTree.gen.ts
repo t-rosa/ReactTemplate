@@ -17,7 +17,7 @@ import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-pass
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
-import { Route as PrivateDashboardIndexRouteImport } from './routes/_private/dashboard/index'
+import { Route as PrivateForecastsIndexRouteImport } from './routes/_private/forecasts/index'
 
 const PrivateRouteRoute = PrivateRouteRouteImport.update({
   id: '/_private',
@@ -57,9 +57,9 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const PrivateDashboardIndexRoute = PrivateDashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
+const PrivateForecastsIndexRoute = PrivateForecastsIndexRouteImport.update({
+  id: '/forecasts/',
+  path: '/forecasts/',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
 
@@ -70,7 +70,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof AuthRegisterRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/home': typeof MarketingHomeRoute
-  '/dashboard': typeof PrivateDashboardIndexRoute
+  '/forecasts': typeof PrivateForecastsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -79,7 +79,7 @@ export interface FileRoutesByTo {
   '/register': typeof AuthRegisterRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/home': typeof MarketingHomeRoute
-  '/dashboard': typeof PrivateDashboardIndexRoute
+  '/forecasts': typeof PrivateForecastsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -91,7 +91,7 @@ export interface FileRoutesById {
   '/_auth/register': typeof AuthRegisterRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_marketing/home': typeof MarketingHomeRoute
-  '/_private/dashboard/': typeof PrivateDashboardIndexRoute
+  '/_private/forecasts/': typeof PrivateForecastsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -102,7 +102,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/home'
-    | '/dashboard'
+    | '/forecasts'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,7 +111,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/home'
-    | '/dashboard'
+    | '/forecasts'
   id:
     | '__root__'
     | '/'
@@ -122,7 +122,7 @@ export interface FileRouteTypes {
     | '/_auth/register'
     | '/_auth/reset-password'
     | '/_marketing/home'
-    | '/_private/dashboard/'
+    | '/_private/forecasts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -190,11 +190,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_private/dashboard/': {
-      id: '/_private/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof PrivateDashboardIndexRouteImport
+    '/_private/forecasts/': {
+      id: '/_private/forecasts/'
+      path: '/forecasts'
+      fullPath: '/forecasts'
+      preLoaderRoute: typeof PrivateForecastsIndexRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
   }
@@ -219,11 +219,11 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface PrivateRouteRouteChildren {
-  PrivateDashboardIndexRoute: typeof PrivateDashboardIndexRoute
+  PrivateForecastsIndexRoute: typeof PrivateForecastsIndexRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
-  PrivateDashboardIndexRoute: PrivateDashboardIndexRoute,
+  PrivateForecastsIndexRoute: PrivateForecastsIndexRoute,
 }
 
 const PrivateRouteRouteWithChildren = PrivateRouteRoute._addFileChildren(
