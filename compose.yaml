@@ -1,0 +1,30 @@
+services:
+  react-template-db:
+    image: postgres
+    restart: always
+    user: postgres
+    volumes:
+      - react-template-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  react-template-telemetry:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard
+    ports:
+      - 18888:18888
+      - 4317:18889
+    environment:
+      - DASHBOARD__OTLP__AUTHMODE=ApiKey
+      - DASHBOARD__OTLP__PRIMARYAPIKEY=768ba790-4261-4b9f-91d9-0fc21838463c
+
+volumes:
+  react-template-db-data:

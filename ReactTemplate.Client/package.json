@@ -1,0 +1,72 @@
+{
+  "name": "react-template-client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "npx oxlint && eslint .",
+    "format": "prettier . --write",
+    "preview": "vite preview",
+    "openapi": "openapi-typescript ../ReactTemplate.Server/obj/ReactTemplate.Server.json -o src/lib/api/schema.ts",
+    "test": "vitest",
+    "test:e2e": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.1",
+    "@radix-ui/react-tooltip": "^1.2.7",
+    "@tanstack/react-router": "^1.130.12",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.537.0",
+    "openapi-fetch": "^0.14.0",
+    "openapi-react-query": "^0.5.0",
+    "radix-ui": "^1.4.2",
+    "react": "^19.1.1",
+    "react-day-picker": "^9.8.1",
+    "react-dom": "^19.1.1",
+    "react-hook-form": "^7.62.0",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^4.0.15"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@playwright/test": "^1.54.2",
+    "@tailwindcss/vite": "^4.1.11",
+    "@tanstack/router-plugin": "^1.130.15",
+    "@types/node": "^24.2.0",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "@vitest/browser": "^3.2.4",
+    "eslint": "^9.32.0",
+    "eslint-plugin-react-dom": "^1.52.3",
+    "eslint-plugin-react-hooks": "^6.0.0-rc.1",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-react-x": "^1.52.3",
+    "globals": "^16.3.0",
+    "openapi-typescript": "^7.8.0",
+    "playwright": "^1.54.2",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.11",
+    "tw-animate-css": "^1.3.6",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.39.0",
+    "vite": "npm:rolldown-vite@latest",
+    "vitest": "^3.2.4",
+    "vitest-browser-react": "^1.0.1"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "experimentalTernaries": true,
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
+  }
+}
