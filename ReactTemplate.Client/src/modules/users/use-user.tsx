@@ -10,7 +10,7 @@ export const ROLE_LABELS: Record<UserRole, UserRoleLabel> = {
 };
 
 export function useUser() {
-  const { data: user } = $api.useSuspenseQuery("get", "/api/auth/info");
+  const { data: user } = $api.useSuspenseQuery("get", "/api/users/me");
 
   function hasRole(role: UserRole) {
     return user.roles.includes(role) ?? false;

@@ -4,7 +4,7 @@ import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import * as React from "react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
-import type { ForgotPasswordFormSchema } from "../forgot-password.types";
+import type { ForgotPasswordFormSchema } from "./forgot-password.types";
 
 interface ForgotPasswordFormProps extends React.PropsWithChildren {
   form: UseFormReturn<ForgotPasswordFormSchema>;

@@ -55,7 +55,6 @@ export default defineConfig({
       headless: true,
       enabled: true,
       provider: "playwright",
-      // https://vitest.dev/guide/browser/playwright
       instances: [{ browser: "chromium" }, { browser: "firefox" }, { browser: "webkit" }],
     },
   },
@@ -66,42 +65,6 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "^/register": {
-        target,
-        secure: false,
-      },
-      "^/login": {
-        target,
-        secure: false,
-      },
-      "^/refresh": {
-        target,
-        secure: false,
-      },
-      "^/confirmEmail": {
-        target,
-        secure: false,
-      },
-      "^/resendConfirmationEmail": {
-        target,
-        secure: false,
-      },
-      "^/forgotPassword": {
-        target,
-        secure: false,
-      },
-      "^/resetPassword": {
-        target,
-        secure: false,
-      },
-      "^/manage": {
-        target,
-        secure: false,
-      },
-      "^/logout": {
-        target,
-        secure: false,
-      },
       "^/api": {
         target,
         secure: false,

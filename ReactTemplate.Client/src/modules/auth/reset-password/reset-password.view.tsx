@@ -5,9 +5,9 @@ import { AuthLayout } from "@/modules/auth/components/auth-layout";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import { ResetPasswordForm } from "./components/form";
 import { SuccessState } from "./components/success-state";
 import { formSchema, type ResetPasswordFormSchema } from "./reset-password.types";
+import { ResetPasswordForm } from "./reset-password.ui";
 
 export function ResetPasswordView() {
   const { mutate, status } = $api.useMutation("post", "/api/auth/resetPassword");

@@ -5,9 +5,9 @@ import { AuthLayout } from "@/modules/auth/components/auth-layout";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import { RegisterForm } from "./components/form";
 import { SuccessState } from "./components/success-state";
 import { formSchema, type RegisterFormSchema } from "./register.types";
+import { RegisterForm } from "./register.ui";
 
 export function RegisterView() {
   const { mutate, status } = $api.useMutation("post", "/api/auth/register", {});

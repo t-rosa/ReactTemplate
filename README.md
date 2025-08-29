@@ -40,13 +40,12 @@ npm install
 
 ```bash
 # From ./ReactTemplate.Server/
-dotnet user-secrets init
 dotnet user-secrets set "SMTP_USERNAME" "value"
 dotnet user-secrets set "SMTP_PASSWORD" "value"
 dotnet user-secrets set "ADMIN_EMAIL" "value"
 dotnet user-secrets set "ADMIN_PASSWORD" "value"
-dotnet user-secrets set "CONNECTION_STRING" "value"
-dotnet user-secrets set "OTEL_API_KEY" "value"
+dotnet user-secrets set "CONNECTION_STRING" "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=react-template;"
+dotnet user-secrets set "OTEL_API_KEY" "768ba790-4261-4b9f-91d9-0fc21838463c"
 ```
 
 3. Launch the Debug configuration

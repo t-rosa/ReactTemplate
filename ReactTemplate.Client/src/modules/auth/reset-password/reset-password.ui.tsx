@@ -4,7 +4,7 @@ import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import * as React from "react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
-import type { ResetPasswordFormSchema } from "../reset-password.types";
+import type { ResetPasswordFormSchema } from "./reset-password.types";
 
 interface ResetPasswordFormProps extends React.PropsWithChildren {
   form: UseFormReturn<ResetPasswordFormSchema>;

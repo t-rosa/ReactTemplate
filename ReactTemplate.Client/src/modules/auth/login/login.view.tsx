@@ -5,8 +5,8 @@ import { AuthLayout } from "@/modules/auth/components/auth-layout";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import { LoginForm } from "./components/form";
 import { formSchema, type LoginFormSchema } from "./login.types";
+import { LoginForm } from "./login.ui";
 
 export function LoginView() {
   const navigate = useNavigate();

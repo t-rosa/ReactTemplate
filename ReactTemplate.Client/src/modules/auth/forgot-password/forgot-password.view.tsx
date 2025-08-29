@@ -5,8 +5,8 @@ import { AuthLayout } from "@/modules/auth/components/auth-layout";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import { ForgotPasswordForm } from "./components/form";
 import { formSchema, type ForgotPasswordFormSchema } from "./forgot-password.types";
+import { ForgotPasswordForm } from "./forgot-password.ui";
 
 export function ForgotPasswordView() {
   const navigate = useNavigate();

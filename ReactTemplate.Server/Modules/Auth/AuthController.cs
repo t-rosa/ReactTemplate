@@ -79,7 +79,7 @@ public class AuthController : ControllerBase
         }
 
         if (!result.Succeeded) return Unauthorized(result.ToString());
-        return NoContent(); // cookie already set
+        return NoContent();
     }
 
     [HttpPost("logout")]
@@ -138,7 +138,7 @@ public class AuthController : ControllerBase
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             await _emailSender.SendPasswordResetCodeAsync(user, resetRequest.Email, HtmlEncoder.Default.Encode(code));
         }
-        return Ok(); // never reveal existence
+        return Ok();
     }
 
     [AllowAnonymous]
@@ -163,24 +163,6 @@ public class AuthController : ControllerBase
 
         if (!result.Succeeded) return ValidationProblem();
         return Ok();
-    }
-
-    [HttpGet("info")]
-    [ProducesResponseType(typeof(GetUserResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetInfo()
-    {
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null) return NotFound();
-
-        var response = new GetUserResponse
-        {
-            Id = await _userManager.GetUserIdAsync(user) ?? throw new NotSupportedException("Users must have an Id."),
-            Email = await _userManager.GetEmailAsync(user) ?? throw new NotSupportedException("Users must have an email."),
-            Roles = await _userManager.GetRolesAsync(user) ?? throw new NotSupportedException("Users must have a role."),
-            IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user)
-        };
-
-        return Ok(response);
     }
 
     [HttpPost("info")]

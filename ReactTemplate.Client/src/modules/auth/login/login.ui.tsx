@@ -6,7 +6,7 @@ import type { components } from "@/lib/api/schema";
 import { Link } from "@tanstack/react-router";
 import * as React from "react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
-import type { LoginFormSchema } from "../login.types";
+import type { LoginFormSchema } from "./login.types";
 
 interface LoginFormProps extends React.PropsWithChildren {
   form: UseFormReturn<LoginFormSchema>;
