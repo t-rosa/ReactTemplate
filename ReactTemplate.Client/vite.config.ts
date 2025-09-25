@@ -51,12 +51,6 @@ export default defineConfig({
   ],
   test: {
     include: ["./tests/browser/**/*.{spec,test}.{ts,tsx}"],
-    browser: {
-      headless: true,
-      enabled: true,
-      provider: "playwright",
-      instances: [{ browser: "chromium" }, { browser: "firefox" }, { browser: "webkit" }],
-    },
   },
   resolve: {
     alias: {

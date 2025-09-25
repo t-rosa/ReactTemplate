@@ -1,4 +1,17 @@
 services:
+  # react-template-preview:
+  #   container_name: react-template-preview
+  #   image: react-template-server:latest
+  #   restart: always
+  #   ports:
+  #     - 127.0.0.1:3000:8080
+  #   environment:
+  #     react-template_CONNECTION_STRING: Host=react-template-db;Port=5432;Database=react-template;Username=postgres;Password=postgres
+  #   depends_on:
+  #     - react-template-db
+  #   volumes:
+  #     - ./react-template.Server/keys/storage:/app/keys/storage
+
   react-template-db:
     container_name: react-template-db
     image: postgres
