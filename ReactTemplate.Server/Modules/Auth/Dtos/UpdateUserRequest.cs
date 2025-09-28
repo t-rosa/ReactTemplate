@@ -1,6 +1,6 @@
 namespace ReactTemplate.Server.Modules.Auth.Dtos;
 
-public class UpdateUserRequest
+public record UpdateUserRequest
 {
     public string NewEmail { get; set; } = string.Empty;
 

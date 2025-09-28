@@ -254,6 +254,45 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/weather-forecasts/bulk-delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": string[];
+                    "text/json": string[];
+                    "application/*+json": string[];
+                };
+            };
+            responses: {
+                /** @description No Content */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/auth/register": {
         parameters: {
             query?: never;
@@ -607,11 +646,11 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         CreateWeatherForecastRequest: {
+            /** Format: int32 */
+            temperatureC: number;
+            summary: string | null;
             /** Format: date */
             date?: string;
-            /** Format: int32 */
-            temperatureC?: number;
-            summary?: string | null;
         };
         ForgotPasswordRequest: {
             email: string;
@@ -624,12 +663,12 @@ export interface components {
         };
         GetWeatherForecastResponse: {
             /** Format: uuid */
-            id?: string;
+            id: string;
             /** Format: date */
-            date?: string;
+            date: string;
             /** Format: int32 */
-            temperatureC?: number;
-            summary?: string | null;
+            temperatureC: number;
+            summary: string | null;
         };
         LoginRequest: {
             email: string;
@@ -663,11 +702,11 @@ export interface components {
             oldPassword?: string;
         };
         UpdateWeatherForecastRequest: {
+            /** Format: int32 */
+            temperatureC: number;
+            summary: string | null;
             /** Format: date */
             date?: string;
-            /** Format: int32 */
-            temperatureC?: number;
-            summary?: string | null;
         };
         ValidationProblemDetails: {
             type?: string | null;

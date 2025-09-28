@@ -14,13 +14,11 @@ namespace ReactTemplate.Server.Modules.WeatherForecasts;
 public class WeatherForecastsController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
-    private readonly ILogger<WeatherForecastsController> _logger;
     private readonly UserManager<User> _userManager;
 
-    public WeatherForecastsController(ApplicationDbContext context, ILogger<WeatherForecastsController> logger, UserManager<User> userManager)
+    public WeatherForecastsController(ApplicationDbContext context, UserManager<User> userManager)
     {
         _context = context;
-        _logger = logger;
         _userManager = userManager;
     }
 
@@ -29,27 +27,16 @@ public class WeatherForecastsController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetWeatherForecasts()
     {
-        _logger.LogInformation("Retrieving all weather forecasts");
-
-        _logger.LogInformation("Retrieving the user");
         var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
-            _logger.LogError("User not found");
             return Unauthorized();
         }
 
-        var response = _context.WeatherForecasts
-            .AsNoTracking()
-            .Where(e => e.UserId == user.Id)
-            .Select((forecast) => new GetWeatherForecastResponse
-            {
-                Id = forecast.Id,
-                Date = forecast.Date,
-                Summary = forecast.Summary,
-                TemperatureC = forecast.TemperatureC
-            });
 
+        var response = _context.WeatherForecasts.AsNoTracking()
+                                                .Where(e => e.UserId == user.Id)
+                                                .Select((forecast) => new GetWeatherForecastResponse(forecast.Id, forecast.Date, forecast.TemperatureC, forecast.Summary));
         return Ok(response);
     }
 
@@ -59,28 +46,19 @@ public class WeatherForecastsController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetWeatherForecast([FromRoute] Guid id)
     {
-        _logger.LogInformation("Retrieving weather forecasts with ID: {ID}", id);
-
-        _logger.LogInformation("Retrieving the user");
         var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
-            _logger.LogError("User not found");
             return Unauthorized();
         }
 
-        var query = _context.WeatherForecasts.Where(e => e.UserId == user.Id).Where(e => e.Id == id).Select((forecast) => new GetWeatherForecastResponse
-        {
-            Id = forecast.Id,
-            Date = forecast.Date,
-            Summary = forecast.Summary,
-            TemperatureC = forecast.TemperatureC
-        });
+        var query = _context.WeatherForecasts.Where(e => e.UserId == user.Id)
+                                             .Where(e => e.Id == id)
+                                             .Select((forecast) => new GetWeatherForecastResponse(forecast.Id, forecast.Date, forecast.TemperatureC, forecast.Summary));
 
         var response = await query.SingleOrDefaultAsync();
         if (response is null)
         {
-            _logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
             return NotFound();
         }
 
@@ -95,20 +73,15 @@ public class WeatherForecastsController : ControllerBase
         [FromBody] CreateWeatherForecastRequest request,
         [FromServices] IValidator<CreateWeatherForecastRequest> validator)
     {
-        _logger.LogInformation("Creating weather forecast");
-
-        _logger.LogInformation("Retrieving the user");
         var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
-            _logger.LogError("User not found");
             return Unauthorized();
         }
 
         var validation = await validator.ValidateAsync(request);
         if (!validation.IsValid)
         {
-            _logger.LogError("Error validating request");
             var problem = new ValidationProblemDetails(validation.ToDictionary());
             return ValidationProblem(problem);
         }
@@ -122,7 +95,6 @@ public class WeatherForecastsController : ControllerBase
         };
 
         await _context.WeatherForecasts.AddAsync(forecast);
-        _logger.LogInformation("Creating weather forecast with ID: {ID}", forecast.Id);
 
         try
         {
@@ -130,19 +102,11 @@ public class WeatherForecastsController : ControllerBase
         }
         catch (Exception exception)
         {
-            _logger.LogError("Error creating weather forecast with ID: {ID}", forecast.Id);
             return StatusCode(500, exception);
         }
 
-        var response = new GetWeatherForecastResponse
-        {
-            Id = forecast.Id,
-            Date = forecast.Date,
-            Summary = forecast.Summary,
-            TemperatureC = forecast.TemperatureC,
-        };
+        var response = new GetWeatherForecastResponse(forecast.Id, forecast.Date, forecast.TemperatureC, forecast.Summary);
 
-        _logger.LogInformation("Weather forecast with ID: {ID} successfully created", response.Id);
         return CreatedAtAction(nameof(GetWeatherForecast), new { id = response.Id }, response);
     }
 
@@ -155,28 +119,24 @@ public class WeatherForecastsController : ControllerBase
         [FromBody] UpdateWeatherForecastRequest request,
         [FromServices] IValidator<UpdateWeatherForecastRequest> validator)
     {
-        _logger.LogInformation("Updating weather forecast with ID: {ID}", id);
-
-        _logger.LogInformation("Retrieving the user");
         var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
-            _logger.LogError("User not found");
             return Unauthorized();
         }
 
         var validation = await validator.ValidateAsync(request);
         if (!validation.IsValid)
         {
-            _logger.LogError("Error validating request");
             var problem = new ValidationProblemDetails(validation.ToDictionary());
             return ValidationProblem(problem);
         }
 
-        var forecast = await _context.WeatherForecasts.Where(e => e.UserId == user.Id).Where(e => e.Id == id).SingleOrDefaultAsync();
+        var forecast = await _context.WeatherForecasts.Where(e => e.UserId == user.Id)
+                                                      .Where(e => e.Id == id)
+                                                      .SingleOrDefaultAsync();
         if (forecast is null)
         {
-            _logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
             return NotFound();
         }
 
@@ -189,19 +149,11 @@ public class WeatherForecastsController : ControllerBase
         }
         catch (Exception exception)
         {
-            _logger.LogError("Error updating weather forecast with ID: {ID}", id);
             return StatusCode(500, exception);
         }
 
-        _logger.LogInformation("Weather forecast with ID: {ID} successfully updated", id);
-
-        var response = _context.WeatherForecasts.Where(e => e.Id == id).Select((forecast) => new GetWeatherForecastResponse
-        {
-            Id = forecast.Id,
-            Date = forecast.Date,
-            Summary = forecast.Summary,
-            TemperatureC = forecast.TemperatureC
-        });
+        var response = _context.WeatherForecasts.Where(e => e.Id == id)
+                                                .Select((forecast) => new GetWeatherForecastResponse(forecast.Id, forecast.Date, forecast.TemperatureC, forecast.Summary));
 
         return Ok(response);
     }
@@ -212,20 +164,17 @@ public class WeatherForecastsController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RemoveWeatherForecast([FromRoute] Guid id)
     {
-        _logger.LogInformation("Removing weather forecast with ID: {ID}", id);
-
-        _logger.LogInformation("Retrieving the user");
         var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
-            _logger.LogError("User not found");
             return Unauthorized();
         }
 
-        var forecast = await _context.WeatherForecasts.Where(e => e.UserId == user.Id).Where(e => e.Id == id).SingleOrDefaultAsync();
+        var forecast = await _context.WeatherForecasts.Where(e => e.UserId == user.Id)
+                                                      .Where(e => e.Id == id)
+                                                      .SingleOrDefaultAsync();
         if (forecast is null)
         {
-            _logger.LogInformation("Weather forecasts with ID: {ID} not found", id);
             return NotFound();
         }
 
@@ -237,11 +186,29 @@ public class WeatherForecastsController : ControllerBase
         }
         catch (Exception exception)
         {
-            _logger.LogError("Error removing weather forecast with ID: {ID}", id);
             return StatusCode(500, exception);
         }
 
-        _logger.LogInformation("Weather forecast with ID: {ID} successfully removed", id);
         return NoContent();
     }
+
+    [HttpPost("bulk-delete")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> RemoveWeatherForecasts([FromBody] List<Guid> ids)
+    {
+        var courses = await _context.WeatherForecasts
+            .Where(c => ids.Contains(c.Id))
+            .ToListAsync();
+
+        if (courses.Count == 0)
+        {
+            return NotFound();
+        }
+
+        _context.WeatherForecasts.RemoveRange(courses);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
 }

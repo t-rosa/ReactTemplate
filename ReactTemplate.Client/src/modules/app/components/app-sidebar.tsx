@@ -9,12 +9,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { UserMenu } from "@/views/app/user-menu/user-menu.view";
+import { UserMenu } from "@/modules/app/user-menu/user-menu.view";
 import { Link } from "@tanstack/react-router";
 import { FrameIcon, LayoutDashboardIcon } from "lucide-react";
 import { ThemeSwitcher } from "../theme-switcher/theme-switcher.view";
 
-function _ApplicationSidebar(props: React.PropsWithChildren) {
+function _AppSidebar(props: React.PropsWithChildren) {
   return (
     <div className="pattern hidden sm:block">
       <Sidebar variant="floating" collapsible="icon">
@@ -24,7 +24,7 @@ function _ApplicationSidebar(props: React.PropsWithChildren) {
   );
 }
 
-function _ApplicationSidebarHeader() {
+function _AppSidebarHeader() {
   return (
     <SidebarHeader className="border-b">
       <SidebarMenu>
@@ -41,7 +41,7 @@ function _ApplicationSidebarHeader() {
   );
 }
 
-function _ApplicationSidebarContent() {
+function _AppSidebarContent() {
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -74,7 +74,7 @@ function _ApplicationSidebarContent() {
   );
 }
 
-function _ApplicationSidebarFooter() {
+function _AppSidebarFooter() {
   return (
     <SidebarFooter className="border-t">
       <UserMenu />
@@ -82,8 +82,8 @@ function _ApplicationSidebarFooter() {
   );
 }
 
-export const ApplicationSidebar = Object.assign(_ApplicationSidebar, {
-  Content: _ApplicationSidebarContent,
-  Header: _ApplicationSidebarHeader,
-  Footer: _ApplicationSidebarFooter,
+export const AppSidebar = Object.assign(_AppSidebar, {
+  Content: _AppSidebarContent,
+  Header: _AppSidebarHeader,
+  Footer: _AppSidebarFooter,
 });

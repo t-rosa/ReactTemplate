@@ -2,13 +2,9 @@ using FluentValidation;
 
 namespace ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
 
-public class UpdateWeatherForecastRequest
+public record UpdateWeatherForecastRequest(int TemperatureC, string? Summary)
 {
     public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
-
-    public int TemperatureC { get; set; }
-
-    public string? Summary { get; set; }
 }
 
 public class UpdateWeatherForecastRequestValidator : AbstractValidator<UpdateWeatherForecastRequest>

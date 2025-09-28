@@ -6,8 +6,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
+import type { UserRoleLabel } from "@/hooks/use-user";
 import type { components } from "@/lib/api/schema";
-import type { UserRoleLabel } from "@/modules/users/use-user";
 import { MoreVerticalIcon } from "lucide-react";
 
 interface UserMenuDropdownProps extends React.PropsWithChildren {

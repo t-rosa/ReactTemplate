@@ -1,4 +1,4 @@
-import { RootView } from "@/views/root/root.view";
+import { RootView } from "@/modules/root/root.view";
 import type { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext } from "@tanstack/react-router";
 
