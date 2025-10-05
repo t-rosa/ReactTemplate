@@ -104,7 +104,25 @@ public record CreateWeatherForecastRequest(int TemperatureC, string? Summary);
 public class CreateWeatherForecastRequestValidator : AbstractValidator<CreateWeatherForecastRequest>
 ```
 
-**DbContext**: Entities added as `DbSet<T>` properties in `ApplicationDbContext.cs`, uses snake_case via `UseSnakeCaseNamingConvention()`.
+**Entities**: Configure relationships explicitly in `OnModelCreating`
+
+- Navigation collections: Use **getter-only** properties `{ get; } = new List<T>()`
+- Reference navigations: Standard properties with `= default!`
+
+```csharp
+// ✅ Collection navigation (one-to-many)
+public ICollection<WeatherForecast> WeatherForecasts { get; } = new List<WeatherForecast>();
+
+// ✅ Reference navigation (many-to-one)
+public User User { get; set; } = default!;
+```
+
+**DbContext**:
+
+- Call `base.OnModelCreating()` FIRST
+- Configure all relationships explicitly
+- Add indexes for foreign keys and frequently queried columns
+- Uses snake_case via `UseSnakeCaseNamingConvention()`
 
 **Seeding**: `SeedData.cs` runs on startup, creates roles (Admin/Member/User) and admin user from secrets.
 

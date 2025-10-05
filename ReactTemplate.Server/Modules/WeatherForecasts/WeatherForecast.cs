@@ -4,7 +4,7 @@ namespace ReactTemplate.Server.Modules.WeatherForecasts;
 
 public class WeatherForecast
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
     public Guid UserId { get; set; }
 
