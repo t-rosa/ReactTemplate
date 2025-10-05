@@ -26,7 +26,6 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // Remplir automatiquement les champs d'audit avant de sauvegarder
         HandleAuditFields();
         return base.SaveChangesAsync(cancellationToken);
     }
@@ -50,6 +49,13 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
                 case EntityState.Modified:
                     entry.Entity.UpdatedAt = now;
                     entry.Entity.UpdatedBy = currentUserId;
+                    break;
+
+                case EntityState.Deleted:
+                    entry.State = EntityState.Modified;
+                    entry.Entity.IsDeleted = true;
+                    entry.Entity.DeletedAt = now;
+                    entry.Entity.DeletedBy = currentUserId;
                     break;
             }
         }
@@ -109,6 +115,23 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
             entity.Property(e => e.UpdatedBy)
                   .IsRequired(false);
 
+            // Configuration des propriétés de soft delete
+            entity.Property(e => e.IsDeleted)
+                  .IsRequired()
+                  .HasDefaultValue(false);
+
+            entity.Property(e => e.DeletedAt)
+                  .HasColumnType("timestamp with time zone")
+                  .IsRequired(false);
+
+            entity.Property(e => e.DeletedBy)
+                  .IsRequired(false);
+
+            // Global Query Filter : Exclure automatiquement les entités supprimées (soft delete)
+            // Les entités avec IsDeleted = true ne seront pas retournées par défaut
+            // Pour les inclure explicitement : query.IgnoreQueryFilters()
+            entity.HasQueryFilter(e => !e.IsDeleted);
+
             // Relations optionnelles vers User pour l'audit
             // Note: Ces relations ne sont PAS configurées car elles créeraient des cycles
             // et compliqueraient la suppression. On garde juste les Guid sans FK.
@@ -121,6 +144,8 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
             entity.HasIndex(e => e.CreatedAt);
             entity.HasIndex(e => e.CreatedBy);
             entity.HasIndex(e => e.UpdatedBy);
+            entity.HasIndex(e => e.IsDeleted);
+            entity.HasIndex(e => e.DeletedAt);
         });
     }
 }

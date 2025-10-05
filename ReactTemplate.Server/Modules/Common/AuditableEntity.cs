@@ -29,4 +29,23 @@ public abstract class AuditableEntity : IAuditableEntity
     /// Automatiquement mise à jour lors de la modification de l'entité.
     /// </summary>
     public Guid? UpdatedBy { get; set; }
+
+    /// <summary>
+    /// Indique si l'entité est marquée comme supprimée (soft delete).
+    /// Par défaut : false (non supprimée).
+    /// Automatiquement mise à true lors de la suppression de l'entité.
+    /// </summary>
+    public bool IsDeleted { get; set; } = false;
+
+    /// <summary>
+    /// Date et heure de la suppression logique (UTC).
+    /// Automatiquement remplie lors de la suppression de l'entité.
+    /// </summary>
+    public DateTime? DeletedAt { get; set; }
+
+    /// <summary>
+    /// Identifiant (Guid) de l'utilisateur ayant effectué la suppression logique.
+    /// Automatiquement remplie lors de la suppression de l'entité.
+    /// </summary>
+    public Guid? DeletedBy { get; set; }
 }

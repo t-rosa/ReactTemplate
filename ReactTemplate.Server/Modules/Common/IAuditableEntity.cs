@@ -26,4 +26,19 @@ public interface IAuditableEntity
     /// Identifiant (Guid) de l'utilisateur ayant effectué la dernière modification.
     /// </summary>
     Guid? UpdatedBy { get; set; }
+
+    /// <summary>
+    /// Indique si l'entité est marquée comme supprimée (soft delete).
+    /// </summary>
+    bool IsDeleted { get; set; }
+
+    /// <summary>
+    /// Date et heure de la suppression logique (UTC).
+    /// </summary>
+    DateTime? DeletedAt { get; set; }
+
+    /// <summary>
+    /// Identifiant (Guid) de l'utilisateur ayant effectué la suppression logique.
+    /// </summary>
+    Guid? DeletedBy { get; set; }
 }
