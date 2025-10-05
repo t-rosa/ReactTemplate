@@ -36,15 +36,13 @@ export function RegisterView() {
         <AuthCard>
           <AuthCard.Content>
             <AuthCard.Header>
-              <AuthCard.Title>Créer un compte.</AuthCard.Title>
-              <AuthCard.Description>
-                Enregistrez-vous pour vous connecter à l&apos;application.
-              </AuthCard.Description>
+              <AuthCard.Title>Create an account.</AuthCard.Title>
+              <AuthCard.Description>Sign up to access the application.</AuthCard.Description>
             </AuthCard.Header>
             <SuccessState />
           </AuthCard.Content>
           <AuthCard.Footer>
-            <Link to="/login">Se connecter</Link>
+            <Link to="/login">Log in</Link>
           </AuthCard.Footer>
         </AuthCard>
       </AuthLayout>
@@ -56,10 +54,8 @@ export function RegisterView() {
       <AuthCard>
         <AuthCard.Content>
           <AuthCard.Header>
-            <AuthCard.Title>Créer un compte.</AuthCard.Title>
-            <AuthCard.Description>
-              Enregistrez-vous pour vous connecter à l&apos;application.
-            </AuthCard.Description>
+            <AuthCard.Title>Create an account.</AuthCard.Title>
+            <AuthCard.Description>Sign up to access the application.</AuthCard.Description>
           </AuthCard.Header>
           <RegisterForm form={form} onSubmit={handleSubmit}>
             <FormField control={form.control} name="email" render={RegisterForm.Email} />
@@ -73,7 +69,7 @@ export function RegisterView() {
           </RegisterForm>
         </AuthCard.Content>
         <AuthCard.Footer>
-          <Link to="/login">Se connecter</Link>
+          <Link to="/login">Log in</Link>
         </AuthCard.Footer>
       </AuthCard>
     </AuthLayout>

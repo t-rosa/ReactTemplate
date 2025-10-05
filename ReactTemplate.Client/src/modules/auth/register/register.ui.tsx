@@ -49,9 +49,9 @@ interface PasswordProps {
 function Password(props: PasswordProps) {
   return (
     <FormItem>
-      <FormLabel>Mot de passe</FormLabel>
+      <FormLabel>Password</FormLabel>
       <FormControl>
-        <Input type="password" placeholder="Mot de passe" {...props.field} />
+        <Input type="password" placeholder="Password" {...props.field} />
       </FormControl>
       <FormMessage />
     </FormItem>
@@ -65,9 +65,9 @@ interface ConfirmPasswordProps {
 function ConfirmPassword(props: ConfirmPasswordProps) {
   return (
     <FormItem>
-      <FormLabel>Confirmer le mot de passe</FormLabel>
+      <FormLabel>Confirm password</FormLabel>
       <FormControl>
-        <Input type="password" placeholder="Confirmation" {...props.field} />
+        <Input type="password" placeholder="Confirm password" {...props.field} />
       </FormControl>
       <FormMessage />
     </FormItem>
@@ -81,7 +81,7 @@ interface SubmitProps {
 function Submit(props: SubmitProps) {
   return (
     <Button type="submit" disabled={props.isPending} className="w-full rounded-full">
-      Créer un compte
+      Create account
       {props.isPending && <Spinner />}
     </Button>
   );

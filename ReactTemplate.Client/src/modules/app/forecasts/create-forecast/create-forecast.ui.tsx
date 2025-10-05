@@ -79,7 +79,7 @@ interface TemperatureProps {
 function Temperature(props: TemperatureProps) {
   return (
     <FormItem>
-      <FormLabel>Température</FormLabel>
+      <FormLabel>Temperature</FormLabel>
       <FormControl>
         <Input type="number" placeholder="20" {...props.field} />
       </FormControl>
@@ -95,7 +95,7 @@ interface SummaryProps {
 function Summary(props: SummaryProps) {
   return (
     <FormItem>
-      <FormLabel>Résumé</FormLabel>
+      <FormLabel>Summary</FormLabel>
       <FormControl>
         <Input placeholder="Cool" {...props.field} />
       </FormControl>

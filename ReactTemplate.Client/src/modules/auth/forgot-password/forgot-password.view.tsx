@@ -35,8 +35,8 @@ export function ForgotPasswordView() {
       <AuthCard>
         <AuthCard.Content>
           <AuthCard.Header>
-            <AuthCard.Title>Mot de passe oublié.</AuthCard.Title>
-            <AuthCard.Description>Saisissez votre adresse e-mail.</AuthCard.Description>
+            <AuthCard.Title>Forgot password.</AuthCard.Title>
+            <AuthCard.Description>Enter your email address.</AuthCard.Description>
           </AuthCard.Header>
           <ForgotPasswordForm form={form} onSubmit={handleSubmit}>
             <FormField control={form.control} name="email" render={ForgotPasswordForm.Email} />
@@ -44,7 +44,7 @@ export function ForgotPasswordView() {
           </ForgotPasswordForm>
         </AuthCard.Content>
         <AuthCard.Footer>
-          <Link to="/login">Se connecter</Link>
+          <Link to="/login">Log in</Link>
         </AuthCard.Footer>
       </AuthCard>
     </AuthLayout>

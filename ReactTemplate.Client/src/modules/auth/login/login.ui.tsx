@@ -32,9 +32,9 @@ interface EmailProps {
 function Email(props: EmailProps) {
   return (
     <FormItem>
-      <FormLabel>Courriel</FormLabel>
+      <FormLabel>Email</FormLabel>
       <FormControl>
-        <Input type="email" placeholder="nom@example.com" {...props.field} />
+        <Input type="email" placeholder="name@example.com" {...props.field} />
       </FormControl>
       <FormMessage />
     </FormItem>
@@ -48,7 +48,7 @@ interface PasswordProps {
 function Password(props: PasswordProps) {
   return (
     <FormItem>
-      <FormLabel>Mot de passe</FormLabel>
+      <FormLabel>Password</FormLabel>
       <FormControl>
         <Input type="password" placeholder="••••••••" {...props.field} />
       </FormControl>
@@ -67,7 +67,7 @@ function Submit(props: SubmitProps) {
       {props.isPending ?
         <Spinner className="mr-2" />
       : null}
-      {props.isPending ? "Connexion..." : "Se connecter"}
+      {props.isPending ? "Logging in..." : "Log in"}
     </Button>
   );
 }

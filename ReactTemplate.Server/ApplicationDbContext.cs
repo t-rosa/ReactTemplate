@@ -127,15 +127,15 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
             entity.Property(e => e.DeletedBy)
                   .IsRequired(false);
 
-            // Global Query Filter : Exclure automatiquement les entités supprimées (soft delete)
-            // Les entités avec IsDeleted = true ne seront pas retournées par défaut
-            // Pour les inclure explicitement : query.IgnoreQueryFilters()
+            // Global Query Filter: Automatically exclude deleted entities (soft delete)
+            // Entities with IsDeleted = true will not be returned by default
+            // To explicitly include them: query.IgnoreQueryFilters()
             entity.HasQueryFilter(e => !e.IsDeleted);
 
-            // Relations optionnelles vers User pour l'audit
-            // Note: Ces relations ne sont PAS configurées car elles créeraient des cycles
-            // et compliqueraient la suppression. On garde juste les Guid sans FK.
-            // Pour récupérer les infos utilisateur, faire une jointure manuelle si nécessaire.
+            // Optional relations to User for audit
+            // Note: These relations are NOT configured as they would create cycles
+            // and complicate deletion. We keep only the Guid without FK.
+            // To retrieve user info, perform a manual join if necessary.
 
             // Index
             entity.HasIndex(e => e.UserId);

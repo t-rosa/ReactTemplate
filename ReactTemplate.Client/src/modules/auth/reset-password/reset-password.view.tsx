@@ -38,15 +38,15 @@ export function ResetPasswordView() {
         <AuthCard>
           <AuthCard.Content>
             <AuthCard.Header>
-              <AuthCard.Title>Réinitialiser.</AuthCard.Title>
+              <AuthCard.Title>Reset password.</AuthCard.Title>
               <AuthCard.Description>
-                Veuillez saisir votre adresse e-mail afin de réinitialiser votre mot de passe.
+                Enter your email address to reset your password.
               </AuthCard.Description>
             </AuthCard.Header>
             <SuccessState />
           </AuthCard.Content>
           <AuthCard.Footer>
-            <Link to="/login">Se connecter</Link>
+            <Link to="/login">Log in</Link>
           </AuthCard.Footer>
         </AuthCard>
       </AuthLayout>
@@ -58,9 +58,9 @@ export function ResetPasswordView() {
       <AuthCard>
         <AuthCard.Content>
           <AuthCard.Header>
-            <AuthCard.Title>Réinitialiser.</AuthCard.Title>
+            <AuthCard.Title>Reset password.</AuthCard.Title>
             <AuthCard.Description>
-              Veuillez saisir votre adresse e-mail afin de réinitialiser votre mot de passe.
+              Enter your email address to reset your password.
             </AuthCard.Description>
           </AuthCard.Header>
           <ResetPasswordForm form={form} onSubmit={handleSubmit}>
@@ -84,7 +84,7 @@ export function ResetPasswordView() {
           </ResetPasswordForm>
         </AuthCard.Content>
         <AuthCard.Footer>
-          <Link to="/login">Se connecter</Link>
+          <Link to="/login">Log in</Link>
         </AuthCard.Footer>
       </AuthCard>
     </AuthLayout>

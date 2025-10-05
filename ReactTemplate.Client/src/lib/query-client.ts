@@ -5,7 +5,7 @@ import { toast } from "sonner";
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError() {
-      toast.error("Une erreur inattendue est survenue. Veuillez réessayer dans quelques instants.");
+      toast.error("An unexpected error occurred. Please try again in a few moments.");
     },
   }),
   mutationCache: new MutationCache({

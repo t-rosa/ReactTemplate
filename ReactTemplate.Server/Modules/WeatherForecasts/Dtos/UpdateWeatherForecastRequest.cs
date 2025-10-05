@@ -11,7 +11,7 @@ public class UpdateWeatherForecastRequestValidator : AbstractValidator<UpdateWea
 {
     public UpdateWeatherForecastRequestValidator()
     {
-        RuleFor(e => e.Date).NotEmpty().WithMessage("La date doit être renseignée.");
-        RuleFor(e => e.TemperatureC).NotEmpty().WithMessage("La température doit être renseignée.");
+        RuleFor(e => e.Date).NotEmpty().WithMessage("Date is required.");
+        RuleFor(e => e.TemperatureC).NotEmpty().WithMessage("Temperature is required.");
     }
 }

@@ -9,8 +9,8 @@ export function LogoutView() {
 
   const { mutate, status } = $api.useMutation("post", "/api/auth/logout", {
     meta: {
-      successMessage: "Déconnecté",
-      errorMessage: "Il y a eu une érreur.",
+      successMessage: "Logged out",
+      errorMessage: "An error occurred.",
       invalidatesQuery: ["get", "manage/info"],
     },
     async onSuccess() {
@@ -26,7 +26,7 @@ export function LogoutView() {
     return (
       <DropdownMenuItem disabled>
         <Spinner />
-        Déconnexion
+        Logging out
       </DropdownMenuItem>
     );
   }
@@ -34,7 +34,7 @@ export function LogoutView() {
   return (
     <DropdownMenuItem onClick={handleClick}>
       <LogOutIcon />
-      Déconnexion
+      Log out
     </DropdownMenuItem>
   );
 }

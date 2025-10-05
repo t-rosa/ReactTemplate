@@ -48,7 +48,7 @@ public interface Program
             options.Headers = $"x-otlp-api-key={builder.Configuration["OTEL_API_KEY"]}";
         });
 
-        // HttpContextAccessor pour accéder à l'utilisateur actuel dans le DbContext
+        // HttpContextAccessor to access the current user in DbContext
         builder.Services.AddHttpContextAccessor();
 
         // Database

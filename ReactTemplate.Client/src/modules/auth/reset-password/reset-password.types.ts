@@ -3,32 +3,32 @@ import { z } from "zod";
 export const formSchema = z
   .object({
     email: z.email({
-      error: "L'email est invalide",
+      error: "Invalid email address",
     }),
     resetCode: z.string({
-      error: "Le code est invalide",
+      error: "Invalid code",
     }),
     newPassword: z
       .string({
-        error: "Le mot de passe est invalide",
+        error: "Invalid password",
       })
-      .min(6, "Le mot de passe doit contenir au moins 6 caractères.")
-      .regex(/[A-Z]/, "Le mot de passe doit contenir au moins une lettre majuscule.")
-      .regex(/[a-z]/, "Le mot de passe doit contenir au moins une lettre minuscule.")
-      .regex(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre.")
-      .regex(/[^a-zA-Z0-9]/, "Le mot de passe doit contenir au moins un caractère spécial."),
+      .min(6, "Password must be at least 6 characters long.")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
+      .regex(/[0-9]/, "Password must contain at least one digit.")
+      .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character."),
     confirmPassword: z
       .string({
-        error: "Le mot de passe est invalide",
+        error: "Invalid password",
       })
-      .min(6, "Le mot de passe doit contenir au moins 6 caractères.")
-      .regex(/[A-Z]/, "Le mot de passe doit contenir au moins une lettre majuscule.")
-      .regex(/[a-z]/, "Le mot de passe doit contenir au moins une lettre minuscule.")
-      .regex(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre.")
-      .regex(/[^a-zA-Z0-9]/, "Le mot de passe doit contenir au moins un caractère spécial."),
+      .min(6, "Password must be at least 6 characters long.")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
+      .regex(/[0-9]/, "Password must contain at least one digit.")
+      .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character."),
   })
   .refine((values) => values.newPassword === values.confirmPassword, {
-    error: "Les mots de passe ne correspondent pas.",
+    error: "Passwords do not match.",
     path: ["confirmPassword"],
   });
 

@@ -46,8 +46,8 @@ export function LoginView() {
       <AuthCard>
         <AuthCard.Content>
           <AuthCard.Header>
-            <AuthCard.Title>Bienvenue !</AuthCard.Title>
-            <AuthCard.Description>Connectez-vous pour continuer.</AuthCard.Description>
+            <AuthCard.Title>Welcome!</AuthCard.Title>
+            <AuthCard.Description>Log in to continue.</AuthCard.Description>
           </AuthCard.Header>
           <LoginForm form={form} onSubmit={handleSubmit}>
             <FormField control={form.control} name="email" render={LoginForm.Email} />
@@ -56,7 +56,7 @@ export function LoginView() {
           </LoginForm>
         </AuthCard.Content>
         <AuthCard.Footer>
-          <Link to="/register">Créer un compte</Link>
+          <Link to="/register">Create account</Link>
         </AuthCard.Footer>
       </AuthCard>
     </AuthLayout>

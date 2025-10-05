@@ -52,7 +52,7 @@ function ErrorCardContent(props: ErrorCardContentProps) {
 
   return (
     <div className="mt-8 space-y-6">
-      <p>Nous avons rencontré une erreur, veuillez nous excuser pour ce désagrément.</p>
+      <p>We encountered an error, please excuse us for the inconvenience.</p>
       <div className="grid gap-2">
         <Button onClick={props.onReloadClick} className="cursor-pointer">
           Recharger la page

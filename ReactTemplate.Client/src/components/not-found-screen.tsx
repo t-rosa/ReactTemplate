@@ -7,7 +7,7 @@ export function NotFoundScreen() {
     <div className="absolute inset-0 grid place-items-center">
       <Card className="min-w-96">
         <CardHeader>
-          <CardTitle>Page non trouvé</CardTitle>
+          <CardTitle>Page not found</CardTitle>
         </CardHeader>
         <CardContent>
           <p>Désolé, la page n&apos;existe pas.</p>

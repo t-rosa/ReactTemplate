@@ -1,44 +1,44 @@
 namespace ReactTemplate.Server.Modules.Common;
 
 /// <summary>
-/// Interface pour les entités auditables.
-/// Les entités implémentant cette interface auront leurs métadonnées de création/modification
-/// automatiquement remplies lors de SaveChanges.
+/// Interface for auditable entities.
+/// Entities implementing this interface will have their creation/modification metadata
+/// automatically filled in during SaveChanges.
 /// </summary>
 public interface IAuditableEntity
 {
     /// <summary>
-    /// Date et heure de création de l'entité (UTC).
+    /// Entity creation date and time (UTC).
     /// </summary>
     DateTime CreatedAt { get; set; }
 
     /// <summary>
-    /// Identifiant (Guid) de l'utilisateur ayant créé l'entité.
+    /// User identifier (Guid) who created the entity.
     /// </summary>
     Guid? CreatedBy { get; set; }
 
     /// <summary>
-    /// Date et heure de la dernière modification de l'entité (UTC).
+    /// Entity last modification date and time (UTC).
     /// </summary>
     DateTime? UpdatedAt { get; set; }
 
     /// <summary>
-    /// Identifiant (Guid) de l'utilisateur ayant effectué la dernière modification.
+    /// User identifier (Guid) who made the last modification.
     /// </summary>
     Guid? UpdatedBy { get; set; }
 
     /// <summary>
-    /// Indique si l'entité est marquée comme supprimée (soft delete).
+    /// Indicates whether the entity is marked as deleted (soft delete).
     /// </summary>
     bool IsDeleted { get; set; }
 
     /// <summary>
-    /// Date et heure de la suppression logique (UTC).
+    /// Logical deletion date and time (UTC).
     /// </summary>
     DateTime? DeletedAt { get; set; }
 
     /// <summary>
-    /// Identifiant (Guid) de l'utilisateur ayant effectué la suppression logique.
+    /// User identifier (Guid) who performed the logical deletion.
     /// </summary>
     Guid? DeletedBy { get; set; }
 }

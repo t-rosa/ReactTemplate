@@ -34,8 +34,8 @@ export function CreateForecast() {
   const { mutate, isPending } = $api.useMutation("post", "/api/weather-forecasts", {
     meta: {
       invalidatesQuery: ["get", "/api/weather-forecasts"],
-      successMessage: "Prévision ajouté",
-      errorMessage: "Il y a eu une erreur.",
+      successMessage: "Forecast added",
+      errorMessage: "An error occurred.",
     },
     onSuccess() {
       setOpen(!open);
@@ -56,13 +56,13 @@ export function CreateForecast() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <PlusIcon /> Ajouter une prévision
+          <PlusIcon /> Add forecast
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Ajouter une prévision</DialogTitle>
-          <DialogDescription>Ajouter une nouvelle prévision météo à votre liste.</DialogDescription>
+          <DialogTitle>Add forecast</DialogTitle>
+          <DialogDescription>Add a new weather forecast to your list.</DialogDescription>
         </DialogHeader>
         <CreateForecastForm form={form} onSubmit={onSubmit}>
           <FormField control={form.control} name="date" render={CreateForecastForm.Date} />
@@ -75,12 +75,12 @@ export function CreateForecast() {
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="outline">
-                Annuler
+                Cancel
               </Button>
             </DialogClose>
             <Button type="submit" disabled={isPending}>
               {isPending && <Spinner />}
-              Valider
+              Submit
             </Button>
           </DialogFooter>
         </CreateForecastForm>

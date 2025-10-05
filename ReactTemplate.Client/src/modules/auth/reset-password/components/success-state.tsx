@@ -1,8 +1,8 @@
 export function SuccessState() {
   return (
     <div className="grid gap-2">
-      <p>Mot de passe réinitialisé avec succès !</p>
-      <p>Vous pouvez désormais vous connecter avec votre nouveau mot de passe.</p>
+      <p>Password successfully reset!</p>
+      <p>You can now log in with your new password.</p>
     </div>
   );
 }
