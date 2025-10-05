@@ -3,6 +3,7 @@
 ## Architecture Overview
 
 Full-stack .NET + React template with modular vertical slice architecture:
+
 - **Server**: ASP.NET Core 9.0 minimal API with EF Core, Identity, OpenAPI
 - **Client**: React + TypeScript with TanStack Router/Query, Vite, Tailwind + shadcn/ui
 - **Communication**: Type-safe API via `openapi-typescript` auto-generated schemas
@@ -12,7 +13,9 @@ Full-stack .NET + React template with modular vertical slice architecture:
 Both client and server follow **feature-based modules**, not layered architecture:
 
 ### Server (`ReactTemplate.Server/Modules/`)
+
 Each module contains its complete feature: Controller, DTOs, Validators, Entity
+
 ```
 WeatherForecasts/
   ├── WeatherForecast.cs          # Entity
@@ -23,7 +26,9 @@ WeatherForecasts/
 ```
 
 ### Client (`ReactTemplate.Client/src/modules/`)
+
 Each module contains views, components, and business logic:
+
 ```
 app/forecasts/
   ├── forecasts.view.tsx          # Main view component
@@ -36,21 +41,27 @@ app/forecasts/
 ## Critical Workflows
 
 ### API Contract Generation
+
 **Must run after backend changes:**
+
 ```bash
 cd ReactTemplate.Client
 npm run openapi  # Generates src/lib/api/schema.ts from Server OpenAPI spec
 ```
+
 This generates TypeScript types from `ReactTemplate.Server/obj/ReactTemplate.Server.json`.
 
 ### Database Migrations
+
 ```bash
 cd ReactTemplate.Server
 dotnet ef migrations add MigrationName
 ```
+
 Migrations auto-run in Development via `Program.cs: context.Database.Migrate()`.
 
 ### Build & Run
+
 ```bash
 # Development (separate processes)
 docker compose up -d              # Starts PostgreSQL + telemetry
@@ -63,6 +74,7 @@ dotnet publish ReactTemplate.Server -o ReactTemplate.Server/bin/Production
 ```
 
 ### Testing
+
 ```bash
 # Server: XUnit integration tests with Testcontainers
 dotnet test ReactTemplate.Tests
@@ -76,6 +88,7 @@ cd ReactTemplate.Client && npm run test:e2e
 ### Server Conventions
 
 **Controllers**: Always in module root, inherit `ControllerBase`, use `[Authorize]` + `[AllowAnonymous]`
+
 ```csharp
 [ApiController]
 [Route("api/weather-forecasts")]
@@ -84,6 +97,7 @@ public class WeatherForecastsController : ControllerBase
 ```
 
 **DTOs**: Use records with inline FluentValidation validators
+
 ```csharp
 public record CreateWeatherForecastRequest(int TemperatureC, string? Summary);
 
@@ -97,19 +111,26 @@ public class CreateWeatherForecastRequestValidator : AbstractValidator<CreateWea
 ### Client Conventions
 
 **API Calls**: Use `$api` from `@/lib/api/client.ts` - wraps openapi-fetch with TanStack Query
+
 ```tsx
 const { data } = $api.useSuspenseQuery("get", "/api/weather-forecasts");
 const { mutate } = $api.useMutation("post", "/api/weather-forecasts", {
-  onSuccess: () => queryClient.invalidateQueries({ queryKey: ["get", "/api/weather-forecasts"] })
+  onSuccess: () =>
+    queryClient.invalidateQueries({
+      queryKey: ["get", "/api/weather-forecasts"],
+    }),
 });
 ```
 
 **Routing**: File-based via `@tanstack/router` - routes in `src/routes/`, auto-generates `routeTree.gen.ts`
+
 ```tsx
 // src/routes/_app/forecasts/index.tsx
 export const Route = createFileRoute("/_app/forecasts/")({
   loader({ context }) {
-    return context.queryClient.ensureQueryData($api.queryOptions("get", "/api/weather-forecasts"));
+    return context.queryClient.ensureQueryData(
+      $api.queryOptions("get", "/api/weather-forecasts")
+    );
   },
   component: ForecastsView,
 });
@@ -122,6 +143,7 @@ export const Route = createFileRoute("/_app/forecasts/")({
 ## Configuration
 
 ### Server Secrets (Development)
+
 ```bash
 cd ReactTemplate.Server
 dotnet user-secrets set "ADMIN_EMAIL" "admin@example.com"
@@ -132,6 +154,7 @@ dotnet user-secrets set "SMTP_PASSWORD" "your-smtp-pass"
 ```
 
 ### Docker Services
+
 - **PostgreSQL**: `localhost:5432` (react-template-db)
 - **Aspire Dashboard**: `localhost:18888` (OpenTelemetry UI)
 
@@ -146,6 +169,7 @@ dotnet user-secrets set "SMTP_PASSWORD" "your-smtp-pass"
 ## Common Tasks
 
 **Add new feature:**
+
 1. Create module folder in both Server/Modules and Client/src/modules
 2. Server: Add controller, DTOs with validators, register in DbContext if needed
 3. Client: Create route file, view component, API calls via `$api`
