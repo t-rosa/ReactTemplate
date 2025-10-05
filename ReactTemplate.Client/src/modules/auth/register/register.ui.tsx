@@ -11,21 +11,26 @@ interface RegisterFormProps extends React.PropsWithChildren {
   onSubmit: (values: RegisterFormSchema) => void;
 }
 
-function _RegisterForm(props: RegisterFormProps) {
+function RegisterFormRoot(props: RegisterFormProps) {
   return (
     <Form {...props.form}>
-      <form onSubmit={void props.form.handleSubmit(props.onSubmit)} className="grid gap-6">
+      <form
+        onSubmit={(e) => {
+          void props.form.handleSubmit(props.onSubmit)(e);
+        }}
+        className="grid gap-6"
+      >
         {props.children}
       </form>
     </Form>
   );
 }
 
-interface RegisterFormEmailProps {
+interface EmailProps {
   field: ControllerRenderProps<RegisterFormSchema, "email">;
 }
 
-function _RegisterFormEmail(props: RegisterFormEmailProps) {
+function Email(props: EmailProps) {
   return (
     <FormItem>
       <FormLabel>Email</FormLabel>
@@ -37,11 +42,11 @@ function _RegisterFormEmail(props: RegisterFormEmailProps) {
   );
 }
 
-interface RegisterFormPasswordProps {
+interface PasswordProps {
   field: ControllerRenderProps<RegisterFormSchema, "password">;
 }
 
-function _RegisterFormPassword(props: RegisterFormPasswordProps) {
+function Password(props: PasswordProps) {
   return (
     <FormItem>
       <FormLabel>Mot de passe</FormLabel>
@@ -53,11 +58,11 @@ function _RegisterFormPassword(props: RegisterFormPasswordProps) {
   );
 }
 
-interface RegisterFormConfirmPasswordProps {
+interface ConfirmPasswordProps {
   field: ControllerRenderProps<RegisterFormSchema, "confirmPassword">;
 }
 
-function _RegisterFormConfirmPassword(props: RegisterFormConfirmPasswordProps) {
+function ConfirmPassword(props: ConfirmPasswordProps) {
   return (
     <FormItem>
       <FormLabel>Confirmer le mot de passe</FormLabel>
@@ -69,11 +74,11 @@ function _RegisterFormConfirmPassword(props: RegisterFormConfirmPasswordProps) {
   );
 }
 
-interface RegisterFormSubmitProps {
+interface SubmitProps {
   isPending: boolean;
 }
 
-function _RegisterFormSubmit(props: RegisterFormSubmitProps) {
+function Submit(props: SubmitProps) {
   return (
     <Button type="submit" disabled={props.isPending} className="w-full rounded-full">
       Créer un compte
@@ -82,9 +87,9 @@ function _RegisterFormSubmit(props: RegisterFormSubmitProps) {
   );
 }
 
-export const RegisterForm = Object.assign(_RegisterForm, {
-  Email: _RegisterFormEmail,
-  Password: _RegisterFormPassword,
-  ConfirmPassword: _RegisterFormConfirmPassword,
-  Submit: _RegisterFormSubmit,
+export const RegisterForm = Object.assign(RegisterFormRoot, {
+  Email,
+  Password,
+  ConfirmPassword,
+  Submit,
 });

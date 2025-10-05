@@ -11,21 +11,26 @@ interface ForgotPasswordFormProps extends React.PropsWithChildren {
   onSubmit: (values: ForgotPasswordFormSchema) => void;
 }
 
-function _ForgotPasswordForm(props: ForgotPasswordFormProps) {
+function ForgotPasswordFormRoot(props: ForgotPasswordFormProps) {
   return (
     <Form {...props.form}>
-      <form onSubmit={void props.form.handleSubmit(props.onSubmit)} className="grid gap-6">
+      <form
+        onSubmit={(e) => {
+          void props.form.handleSubmit(props.onSubmit)(e);
+        }}
+        className="grid gap-6"
+      >
         {props.children}
       </form>
     </Form>
   );
 }
 
-interface ForgotPasswordFormEmailProps {
+interface EmailProps {
   field: ControllerRenderProps<ForgotPasswordFormSchema, "email">;
 }
 
-function _ForgotPasswordFormEmail(props: ForgotPasswordFormEmailProps) {
+function Email(props: EmailProps) {
   return (
     <FormItem>
       <FormLabel>Email</FormLabel>
@@ -37,11 +42,11 @@ function _ForgotPasswordFormEmail(props: ForgotPasswordFormEmailProps) {
   );
 }
 
-interface ForgotPasswordFormSubmitProps {
+interface SubmitProps {
   isPending: boolean;
 }
 
-function _ForgotPasswordFormSubmit(props: ForgotPasswordFormSubmitProps) {
+function Submit(props: SubmitProps) {
   return (
     <Button type="submit" disabled={props.isPending} className="w-full rounded-full">
       Envoyer
@@ -50,7 +55,7 @@ function _ForgotPasswordFormSubmit(props: ForgotPasswordFormSubmitProps) {
   );
 }
 
-export const ForgotPasswordForm = Object.assign(_ForgotPasswordForm, {
-  Email: _ForgotPasswordFormEmail,
-  Submit: _ForgotPasswordFormSubmit,
+export const ForgotPasswordForm = Object.assign(ForgotPasswordFormRoot, {
+  Email,
+  Submit,
 });

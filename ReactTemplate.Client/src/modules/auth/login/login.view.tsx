@@ -30,7 +30,7 @@ export function LoginView() {
     },
   });
 
-  function handleSubmit(values: LoginFormSchema) {
+  const handleSubmit = (values: LoginFormSchema) => {
     mutate({
       body: values,
       params: {
@@ -39,7 +39,7 @@ export function LoginView() {
         },
       },
     });
-  }
+  };
 
   return (
     <AuthLayout>

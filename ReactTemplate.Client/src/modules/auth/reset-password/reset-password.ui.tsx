@@ -11,21 +11,26 @@ interface ResetPasswordFormProps extends React.PropsWithChildren {
   onSubmit: (values: ResetPasswordFormSchema) => void;
 }
 
-function _ResetPasswordForm(props: ResetPasswordFormProps) {
+function ResetPasswordFormRoot(props: ResetPasswordFormProps) {
   return (
     <Form {...props.form}>
-      <form onSubmit={void props.form.handleSubmit(props.onSubmit)} className="grid gap-6">
+      <form
+        onSubmit={(e) => {
+          void props.form.handleSubmit(props.onSubmit)(e);
+        }}
+        className="grid gap-6"
+      >
         {props.children}
       </form>
     </Form>
   );
 }
 
-interface ResetPasswordFormEmailProps {
+interface EmailProps {
   field: ControllerRenderProps<ResetPasswordFormSchema, "email">;
 }
 
-function _ResetPasswordFormEmail(props: ResetPasswordFormEmailProps) {
+function Email(props: EmailProps) {
   return (
     <FormItem>
       <FormLabel>Email</FormLabel>
@@ -37,11 +42,11 @@ function _ResetPasswordFormEmail(props: ResetPasswordFormEmailProps) {
   );
 }
 
-interface ResetPasswordFormNewPasswordProps {
+interface NewPasswordProps {
   field: ControllerRenderProps<ResetPasswordFormSchema, "newPassword">;
 }
 
-function _ResetPasswordFormNewPassword(props: ResetPasswordFormNewPasswordProps) {
+function NewPassword(props: NewPasswordProps) {
   return (
     <FormItem>
       <FormLabel>Nouveau mot de passe</FormLabel>
@@ -53,11 +58,11 @@ function _ResetPasswordFormNewPassword(props: ResetPasswordFormNewPasswordProps)
   );
 }
 
-interface ResetPasswordFormConfirmPasswordProps {
+interface ConfirmPasswordProps {
   field: ControllerRenderProps<ResetPasswordFormSchema, "confirmPassword">;
 }
 
-function _ResetPasswordFormConfirmPassword(props: ResetPasswordFormConfirmPasswordProps) {
+function ConfirmPassword(props: ConfirmPasswordProps) {
   return (
     <FormItem>
       <FormLabel>Confirmer le mot de passe</FormLabel>
@@ -69,11 +74,11 @@ function _ResetPasswordFormConfirmPassword(props: ResetPasswordFormConfirmPasswo
   );
 }
 
-interface ResetPasswordFormResetCodeProps {
+interface ResetCodeProps {
   field: ControllerRenderProps<ResetPasswordFormSchema, "resetCode">;
 }
 
-function _ResetPasswordFormResetCode(props: ResetPasswordFormResetCodeProps) {
+function ResetCode(props: ResetCodeProps) {
   return (
     <FormItem>
       <FormLabel>Code de réinitialisation</FormLabel>
@@ -85,11 +90,11 @@ function _ResetPasswordFormResetCode(props: ResetPasswordFormResetCodeProps) {
   );
 }
 
-interface ResetPasswordFormSubmitProps {
+interface SubmitProps {
   isPending: boolean;
 }
 
-function _ResetPasswordFormSubmit(props: ResetPasswordFormSubmitProps) {
+function Submit(props: SubmitProps) {
   return (
     <Button type="submit" disabled={props.isPending} className="w-full rounded-full">
       Créer un compte
@@ -98,10 +103,10 @@ function _ResetPasswordFormSubmit(props: ResetPasswordFormSubmitProps) {
   );
 }
 
-export const ResetPasswordForm = Object.assign(_ResetPasswordForm, {
-  Email: _ResetPasswordFormEmail,
-  ResetCode: _ResetPasswordFormResetCode,
-  NewPassword: _ResetPasswordFormNewPassword,
-  ConfirmPassword: _ResetPasswordFormConfirmPassword,
-  Submit: _ResetPasswordFormSubmit,
+export const ResetPasswordForm = Object.assign(ResetPasswordFormRoot, {
+  Email,
+  ResetCode,
+  NewPassword,
+  ConfirmPassword,
+  Submit,
 });

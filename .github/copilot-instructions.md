@@ -158,6 +158,156 @@ export const Route = createFileRoute("/_app/forecasts/")({
 
 **Types**: Reference OpenAPI schemas: `components["schemas"]["GetWeatherForecastResponse"]`
 
+### React Component Conventions
+
+**Module Structure**: Each feature module follows this pattern:
+
+```
+login/
+  ├── login.types.ts    # Types and validation schemas
+  ├── login.ui.tsx      # Presentational components (dumb)
+  └── login.view.tsx    # Business logic (smart component)
+```
+
+**Composition Pattern**: Use `Object.assign` to compose sub-components:
+
+```tsx
+// login.ui.tsx
+function LoginFormRoot(props: LoginFormProps) {
+  return (
+    <Form {...props.form}>
+      <form
+        onSubmit={(e) => {
+          void props.form.handleSubmit(props.onSubmit)(e);
+        }}
+      >
+        {props.children}
+      </form>
+    </Form>
+  );
+}
+
+function Email(props: EmailProps) {
+  return (
+    <FormItem>
+      <FormLabel>Email</FormLabel>
+      <FormControl>
+        <Input type="email" {...props.field} />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  );
+}
+
+function Password(props: PasswordProps) {
+  /* ... */
+}
+function Submit(props: SubmitProps) {
+  /* ... */
+}
+
+export const LoginForm = Object.assign(LoginFormRoot, {
+  Email,
+  Password,
+  Submit,
+});
+```
+
+**Usage in View**:
+
+```tsx
+// login.view.tsx
+<LoginForm form={form} onSubmit={handleSubmit}>
+  <FormField control={form.control} name="email" render={LoginForm.Email} />
+  <FormField
+    control={form.control}
+    name="password"
+    render={LoginForm.Password}
+  />
+  <LoginForm.Submit isPending={status === "pending"} />
+</LoginForm>
+```
+
+**Component Conventions**:
+
+1. **Named functions only** - No arrow functions for components
+
+   ```tsx
+   // ✅ Correct
+   function Email(props: EmailProps) {}
+
+   // ❌ Avoid
+   const Email = (props: EmailProps) => {};
+   ```
+
+2. **Props non-destructured** - Always use `props.x`
+
+   ```tsx
+   // ✅ Correct
+   function Email(props: EmailProps) {
+     return <Input {...props.field} />;
+   }
+
+   // ❌ Avoid
+   function Email({ field }: EmailProps) {
+     return <Input {...field} />;
+   }
+   ```
+
+3. **React.PropsWithChildren for children**
+
+   ```tsx
+   interface LoginFormProps extends React.PropsWithChildren {
+     form: UseFormReturn<LoginFormSchema>;
+     onSubmit: (values: LoginFormSchema) => void;
+   }
+   ```
+
+4. **Short, direct names** - Composition sub-components use concise names
+
+   ```tsx
+   // ✅ Correct
+   LoginForm.Email, LoginForm.Submit;
+
+   // ❌ Avoid
+   LoginForm.EmailField, LoginForm.SubmitButton;
+   ```
+
+5. **No barrel files (index.ts)** - Import directly from files
+
+   ```tsx
+   // ✅ Correct
+   import { LoginForm } from "./login.ui";
+
+   // ❌ Avoid
+   import { LoginForm } from "./components";
+   ```
+
+6. **No folder for single file** - Use `.ui.tsx` at module root
+
+   ```
+   ✅ login/login.ui.tsx
+   ❌ login/components/login-form.tsx (for single file)
+   ```
+
+7. **No comments** - Code should be self-documenting
+
+8. **Form submission pattern**
+
+   ```tsx
+   <form onSubmit={(e) => { void form.handleSubmit(onSubmit)(e); }}>
+   ```
+
+9. **FormField shorthand** - When component only takes `field` prop
+
+   ```tsx
+   // ✅ Correct - component signature matches
+   <FormField control={form.control} name="email" render={LoginForm.Email} />
+
+   // ❌ Avoid - unnecessary wrapper
+   <FormField control={form.control} name="email" render={({ field }) => <LoginForm.Email field={field} />} />
+   ```
+
 ## Configuration
 
 ### Server Secrets (Development)

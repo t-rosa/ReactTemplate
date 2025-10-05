@@ -2,9 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import type { components } from "@/lib/api/schema";
-import { Link } from "@tanstack/react-router";
-import * as React from "react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import type { LoginFormSchema } from "./login.types";
 
@@ -13,69 +10,70 @@ interface LoginFormProps extends React.PropsWithChildren {
   onSubmit: (values: LoginFormSchema) => void;
 }
 
-function _LoginForm(props: LoginFormProps) {
+function LoginFormRoot(props: LoginFormProps) {
   return (
     <Form {...props.form}>
-      <form onSubmit={void props.form.handleSubmit(props.onSubmit)} className="grid gap-6">
+      <form
+        onSubmit={(e) => {
+          void props.form.handleSubmit(props.onSubmit)(e);
+        }}
+        className="grid gap-6"
+      >
         {props.children}
       </form>
     </Form>
   );
 }
 
-interface LoginFormEmailProps {
-  field: ControllerRenderProps<components["schemas"]["LoginRequest"], "email">;
+interface EmailProps {
+  field: ControllerRenderProps<LoginFormSchema, "email">;
 }
 
-function _LoginFormEmail(props: LoginFormEmailProps) {
+function Email(props: EmailProps) {
   return (
     <FormItem>
-      <FormLabel>Email</FormLabel>
+      <FormLabel>Courriel</FormLabel>
       <FormControl>
-        <Input placeholder="email@react-template.com" {...props.field} />
+        <Input type="email" placeholder="nom@example.com" {...props.field} />
       </FormControl>
       <FormMessage />
     </FormItem>
   );
 }
 
-interface LoginFormPasswordProps {
-  field: ControllerRenderProps<components["schemas"]["LoginRequest"], "password">;
+interface PasswordProps {
+  field: ControllerRenderProps<LoginFormSchema, "password">;
 }
 
-function _LoginFormPassword(props: LoginFormPasswordProps) {
+function Password(props: PasswordProps) {
   return (
     <FormItem>
       <FormLabel>Mot de passe</FormLabel>
       <FormControl>
-        <Input type="password" placeholder="Mot de passe" {...props.field} />
+        <Input type="password" placeholder="••••••••" {...props.field} />
       </FormControl>
-      <Link
-        to="/forgot-password"
-        className="text-foreground/80 inline-flex w-fit justify-start p-0 text-sm/5 font-normal hover:underline"
-      >
-        Mot de passe oublié ?
-      </Link>
       <FormMessage />
     </FormItem>
   );
 }
 
-interface LoginFormSubmitProps {
+interface SubmitProps {
   isPending: boolean;
 }
 
-function _LoginFormSubmit(props: LoginFormSubmitProps) {
+function Submit(props: SubmitProps) {
   return (
-    <Button type="submit" disabled={props.isPending} className="w-full rounded-full">
-      Connexion
-      {props.isPending && <Spinner />}
+    <Button type="submit" className="w-full" disabled={props.isPending}>
+      {props.isPending ?
+        <Spinner className="mr-2" />
+      : null}
+      {props.isPending ? "Connexion..." : "Se connecter"}
     </Button>
   );
 }
 
-export const LoginForm = Object.assign(_LoginForm, {
-  Email: _LoginFormEmail,
-  Password: _LoginFormPassword,
-  Submit: _LoginFormSubmit,
+export const LoginForm = Object.assign(LoginFormRoot, {
+  Email,
+  Password,
+  Submit,
 });
