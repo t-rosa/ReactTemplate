@@ -1,7 +1,7 @@
-import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import * as React from "react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import type { ForgotPasswordFormSchema } from "./forgot-password.types";
@@ -14,7 +14,7 @@ interface ForgotPasswordFormProps extends React.PropsWithChildren {
 function _ForgotPasswordForm(props: ForgotPasswordFormProps) {
   return (
     <Form {...props.form}>
-      <form onSubmit={props.form.handleSubmit(props.onSubmit)} className="grid gap-6">
+      <form onSubmit={void props.form.handleSubmit(props.onSubmit)} className="grid gap-6">
         {props.children}
       </form>
     </Form>
@@ -45,7 +45,7 @@ function _ForgotPasswordFormSubmit(props: ForgotPasswordFormSubmitProps) {
   return (
     <Button type="submit" disabled={props.isPending} className="w-full rounded-full">
       Envoyer
-      {props.isPending && <Loader />}
+      {props.isPending && <Spinner />}
     </Button>
   );
 }

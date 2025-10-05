@@ -1,5 +1,5 @@
-import { Loader } from "@/components/loader";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Spinner } from "@/components/ui/spinner";
 import { $api } from "@/lib/api/client";
 import { useNavigate } from "@tanstack/react-router";
 import { LogOutIcon } from "lucide-react";
@@ -25,7 +25,7 @@ export function LogoutView() {
   if (status === "pending") {
     return (
       <DropdownMenuItem disabled>
-        <Loader />
+        <Spinner />
         Déconnexion
       </DropdownMenuItem>
     );

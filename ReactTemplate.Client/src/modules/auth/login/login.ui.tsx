@@ -1,7 +1,7 @@
-import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import type { components } from "@/lib/api/schema";
 import { Link } from "@tanstack/react-router";
 import * as React from "react";
@@ -16,7 +16,7 @@ interface LoginFormProps extends React.PropsWithChildren {
 function _LoginForm(props: LoginFormProps) {
   return (
     <Form {...props.form}>
-      <form onSubmit={props.form.handleSubmit(props.onSubmit)} className="grid gap-6">
+      <form onSubmit={void props.form.handleSubmit(props.onSubmit)} className="grid gap-6">
         {props.children}
       </form>
     </Form>
@@ -69,7 +69,7 @@ function _LoginFormSubmit(props: LoginFormSubmitProps) {
   return (
     <Button type="submit" disabled={props.isPending} className="w-full rounded-full">
       Connexion
-      {props.isPending && <Loader />}
+      {props.isPending && <Spinner />}
     </Button>
   );
 }

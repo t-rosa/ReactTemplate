@@ -48,9 +48,3 @@ public class BaseFactory : WebApplicationFactory<Program>, IAsyncLifetime
         base.ConfigureWebHost(builder);
     }
 }
-
-// Shared fixture
-[CollectionDefinition("IntegrationTests")]
-public class IntegrationTestCollection : ICollectionFixture<BaseFactory>
-{
-}

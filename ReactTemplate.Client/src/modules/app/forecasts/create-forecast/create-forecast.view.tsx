@@ -1,4 +1,3 @@
-import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -21,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Spinner } from "@/components/ui/spinner";
 import { $api } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
@@ -53,7 +53,7 @@ export function CreateForecast() {
     },
   });
 
-  async function onSubmit(values: CreateForecastFormSchema) {
+  function onSubmit(values: CreateForecastFormSchema) {
     mutate({
       body: {
         temperatureC: parseInt(values.temperatureC),
@@ -76,7 +76,7 @@ export function CreateForecast() {
           <DialogDescription>Ajouter une nouvelle prévision météo à votre liste.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-3">
+          <form onSubmit={void form.handleSubmit(onSubmit)} className="grid gap-3">
             <FormField
               control={form.control}
               name="date"
@@ -147,7 +147,7 @@ export function CreateForecast() {
                 </Button>
               </DialogClose>
               <Button type="submit" disabled={isPending}>
-                {isPending && <Loader />}
+                {isPending && <Spinner />}
                 Valider
               </Button>
             </DialogFooter>

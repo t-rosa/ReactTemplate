@@ -8,7 +8,7 @@ using ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
 
 namespace ReactTemplate.Tests.Modules.WeatherForecasts;
 
-[Collection("IntegrationTests")]
+[Collection("DefaultCollection")]
 public class WeatherForecastsControllerTests : IAsyncLifetime
 {
     private readonly HttpClient _client;

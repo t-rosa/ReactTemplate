@@ -210,5 +210,4 @@ public class WeatherForecastsController : ControllerBase
 
         return NoContent();
     }
-
 }
