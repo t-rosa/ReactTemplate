@@ -17,7 +17,7 @@ namespace ReactTemplate.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -280,17 +280,34 @@ namespace ReactTemplate.Server.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date")
                         .HasColumnName("date");
 
                     b.Property<string>("Summary")
-                        .HasColumnType("text")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
                         .HasColumnName("summary");
 
                     b.Property<int>("TemperatureC")
                         .HasColumnType("integer")
                         .HasColumnName("temperature_c");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("updated_by");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -299,8 +316,23 @@ namespace ReactTemplate.Server.Migrations
                     b.HasKey("Id")
                         .HasName("pk_weather_forecasts");
 
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_weather_forecasts_created_at");
+
+                    b.HasIndex("CreatedBy")
+                        .HasDatabaseName("ix_weather_forecasts_created_by");
+
+                    b.HasIndex("Date")
+                        .HasDatabaseName("ix_weather_forecasts_date");
+
+                    b.HasIndex("UpdatedBy")
+                        .HasDatabaseName("ix_weather_forecasts_updated_by");
+
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_weather_forecasts_user_id");
+
+                    b.HasIndex("UserId", "Date")
+                        .HasDatabaseName("ix_weather_forecasts_user_id_date");
 
                     b.ToTable("weather_forecasts", (string)null);
                 });

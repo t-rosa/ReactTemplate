@@ -1,8 +1,9 @@
+using ReactTemplate.Server.Modules.Common;
 using ReactTemplate.Server.Modules.Users;
 
 namespace ReactTemplate.Server.Modules.WeatherForecasts;
 
-public class WeatherForecast
+public class WeatherForecast : AuditableEntity
 {
     public Guid Id { get; set; }
 
