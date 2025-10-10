@@ -35,10 +35,10 @@ export function ForecastActions(props: ForecastActionsProps) {
       <AlertDialog>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={handleCopyIdClick}>Copier l&apos;ID</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleCopyIdClick}>Copy ID</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild variant="destructive">
-            <AlertDialogTrigger>Supprimer</AlertDialogTrigger>
+            <AlertDialogTrigger className="w-full">Remove</AlertDialogTrigger>
           </DropdownMenuItem>
         </DropdownMenuContent>
         <RemoveForecast id={forecast.id} />

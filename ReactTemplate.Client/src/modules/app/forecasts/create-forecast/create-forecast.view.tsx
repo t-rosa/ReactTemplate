@@ -56,7 +56,7 @@ export function CreateForecast() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button>
           <PlusIcon /> Add forecast
         </Button>
       </DialogTrigger>

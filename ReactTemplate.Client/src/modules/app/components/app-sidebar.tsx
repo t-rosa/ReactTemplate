@@ -14,7 +14,7 @@ import { Link } from "@tanstack/react-router";
 import { FrameIcon, LayoutDashboardIcon } from "lucide-react";
 import { ThemeSwitcher } from "../theme-switcher/theme-switcher.view";
 
-function _AppSidebar(props: React.PropsWithChildren) {
+function Root(props: React.PropsWithChildren) {
   return (
     <div className="pattern hidden sm:block">
       <Sidebar variant="floating" collapsible="icon">
@@ -24,7 +24,7 @@ function _AppSidebar(props: React.PropsWithChildren) {
   );
 }
 
-function _AppSidebarHeader() {
+function Header() {
   return (
     <SidebarHeader className="border-b">
       <SidebarMenu>
@@ -41,7 +41,7 @@ function _AppSidebarHeader() {
   );
 }
 
-function _AppSidebarContent() {
+function Content() {
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -56,7 +56,7 @@ function _AppSidebarContent() {
                   }}
                 >
                   <LayoutDashboardIcon />
-                  <span>Prévisions</span>
+                  <span>Forecasts</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -74,7 +74,7 @@ function _AppSidebarContent() {
   );
 }
 
-function _AppSidebarFooter() {
+function Footer() {
   return (
     <SidebarFooter className="border-t">
       <UserMenu />
@@ -82,8 +82,8 @@ function _AppSidebarFooter() {
   );
 }
 
-export const AppSidebar = Object.assign(_AppSidebar, {
-  Content: _AppSidebarContent,
-  Header: _AppSidebarHeader,
-  Footer: _AppSidebarFooter,
+export const AppSidebar = Object.assign(Root, {
+  Content,
+  Header,
+  Footer,
 });

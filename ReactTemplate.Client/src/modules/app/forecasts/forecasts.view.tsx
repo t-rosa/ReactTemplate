@@ -6,7 +6,7 @@ export function ForecastsView() {
   const { data } = $api.useSuspenseQuery("get", "/api/weather-forecasts");
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto">
       <ForecastTable columns={FORECAST_COLUMNS} data={data} />
     </div>
   );

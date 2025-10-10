@@ -1,6 +1,7 @@
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
+import * as React from "react";
 
 interface SidebarThemeToggleProps {
   mounted: boolean;
@@ -10,7 +11,7 @@ interface SidebarThemeToggleProps {
 
 export function ThemeSwitcherMenuItem(props: SidebarThemeToggleProps) {
   return (
-    <>
+    <React.Fragment>
       <SidebarMenuItem className="hidden group-data-[collapsible=icon]:block">
         <SidebarMenuButton onClick={props.onThemeChange}>
           <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
@@ -38,7 +39,7 @@ export function ThemeSwitcherMenuItem(props: SidebarThemeToggleProps) {
                 d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0m9-9v18m0-12l4.65-4.65M12 14.3l7.37-7.37M12 19.6l8.85-8.85"
               ></path>
             </svg>
-            <span>Changer le thème</span>
+            <span>Switch theme</span>
             {props.mounted ?
               <Switch
                 className="ml-auto"
@@ -49,6 +50,6 @@ export function ThemeSwitcherMenuItem(props: SidebarThemeToggleProps) {
           </label>
         </SidebarMenuButton>
       </SidebarMenuItem>
-    </>
+    </React.Fragment>
   );
 }

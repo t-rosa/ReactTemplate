@@ -6,12 +6,12 @@ import * as React from "react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import type { ResetPasswordFormSchema } from "./reset-password.types";
 
-interface ResetPasswordFormProps extends React.PropsWithChildren {
+interface RootProps extends React.PropsWithChildren {
   form: UseFormReturn<ResetPasswordFormSchema>;
   onSubmit: (values: ResetPasswordFormSchema) => void;
 }
 
-function ResetPasswordFormRoot(props: ResetPasswordFormProps) {
+function RootProps(props: RootProps) {
   return (
     <Form {...props.form}>
       <form
@@ -103,7 +103,7 @@ function Submit(props: SubmitProps) {
   );
 }
 
-export const ResetPasswordForm = Object.assign(ResetPasswordFormRoot, {
+export const ResetPasswordForm = Object.assign(RootProps, {
   Email,
   ResetCode,
   NewPassword,

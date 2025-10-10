@@ -13,19 +13,19 @@ import { UserMenuDropdown } from "./user-menu.ui";
 
 export function UserMenu() {
   const { isMobile } = useSidebar();
-  const { user, roleLabel } = useUser();
+  const { user } = useUser();
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <UserMenuDropdown user={user} role={roleLabel} side={isMobile ? "bottom" : "right"}>
+        <UserMenuDropdown user={user} side={isMobile ? "bottom" : "right"}>
           <DropdownMenuSeparator />
 
           <DropdownMenuGroup>
             <DropdownMenuItem disabled asChild>
               <div>
                 <UserCircleIcon />
-                Profil
+                Profile
               </div>
             </DropdownMenuItem>
             <Authorize role="Admin">

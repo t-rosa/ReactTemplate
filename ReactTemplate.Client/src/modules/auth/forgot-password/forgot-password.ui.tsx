@@ -6,12 +6,12 @@ import * as React from "react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import type { ForgotPasswordFormSchema } from "./forgot-password.types";
 
-interface ForgotPasswordFormProps extends React.PropsWithChildren {
+interface RootProps extends React.PropsWithChildren {
   form: UseFormReturn<ForgotPasswordFormSchema>;
   onSubmit: (values: ForgotPasswordFormSchema) => void;
 }
 
-function ForgotPasswordFormRoot(props: ForgotPasswordFormProps) {
+function Root(props: RootProps) {
   return (
     <Form {...props.form}>
       <form
@@ -55,7 +55,7 @@ function Submit(props: SubmitProps) {
   );
 }
 
-export const ForgotPasswordForm = Object.assign(ForgotPasswordFormRoot, {
+export const ForgotPasswordForm = Object.assign(Root, {
   Email,
   Submit,
 });

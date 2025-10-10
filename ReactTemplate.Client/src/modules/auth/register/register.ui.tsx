@@ -6,12 +6,12 @@ import * as React from "react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import type { RegisterFormSchema } from "./register.types";
 
-interface RegisterFormProps extends React.PropsWithChildren {
+interface RootProps extends React.PropsWithChildren {
   form: UseFormReturn<RegisterFormSchema>;
   onSubmit: (values: RegisterFormSchema) => void;
 }
 
-function RegisterFormRoot(props: RegisterFormProps) {
+function Root(props: RootProps) {
   return (
     <Form {...props.form}>
       <form
@@ -87,7 +87,7 @@ function Submit(props: SubmitProps) {
   );
 }
 
-export const RegisterForm = Object.assign(RegisterFormRoot, {
+export const RegisterForm = Object.assign(Root, {
   Email,
   Password,
   ConfirmPassword,

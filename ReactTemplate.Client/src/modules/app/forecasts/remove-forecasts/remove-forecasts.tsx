@@ -34,7 +34,7 @@ export function RemoveForecasts(props: RemoveForecastsProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Supprimer</Button>
+        <Button variant="destructive">Remove</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

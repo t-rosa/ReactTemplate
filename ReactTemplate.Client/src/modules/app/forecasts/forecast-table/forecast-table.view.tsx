@@ -1,4 +1,12 @@
 import { Button } from "@/components/ui/button";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -20,7 +28,9 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+import { FolderCodeIcon } from "lucide-react";
 import * as React from "react";
+import { TableContainer } from "../../../../components/table-container";
 import { CreateForecast } from "../create-forecast/create-forecast.view";
 import { RemoveForecasts } from "../remove-forecasts/remove-forecasts";
 
@@ -53,9 +63,28 @@ export function ForecastTable(props: ForecastTableProps) {
 
   const selectedIds = table.getFilteredSelectedRowModel().rows.map((r) => r.original.id);
 
+  if (props.data.length === 0) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <FolderCodeIcon />
+          </EmptyMedia>
+          <EmptyTitle>No Forecasts Yet</EmptyTitle>
+          <EmptyDescription>
+            You haven&apos;t created any forecast yet. Get started by creating your first forecast.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <CreateForecast />
+        </EmptyContent>
+      </Empty>
+    );
+  }
+
   return (
-    <div>
-      <div className="flex items-center justify-between py-4">
+    <TableContainer>
+      <TableContainer.Header>
         <Input
           placeholder="Filter date..."
           value={(table.getColumn("date")?.getFilterValue() as string) ?? ""}
@@ -66,8 +95,8 @@ export function ForecastTable(props: ForecastTableProps) {
           <CreateForecast />
           <RemoveForecasts ids={selectedIds} />
         </div>
-      </div>
-      <div className="overflow-hidden rounded-md border">
+      </TableContainer.Header>
+      <TableContainer.Content>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -85,26 +114,19 @@ export function ForecastTable(props: ForecastTableProps) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ?
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            : <TableRow>
-                <TableCell colSpan={props.columns.length} className="h-24 text-center">
-                  No results.
-                </TableCell>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
-            }
+            ))}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      </TableContainer.Content>
+      <TableContainer.Footer>
         <Button
           variant="outline"
           size="sm"
@@ -121,7 +143,7 @@ export function ForecastTable(props: ForecastTableProps) {
         >
           Next
         </Button>
-      </div>
-    </div>
+      </TableContainer.Footer>
+    </TableContainer>
   );
 }

@@ -6,13 +6,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
-import type { UserRoleLabel } from "@/hooks/use-user";
 import type { components } from "@/lib/api/schema";
 import { MoreVerticalIcon } from "lucide-react";
 
 interface UserMenuDropdownProps extends React.PropsWithChildren {
   user?: components["schemas"]["GetUserResponse"];
-  role: UserRoleLabel;
   side: "bottom" | "right";
 }
 
@@ -32,7 +30,7 @@ export function UserMenuDropdown(props: UserMenuDropdownProps) {
           </Avatar>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-medium">{props.user?.email}</span>
-            <span className="text-muted-foreground truncate text-xs">{props.role}</span>
+            <span className="text-muted-foreground truncate text-xs">{props.user?.roles[0]}</span>
           </div>
           <MoreVerticalIcon />
         </SidebarMenuButton>

@@ -13,8 +13,8 @@ export function LoginView() {
 
   const { mutate, status } = $api.useMutation("post", "/api/auth/login", {
     meta: {
-      successMessage: "Connecté",
-      errorMessage: "Il y a eu une érreur.",
+      successMessage: "Connected",
+      errorMessage: "An error has occurred",
       invalidatesQuery: ["get", "manage/info"],
     },
     async onSuccess() {

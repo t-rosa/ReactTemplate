@@ -5,12 +5,12 @@ import { Spinner } from "@/components/ui/spinner";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import type { LoginFormSchema } from "./login.types";
 
-interface LoginFormProps extends React.PropsWithChildren {
+interface RootProps extends React.PropsWithChildren {
   form: UseFormReturn<LoginFormSchema>;
   onSubmit: (values: LoginFormSchema) => void;
 }
 
-function LoginFormRoot(props: LoginFormProps) {
+function Root(props: RootProps) {
   return (
     <Form {...props.form}>
       <form
@@ -72,7 +72,7 @@ function Submit(props: SubmitProps) {
   );
 }
 
-export const LoginForm = Object.assign(LoginFormRoot, {
+export const LoginForm = Object.assign(Root, {
   Email,
   Password,
   Submit,
