@@ -51,7 +51,7 @@ export function ForecastTable(props: ForecastTableProps) {
     },
   });
 
-  const selectedIds = table.getFilteredSelectedRowModel().rows.map((r) => r.original.id!);
+  const selectedIds = table.getFilteredSelectedRowModel().rows.map((r) => r.original.id);
 
   return (
     <div>

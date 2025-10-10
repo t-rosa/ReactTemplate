@@ -52,6 +52,24 @@ export default defineConfig({
   test: {
     include: ["./tests/browser/**/*.{spec,test}.{ts,tsx}"],
   },
+  build: {
+    rolldownOptions: {
+      output: {
+        advancedChunks: {
+          groups: [
+            { test: /node_modules\/react\//, name: "react" },
+            { test: /node_modules\/react-dom\//, name: "react-dom" },
+            { test: /node_modules\/@tanstack\/react-router\//, name: "tanstack-react-router" },
+            { test: /node_modules\/@tanstack\/react-table\//, name: "tanstack-react-table" },
+            { test: /node_modules\/react-hook-form\//, name: "react-hook-form" },
+            { test: /node_modules\/@hookform\/resolvers\//, name: "hookform-resolvers" },
+            { test: /node_modules\/zod\//, name: "zod" },
+            { test: /node_modules\/@radix-ui\//, name: "radix-ui" },
+          ],
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

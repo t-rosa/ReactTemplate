@@ -187,7 +187,6 @@ dotnet ef migrations add MigrationName
 - [Tailwind](https://tailwindcss.com/)
 - [Shadcn/ui](https://ui.shadcn.com/)
 - [Zod](https://zod.dev/)
-- [Oxlint](https://oxc-project.github.io/docs/guide/usage/linter.html)
 - [ESLint](https://eslint.org/)
 - [Prettier](https://prettier.io/)
 - [Vitest](https://vitest.dev/)

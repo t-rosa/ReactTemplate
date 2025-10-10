@@ -10,12 +10,12 @@ import { CalendarIcon } from "lucide-react";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import type { CreateForecastFormSchema } from "./create-forecast.types";
 
-interface CreateForecastFormProps extends React.PropsWithChildren {
+interface RootProps extends React.PropsWithChildren {
   form: UseFormReturn<CreateForecastFormSchema>;
   onSubmit: (values: CreateForecastFormSchema) => void;
 }
 
-function CreateForecastFormRoot(props: CreateForecastFormProps) {
+function Root(props: RootProps) {
   return (
     <Form {...props.form}>
       <form
@@ -104,7 +104,7 @@ function Summary(props: SummaryProps) {
   );
 }
 
-export const CreateForecastForm = Object.assign(CreateForecastFormRoot, {
+export const CreateForecastForm = Object.assign(Root, {
   Date,
   Temperature,
   Summary,

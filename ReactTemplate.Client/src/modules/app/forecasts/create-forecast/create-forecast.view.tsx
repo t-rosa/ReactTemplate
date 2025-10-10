@@ -22,6 +22,7 @@ import { CreateForecastForm } from "./create-forecast.ui";
 
 export function CreateForecast() {
   const [open, setOpen] = React.useState(false);
+
   const form = useForm<CreateForecastFormSchema>({
     resolver: standardSchemaResolver(formSchema),
     defaultValues: {

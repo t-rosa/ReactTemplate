@@ -17,7 +17,7 @@ export default defineConfig([
       tseslint.configs.stylisticTypeChecked,
       reactX.configs["recommended-typescript"],
       reactDom.configs.recommended,
-      reactHooks.configs.recommended,
+      reactHooks.configs.flat["recommended-latest"],
       reactRefresh.configs.vite,
     ],
     languageOptions: {
@@ -27,6 +27,9 @@ export default defineConfig([
       },
       ecmaVersion: 2020,
       globals: globals.browser,
+    },
+    rules: {
+      "@typescript-eslint/no-misused-promises": "off",
     },
   },
 ]);
