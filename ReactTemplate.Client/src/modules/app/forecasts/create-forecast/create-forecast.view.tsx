@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogClose,
@@ -9,22 +10,34 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { FormField } from "@/components/ui/form";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Spinner } from "@/components/ui/spinner";
+import { Textarea } from "@/components/ui/textarea";
 import { $api } from "@/lib/api/client";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { formatISO } from "date-fns";
-import { PlusIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format, formatISO } from "date-fns";
+import { fr } from "date-fns/locale";
+import { CalendarIcon, PlusIcon } from "lucide-react";
 import * as React from "react";
-import { useForm } from "react-hook-form";
-import { formSchema, type CreateForecastFormSchema } from "./create-forecast.types";
-import { CreateForecastForm } from "./create-forecast.ui";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
+
+const formSchema = z.object({
+  date: z.date(),
+  temperatureC: z.string(),
+  summary: z.string(),
+});
+
+export type CreateForecastFormSchema = z.infer<typeof formSchema>;
 
 export function CreateForecast() {
   const [open, setOpen] = React.useState(false);
 
   const form = useForm<CreateForecastFormSchema>({
-    resolver: standardSchemaResolver(formSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       date: new Date(),
       temperatureC: "",
@@ -32,7 +45,7 @@ export function CreateForecast() {
     },
   });
 
-  const { mutate, isPending } = $api.useMutation("post", "/api/weather-forecasts", {
+  const createForecast = $api.useMutation("post", "/api/weather-forecasts", {
     meta: {
       invalidatesQuery: ["get", "/api/weather-forecasts"],
       successMessage: "Forecast added",
@@ -40,11 +53,12 @@ export function CreateForecast() {
     },
     onSuccess() {
       setOpen(!open);
+      form.reset();
     },
   });
 
   function onSubmit(values: CreateForecastFormSchema) {
-    mutate({
+    createForecast.mutate({
       body: {
         temperatureC: parseInt(values.temperatureC),
         date: formatISO(values.date, { representation: "date" }),
@@ -65,26 +79,85 @@ export function CreateForecast() {
           <DialogTitle>Add forecast</DialogTitle>
           <DialogDescription>Add a new weather forecast to your list.</DialogDescription>
         </DialogHeader>
-        <CreateForecastForm form={form} onSubmit={onSubmit}>
-          <FormField control={form.control} name="date" render={CreateForecastForm.Date} />
-          <FormField
-            control={form.control}
-            name="temperatureC"
-            render={CreateForecastForm.Temperature}
-          />
-          <FormField control={form.control} name="summary" render={CreateForecastForm.Summary} />
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
-            </DialogClose>
-            <Button type="submit" disabled={isPending}>
-              {isPending && <Spinner />}
-              Submit
+        <form id="create-forecast" onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup>
+            <Controller
+              control={form.control}
+              name="date"
+              render={({ field, fieldState }) => (
+                <Field className="flex flex-col">
+                  <FieldLabel htmlFor={field.name}>Date</FieldLabel>
+                  <Popover>
+                    <PopoverTrigger asChild id={field.name}>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        {field.value ?
+                          format(field.value, "P", { locale: fr })
+                        : <span>Pick a date</span>}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new globalThis.Date() || date < new globalThis.Date("1900-01-01")
+                        }
+                        captionLayout="dropdown"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="temperatureC"
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Temperature</FieldLabel>
+                  <Input {...field} id={field.name} type="number" placeholder="20" />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="summary"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>More about you</FieldLabel>
+                  <Textarea
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Cool..."
+                  />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+          </FieldGroup>
+        </form>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              Cancel
             </Button>
-          </DialogFooter>
-        </CreateForecastForm>
+          </DialogClose>
+          <Button type="submit" form="create-forecast" disabled={createForecast.isPending}>
+            {createForecast.isPending ? "Submitting..." : "Submit"}
+            {createForecast.isPending && <Spinner />}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

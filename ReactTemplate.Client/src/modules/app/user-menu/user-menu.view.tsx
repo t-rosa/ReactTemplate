@@ -4,8 +4,8 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { useUser } from "@/hooks/use-user";
-import { Authorize } from "@/modules/auth/components/authorize";
+import { useUser } from "@/modules/auth/authorize/authorize.hooks";
+import { Authorize } from "@/modules/auth/authorize/authorize.view";
 import { LogoutView } from "@/modules/auth/logout/logout.view";
 import { Link } from "@tanstack/react-router";
 import { ShieldIcon, UserCircleIcon } from "lucide-react";

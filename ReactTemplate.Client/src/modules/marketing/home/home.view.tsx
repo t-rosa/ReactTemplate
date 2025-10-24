@@ -77,7 +77,6 @@ const techStack = {
     { name: "Entity Framework Core", category: "ORM" },
     { name: "Identity", category: "Auth" },
     { name: "FluentValidation", category: "Validation" },
-    { name: "OpenTelemetry", category: "Observability" },
     { name: "xUnit", category: "Testing" },
     { name: "Testcontainers", category: "Testing" },
   ],

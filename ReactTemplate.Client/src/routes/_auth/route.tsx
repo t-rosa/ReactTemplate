@@ -1,4 +1,5 @@
 import { $client } from "@/lib/api/client";
+import { AuthView } from "@/modules/auth/auth.view";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth")({
@@ -8,4 +9,5 @@ export const Route = createFileRoute("/_auth")({
       redirect({ to: "/forecasts", throw: true });
     }
   },
+  component: AuthView,
 });

@@ -1,19 +1,50 @@
-import { FormField } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { $api } from "@/lib/api/client";
 import { AuthCard } from "@/modules/auth/components/auth-card";
-import { AuthLayout } from "@/modules/auth/components/auth-layout";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
-import { SuccessState } from "./components/success-state";
-import { formSchema, type RegisterFormSchema } from "./register.types";
-import { RegisterForm } from "./register.ui";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
+
+const formSchema = z
+  .object({
+    email: z.email({
+      error: "Invalid email address",
+    }),
+    password: z
+      .string({
+        error: "Invalid password",
+      })
+      .min(6, "Password must be at least 6 characters long.")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
+      .regex(/[0-9]/, "Password must contain at least one digit.")
+      .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character."),
+    confirmPassword: z
+      .string({
+        error: "Invalid password",
+      })
+      .min(6, "Password must be at least 6 characters long.")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
+      .regex(/[0-9]/, "Password must contain at least one digit.")
+      .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character."),
+  })
+  .refine((values) => values.password === values.confirmPassword, {
+    error: "Passwords do not match.",
+    path: ["confirmPassword"],
+  });
+
+export type RegisterFormSchema = z.infer<typeof formSchema>;
 
 export function RegisterView() {
-  const { mutate, status } = $api.useMutation("post", "/api/auth/register", {});
+  const register = $api.useMutation("post", "/api/auth/register");
 
   const form = useForm<RegisterFormSchema>({
-    resolver: standardSchemaResolver(formSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -21,8 +52,8 @@ export function RegisterView() {
     },
   });
 
-  function handleSubmit(values: RegisterFormSchema) {
-    mutate({
+  function onSubmit(values: RegisterFormSchema) {
+    register.mutate({
       body: {
         email: values.email,
         password: values.password,
@@ -30,48 +61,76 @@ export function RegisterView() {
     });
   }
 
-  if (status === "success") {
+  if (register.isSuccess) {
     return (
-      <AuthLayout>
-        <AuthCard>
-          <AuthCard.Content>
-            <AuthCard.Header>
-              <AuthCard.Title>Create an account.</AuthCard.Title>
-              <AuthCard.Description>Sign up to access the application.</AuthCard.Description>
-            </AuthCard.Header>
-            <SuccessState />
-          </AuthCard.Content>
-          <AuthCard.Footer>
-            <Link to="/login">Log in</Link>
-          </AuthCard.Footer>
-        </AuthCard>
-      </AuthLayout>
-    );
-  }
-
-  return (
-    <AuthLayout>
       <AuthCard>
         <AuthCard.Content>
           <AuthCard.Header>
             <AuthCard.Title>Create an account.</AuthCard.Title>
             <AuthCard.Description>Sign up to access the application.</AuthCard.Description>
           </AuthCard.Header>
-          <RegisterForm form={form} onSubmit={handleSubmit}>
-            <FormField control={form.control} name="email" render={RegisterForm.Email} />
-            <FormField control={form.control} name="password" render={RegisterForm.Password} />
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={RegisterForm.ConfirmPassword}
-            />
-            <RegisterForm.Submit isPending={status === "pending"} />
-          </RegisterForm>
+          <p>Your account has been created successfully!</p>
+          <p>A confirmation email has been sent. Please validate it before logging in.</p>
         </AuthCard.Content>
         <AuthCard.Footer>
           <Link to="/login">Log in</Link>
         </AuthCard.Footer>
       </AuthCard>
-    </AuthLayout>
+    );
+  }
+
+  return (
+    <AuthCard>
+      <AuthCard.Content>
+        <AuthCard.Header>
+          <AuthCard.Title>Create an account.</AuthCard.Title>
+          <AuthCard.Description>Sign up to access the application.</AuthCard.Description>
+        </AuthCard.Header>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup>
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                  <Input id={field.name} type="email" placeholder="name@example.com" {...field} />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="password"
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                  <Input id={field.name} type="password" placeholder="••••••••" {...field} />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="confirmPassword"
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                  <Input id={field.name} type="password" placeholder="••••••••" {...field} />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+            <Button type="submit" disabled={register.isPending}>
+              {register.isPending ? "Creating..." : "Create account"}
+              {register.isPending && <Spinner />}
+            </Button>
+          </FieldGroup>
+        </form>
+      </AuthCard.Content>
+      <AuthCard.Footer>
+        <Link to="/login">Log in</Link>
+      </AuthCard.Footer>
+    </AuthCard>
   );
 }
