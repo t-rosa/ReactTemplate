@@ -1,13 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using OpenTelemetry.Exporter;
-using OpenTelemetry.Logs;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 using ReactTemplate.Server.Modules.Email;
 using ReactTemplate.Server.Modules.Users;
 using Scalar.AspNetCore;
@@ -19,34 +13,6 @@ public interface Program
     private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        // Open Telemetry
-        builder.Services.AddOpenTelemetry()
-            .ConfigureResource(resource => resource.AddService("ReactTemplate"))
-            .WithMetrics(metrics =>
-            {
-                metrics
-                    .AddAspNetCoreInstrumentation()
-                    .AddHttpClientInstrumentation();
-
-                metrics.AddOtlpExporter();
-            })
-            .WithTracing((tracing) =>
-            {
-                tracing
-                    .AddAspNetCoreInstrumentation()
-                    .AddHttpClientInstrumentation()
-                    .AddEntityFrameworkCoreInstrumentation();
-
-                tracing.AddOtlpExporter();
-            });
-
-        builder.Logging.AddOpenTelemetry(logging => logging.AddOtlpExporter());
-
-        builder.Services.Configure<OtlpExporterOptions>(options =>
-        {
-            options.Headers = $"x-otlp-api-key={builder.Configuration["OTEL_API_KEY"]}";
-        });
 
         // HttpContextAccessor to access the current user in DbContext
         builder.Services.AddHttpContextAccessor();

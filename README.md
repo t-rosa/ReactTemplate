@@ -163,7 +163,6 @@ dotnet ef migrations add MigrationName
 - [EFCore](https://learn.microsoft.com/en-us/ef/core/)
 - [Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity)
 - [FluentValidation](https://fluentvalidation.net/)
-- [OpenTelemetry](https://opentelemetry.io/)
 - [XUnit](https://xunit.net/)
 - [Testcontainers](https://testcontainers.com/)
 - [FluentAssertion](https://fluentassertions.com/)

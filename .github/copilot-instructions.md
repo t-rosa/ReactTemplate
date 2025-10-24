@@ -64,7 +64,7 @@ Migrations auto-run in Development via `Program.cs: context.Database.Migrate()`.
 
 ```bash
 # Development (separate processes)
-docker compose up -d              # Starts PostgreSQL + telemetry
+docker compose up -d              # Starts PostgreSQL
 dotnet run --project ReactTemplate.Server  # Server on https://localhost:7000
 cd ReactTemplate.Client && npm run dev      # Client proxies to server
 
@@ -324,7 +324,6 @@ dotnet user-secrets set "SMTP_PASSWORD" "your-smtp-pass"
 ### Docker Services
 
 - **PostgreSQL**: `localhost:5432` (react-template-db)
-- **Aspire Dashboard**: `localhost:18888` (OpenTelemetry UI)
 
 ## Project Structure Notes
 
