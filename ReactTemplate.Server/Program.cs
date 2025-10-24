@@ -17,6 +17,8 @@ public interface Program
         // HttpContextAccessor to access the current user in DbContext
         builder.Services.AddHttpContextAccessor();
 
+        builder.Services.AddResponseCompression();
+
         // Database
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
         {
@@ -66,6 +68,8 @@ public interface Program
         builder.Services.AddOpenApi();
 
         var app = builder.Build();
+
+        app.UseResponseCompression();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
