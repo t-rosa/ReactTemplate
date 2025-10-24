@@ -114,13 +114,13 @@ dotnet run --project ReactTemplate.Server
 1. Publish
 
 ```bash
-rm -rf ReactTemplate.Server/bin/Production/ && dotnet publish ReactTemplate.Server -t:PublishContainer -p ContainerArchiveOutputPath=../designer.tar.gz -o ReactTemplate.Server/bin/Production
+rm -rf ReactTemplate.Server/bin/Production/ && dotnet publish ReactTemplate.Server -t:PublishContainer -p ContainerArchiveOutputPath=../server.tar.gz -o ReactTemplate.Server/bin/Production
 ```
 
 2. Load docker image
 
 ```bash
-docker load < designer.tar.gz
+docker load < server.tar.gz
 ```
 
 3. Stop runing containers

@@ -365,8 +365,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-# Docker image
-react-template.tar.gz
+# Docker tarball
+server.tar.gz
 
 # Cookie / Keys
 keys/
