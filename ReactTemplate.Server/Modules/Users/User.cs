@@ -9,5 +9,5 @@ public class User : IdentityUser<Guid>
 
     public string? LastName { get; set; }
 
-    public ICollection<WeatherForecast> WeatherForecasts { get; } = new List<WeatherForecast>();
+    public ICollection<WeatherForecast> WeatherForecasts { get; set; } = default!;
 }
