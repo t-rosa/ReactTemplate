@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { $api } from "@/lib/api/client";
@@ -47,21 +47,23 @@ export function ForgotPasswordView() {
           <AuthCard.Description>Enter your email address.</AuthCard.Description>
         </AuthCard.Header>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <Controller
-            control={form.control}
-            name="email"
-            render={({ field, fieldState }) => (
-              <Field>
-                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                <Input id={field.name} type="email" placeholder="name@example.com" {...field} />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
-          <Button type="submit" disabled={forgotPassword.isPending}>
-            {forgotPassword.isPending ? "Sending..." : "Forgot password"}
-            {forgotPassword.isPending && <Spinner />}
-          </Button>
+          <FieldGroup>
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                  <Input id={field.name} type="email" placeholder="name@example.com" {...field} />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+            <Button type="submit" disabled={forgotPassword.isPending}>
+              {forgotPassword.isPending ? "Sending..." : "Forgot password"}
+              {forgotPassword.isPending && <Spinner />}
+            </Button>
+          </FieldGroup>
         </form>
       </AuthCard.Content>
       <AuthCard.Footer>
