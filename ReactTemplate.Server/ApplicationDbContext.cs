@@ -100,7 +100,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
                   .HasMaxLength(200)
                   .IsRequired(false);
 
-            // Configuration des propriétés d'audit
+            // Audit properties
             entity.Property(e => e.CreatedAt)
                   .IsRequired()
                   .HasColumnType("timestamp with time zone");
@@ -115,7 +115,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
             entity.Property(e => e.UpdatedBy)
                   .IsRequired(false);
 
-            // Configuration des propriétés de soft delete
+            // Soft delete
             entity.Property(e => e.IsDeleted)
                   .IsRequired()
                   .HasDefaultValue(false);
