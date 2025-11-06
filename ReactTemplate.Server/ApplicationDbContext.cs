@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Internal;
 using ReactTemplate.Server.Modules.Common;
 using ReactTemplate.Server.Modules.Users;
 using ReactTemplate.Server.Modules.WeatherForecasts;
@@ -9,68 +10,18 @@ namespace ReactTemplate.Server;
 
 public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
+    private readonly ISystemClock _systemClock;
     private readonly IHttpContextAccessor? _httpContextAccessor;
 
     internal DbSet<WeatherForecast> WeatherForecasts { get; set; }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-    }
-
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
-        IHttpContextAccessor httpContextAccessor) : base(options)
+        IHttpContextAccessor httpContextAccessor,
+        ISystemClock systemClock) : base(options)
     {
         _httpContextAccessor = httpContextAccessor;
-    }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        HandleAuditFields();
-        return base.SaveChangesAsync(cancellationToken);
-    }
-
-    private void HandleAuditFields()
-    {
-        var currentUserId = GetCurrentUserId();
-        var now = DateTime.UtcNow;
-
-        var entries = ChangeTracker.Entries<IAuditableEntity>();
-
-        foreach (var entry in entries)
-        {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Entity.CreatedAt = now;
-                    entry.Entity.CreatedBy = currentUserId;
-                    break;
-
-                case EntityState.Modified:
-                    entry.Entity.UpdatedAt = now;
-                    entry.Entity.UpdatedBy = currentUserId;
-                    break;
-
-                case EntityState.Deleted:
-                    entry.State = EntityState.Modified;
-                    entry.Entity.IsDeleted = true;
-                    entry.Entity.DeletedAt = now;
-                    entry.Entity.DeletedBy = currentUserId;
-                    break;
-            }
-        }
-    }
-
-    private Guid? GetCurrentUserId()
-    {
-        var userIdClaim = _httpContextAccessor?.HttpContext?.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-        if (userIdClaim != null && Guid.TryParse(userIdClaim, out var userId))
-        {
-            return userId;
-        }
-
-        return null;
+        _systemClock = systemClock;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -131,21 +82,46 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
             // Entities with IsDeleted = true will not be returned by default
             // To explicitly include them: query.IgnoreQueryFilters()
             entity.HasQueryFilter(e => !e.IsDeleted);
-
-            // Optional relations to User for audit
-            // Note: These relations are NOT configured as they would create cycles
-            // and complicate deletion. We keep only the Guid without FK.
-            // To retrieve user info, perform a manual join if necessary.
-
-            // Index
-            entity.HasIndex(e => e.UserId);
-            entity.HasIndex(e => e.Date);
-            entity.HasIndex(e => new { e.UserId, e.Date });
-            entity.HasIndex(e => e.CreatedAt);
-            entity.HasIndex(e => e.CreatedBy);
-            entity.HasIndex(e => e.UpdatedBy);
-            entity.HasIndex(e => e.IsDeleted);
-            entity.HasIndex(e => e.DeletedAt);
         });
     }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        HandleAuditFields();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void HandleAuditFields()
+    {
+        var userIdClaim = _httpContextAccessor?.HttpContext?.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var currentUserId = Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
+
+        var now = _systemClock.UtcNow.UtcDateTime;
+
+        var entries = ChangeTracker.Entries<IAuditableEntity>();
+
+        foreach (var entry in entries)
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedAt = now;
+                    entry.Entity.CreatedBy = currentUserId;
+                    break;
+
+                case EntityState.Modified:
+                    entry.Entity.UpdatedAt = now;
+                    entry.Entity.UpdatedBy = currentUserId;
+                    break;
+
+                case EntityState.Deleted:
+                    entry.State = EntityState.Modified;
+                    entry.Entity.IsDeleted = true;
+                    entry.Entity.DeletedAt = now;
+                    entry.Entity.DeletedBy = currentUserId;
+                    break;
+            }
+        }
+    }
+
 }

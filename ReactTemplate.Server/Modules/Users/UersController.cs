@@ -28,7 +28,13 @@ public class UsersController : ControllerBase
             return NotFound();
         }
 
-        var response = new GetUserResponse(await _userManager.GetUserIdAsync(user) ?? throw new NotSupportedException("Users must have an Id."), await _userManager.GetEmailAsync(user) ?? throw new NotSupportedException("Users must have an email."), await _userManager.GetRolesAsync(user) ?? throw new NotSupportedException("Users must have a role."), await _userManager.IsEmailConfirmedAsync(user));
+        var response = new GetUserResponse
+        {
+            Id = await _userManager.GetUserIdAsync(user) ?? throw new NotSupportedException("Users must have an Id."),
+            Email = await _userManager.GetEmailAsync(user) ?? throw new NotSupportedException("Users must have an email."),
+            Roles = await _userManager.GetRolesAsync(user) ?? throw new NotSupportedException("Users must have a role."),
+            IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user)
+        };
 
         return Ok(response);
     }

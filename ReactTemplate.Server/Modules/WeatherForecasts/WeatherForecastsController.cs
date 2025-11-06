@@ -36,7 +36,13 @@ public class WeatherForecastsController : ControllerBase
 
         var response = _context.WeatherForecasts.AsNoTracking()
                                                 .Where(e => e.UserId == user.Id)
-                                                .Select((forecast) => new GetWeatherForecastResponse(forecast.Id, forecast.Date, forecast.TemperatureC, forecast.Summary));
+                                                .Select((forecast) => new GetWeatherForecastResponse
+                                                {
+                                                    Id = forecast.Id,
+                                                    Date = forecast.Date,
+                                                    TemperatureC = forecast.TemperatureC,
+                                                    Summary = forecast.Summary
+                                                });
         return Ok(response);
     }
 
@@ -54,7 +60,13 @@ public class WeatherForecastsController : ControllerBase
 
         var query = _context.WeatherForecasts.Where(e => e.UserId == user.Id)
                                              .Where(e => e.Id == id)
-                                             .Select((forecast) => new GetWeatherForecastResponse(forecast.Id, forecast.Date, forecast.TemperatureC, forecast.Summary));
+                                             .Select((forecast) => new GetWeatherForecastResponse
+                                             {
+                                                 Id = forecast.Id,
+                                                 Date = forecast.Date,
+                                                 TemperatureC = forecast.TemperatureC,
+                                                 Summary = forecast.Summary
+                                             });
 
         var response = await query.SingleOrDefaultAsync();
         if (response is null)
@@ -105,7 +117,13 @@ public class WeatherForecastsController : ControllerBase
             return StatusCode(500, exception);
         }
 
-        var response = new GetWeatherForecastResponse(forecast.Id, forecast.Date, forecast.TemperatureC, forecast.Summary);
+        var response = new GetWeatherForecastResponse
+        {
+            Id = forecast.Id,
+            Date = forecast.Date,
+            TemperatureC = forecast.TemperatureC,
+            Summary = forecast.Summary
+        };
 
         return CreatedAtAction(nameof(GetWeatherForecast), new { id = response.Id }, response);
     }
@@ -153,7 +171,13 @@ public class WeatherForecastsController : ControllerBase
         }
 
         var response = _context.WeatherForecasts.Where(e => e.Id == id)
-                                                .Select((forecast) => new GetWeatherForecastResponse(forecast.Id, forecast.Date, forecast.TemperatureC, forecast.Summary));
+                                                .Select((forecast) => new GetWeatherForecastResponse
+                                                {
+                                                    Id = forecast.Id,
+                                                    Date = forecast.Date,
+                                                    TemperatureC = forecast.TemperatureC,
+                                                    Summary = forecast.Summary
+                                                });
 
         return Ok(response);
     }

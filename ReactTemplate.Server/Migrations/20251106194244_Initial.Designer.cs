@@ -12,7 +12,7 @@ using ReactTemplate.Server;
 namespace ReactTemplate.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251005105036_Initial")]
+    [Migration("20251106194244_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace ReactTemplate.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -295,6 +295,20 @@ namespace ReactTemplate.Server.Migrations
                         .HasColumnType("date")
                         .HasColumnName("date");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
                     b.Property<string>("Summary")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
@@ -319,23 +333,8 @@ namespace ReactTemplate.Server.Migrations
                     b.HasKey("Id")
                         .HasName("pk_weather_forecasts");
 
-                    b.HasIndex("CreatedAt")
-                        .HasDatabaseName("ix_weather_forecasts_created_at");
-
-                    b.HasIndex("CreatedBy")
-                        .HasDatabaseName("ix_weather_forecasts_created_by");
-
-                    b.HasIndex("Date")
-                        .HasDatabaseName("ix_weather_forecasts_date");
-
-                    b.HasIndex("UpdatedBy")
-                        .HasDatabaseName("ix_weather_forecasts_updated_by");
-
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_weather_forecasts_user_id");
-
-                    b.HasIndex("UserId", "Date")
-                        .HasDatabaseName("ix_weather_forecasts_user_id_date");
 
                     b.ToTable("weather_forecasts", (string)null);
                 });

@@ -171,7 +171,10 @@ namespace ReactTemplate.Server.Migrations
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     created_by = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    updated_by = table.Column<Guid>(type: "uuid", nullable: true)
+                    updated_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -222,34 +225,9 @@ namespace ReactTemplate.Server.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_weather_forecasts_created_at",
-                table: "weather_forecasts",
-                column: "created_at");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_weather_forecasts_created_by",
-                table: "weather_forecasts",
-                column: "created_by");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_weather_forecasts_date",
-                table: "weather_forecasts",
-                column: "date");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_weather_forecasts_updated_by",
-                table: "weather_forecasts",
-                column: "updated_by");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_weather_forecasts_user_id",
                 table: "weather_forecasts",
                 column: "user_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_weather_forecasts_user_id_date",
-                table: "weather_forecasts",
-                columns: new[] { "user_id", "date" });
         }
 
         /// <inheritdoc />

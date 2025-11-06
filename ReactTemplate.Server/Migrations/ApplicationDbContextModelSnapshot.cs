@@ -17,7 +17,7 @@ namespace ReactTemplate.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -330,29 +330,8 @@ namespace ReactTemplate.Server.Migrations
                     b.HasKey("Id")
                         .HasName("pk_weather_forecasts");
 
-                    b.HasIndex("CreatedAt")
-                        .HasDatabaseName("ix_weather_forecasts_created_at");
-
-                    b.HasIndex("CreatedBy")
-                        .HasDatabaseName("ix_weather_forecasts_created_by");
-
-                    b.HasIndex("Date")
-                        .HasDatabaseName("ix_weather_forecasts_date");
-
-                    b.HasIndex("DeletedAt")
-                        .HasDatabaseName("ix_weather_forecasts_deleted_at");
-
-                    b.HasIndex("IsDeleted")
-                        .HasDatabaseName("ix_weather_forecasts_is_deleted");
-
-                    b.HasIndex("UpdatedBy")
-                        .HasDatabaseName("ix_weather_forecasts_updated_by");
-
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_weather_forecasts_user_id");
-
-                    b.HasIndex("UserId", "Date")
-                        .HasDatabaseName("ix_weather_forecasts_user_id_date");
 
                     b.ToTable("weather_forecasts", (string)null);
                 });

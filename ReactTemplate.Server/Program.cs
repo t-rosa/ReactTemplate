@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Internal;
 using ReactTemplate.Server.Modules.Email;
 using ReactTemplate.Server.Modules.Users;
 using Scalar.AspNetCore;
@@ -18,6 +19,8 @@ public interface Program
         builder.Services.AddHttpContextAccessor();
 
         builder.Services.AddResponseCompression();
+
+        builder.Services.AddSingleton<ISystemClock, SystemClock>();
 
         // Database
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
