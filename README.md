@@ -1,6 +1,8 @@
 # React Template
 
-## How to use this template?
+Full-stack starter that ships a production-ready ASP.NET Core API with a modern React front-end, wired together with Identity, EF Core, and a PostgreSQL dev database.
+
+## Template Quickstart _(delete after scaffolding)_
 
 1. Install the template
 
@@ -8,13 +10,13 @@
 dotnet new install .
 ```
 
-2. Create a new project
+2. Scaffold a new project
 
 ```bash
 dotnet new full-stack-react -o MyProject
 ```
 
-3. Remove this "how to use this template" section inside the README.md
+Every occurrence of `ReactTemplate`/`react-template` is replaced automatically. `MyProject` becomes `my-project`, so the generated README and configuration already point to the correct projects and secrets. Remove this section once you copy the template into a new repository.
 
 ## Prerequisites
 
@@ -44,7 +46,7 @@ git init
 docker compose up -d
 ```
 
-3. Set environment variables
+3. Configure required secrets
 
 ```bash
 dotnet user-secrets --project ReactTemplate.Server set "SMTP_USERNAME" "value"
@@ -77,6 +79,22 @@ dotnet publish ReactTemplate.Server -o ReactTemplate.Server/bin/Production
 ```bash
 dotnet run --project ReactTemplate.Server
 ```
+
+- Execute automated tests:
+
+```bash
+dotnet test ReactTemplate.Tests
+```
+
+Run the server end-to-end commands from the root : `ReactTemplate` directory.
+
+```bash
+cd ReactTemplate.Client
+npm run test
+npx playwright test
+```
+
+Run the client and end-to-end commands from the `ReactTemplate.Client` directory.
 
 ## Debug
 
@@ -126,33 +144,33 @@ dotnet run --project ReactTemplate.Server
 
 ## Production Preview
 
-1. Publish
+1. Publish the container image
 
 ```bash
 rm -rf ReactTemplate.Server/bin/Production/ && dotnet publish ReactTemplate.Server -t:PublishContainer -p ContainerArchiveOutputPath=../server.tar.gz -o ReactTemplate.Server/bin/Production
 ```
 
-2. Load docker image
+2. Load the Docker image
 
 ```bash
 docker load < server.tar.gz
 ```
 
-3. Stop runing containers
+3. Stop any running containers
 
 ```bash
 docker compose down
 ```
 
-4. Uncomment the “preview” service in the “compose.yaml” file.
+4. Enable the `preview` service inside `compose.yaml`.
 
-5. Restart containers
+5. Restart the stack
 
 ```bash
 docker compose up -d
 ```
 
-6. Access the application via: http://localhost:3000
+6. Browse to `http://localhost:3000`.
 
 ## Deployment
 
