@@ -8,10 +8,10 @@
 dotnet new install .
 ```
 
-2. Create a new project (don't forget the --title)
+2. Create a new project
 
 ```bash
-dotnet new full-stack-react -o MyProject --title my-project
+dotnet new full-stack-react -o MyProject
 ```
 
 3. Remove this "how to use this template" section inside the README.md

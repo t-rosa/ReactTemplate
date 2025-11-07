@@ -11,10 +11,52 @@
     "type": "solution"
   },
   "preferNameDirectory": true,
+  "forms": {
+    "splitConsecutiveCapitals": {
+      "identifier": "replace",
+      "pattern": "([A-Z]+)([A-Z][a-z])",
+      "replacement": "$1-$2"
+    },
+    "splitCamelCase": {
+      "identifier": "replace",
+      "pattern": "([a-z0-9])([A-Z])",
+      "replacement": "$1-$2"
+    },
+    "normalizeSeparators": {
+      "identifier": "replace",
+      "pattern": "[\\s_]+",
+      "replacement": "-"
+    },
+    "toLower": {
+      "identifier": "lowerCase"
+    },
+    "collapseHyphen": {
+      "identifier": "replace",
+      "pattern": "-{2,}",
+      "replacement": "-"
+    },
+    "trimHyphen": {
+      "identifier": "replace",
+      "pattern": "(^-+)|(-+$)",
+      "replacement": ""
+    },
+    "toKebabCase": {
+      "identifier": "chain",
+      "steps": [
+        "splitConsecutiveCapitals",
+        "splitCamelCase",
+        "normalizeSeparators",
+        "toLower",
+        "collapseHyphen",
+        "trimHyphen"
+      ]
+    }
+  },
   "symbols": {
-    "title": {
-      "type": "parameter",
-      "defaultValue": "react-template",
+    "appSlug": {
+      "type": "derived",
+      "valueSource": "name",
+      "valueTransform": "toKebabCase",
       "replaces": "react-template"
     }
   }
