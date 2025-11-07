@@ -6,7 +6,7 @@ import {
 import { SidebarMenu, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { useUser } from "@/modules/auth/authorize/authorize.hooks";
 import { Authorize } from "@/modules/auth/authorize/authorize.view";
-import { LogoutView } from "@/modules/auth/logout/logout.view";
+import { LogoutView } from "@/modules/auth/logout.view";
 import { Link } from "@tanstack/react-router";
 import { ShieldIcon, UserCircleIcon } from "lucide-react";
 import { UserMenuDropdown } from "./user-menu.ui";
