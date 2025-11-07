@@ -1,0 +1,12 @@
+namespace ReactTemplate.Server.Modules.{{ module_name }}.Dtos;
+
+public class Get{{ entity_name }}Response
+{
+    public Guid Id { get; set; }
+
+    // TODO: Add properties based on entity fields
+
+    public DateTime CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+}

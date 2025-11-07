@@ -1,0 +1,16 @@
+using FluentValidation;
+
+namespace ReactTemplate.Server.Modules.{{ module_name }}.Dtos;
+
+public class Create{{ entity_name }}Request
+{
+    // TODO: Add properties based on entity fields
+}
+
+public class Create{{ entity_name }}RequestValidator : AbstractValidator<Create{{ entity_name }}Request>
+{
+    public Create{{ entity_name }}RequestValidator()
+    {
+        // TODO: Add validation rules
+    }
+}

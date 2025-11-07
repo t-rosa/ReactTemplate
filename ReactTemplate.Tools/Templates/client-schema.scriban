@@ -1,0 +1,12 @@
+import * as z from "zod";
+
+export const create{{ entity_name }}Schema = z.object({
+  // TODO: Add fields based on entity properties
+});
+
+export const update{{ entity_name }}Schema = z.object({
+  // TODO: Add fields based on entity properties
+});
+
+export type Create{{ entity_name }}FormSchema = z.infer<typeof create{{ entity_name }}Schema>;
+export type Update{{ entity_name }}FormSchema = z.infer<typeof update{{ entity_name }}Schema>;

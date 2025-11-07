@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <NoWarn>NU1701;NU1603</NoWarn>
+    <!-- Global Tool Package Configuration -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>react-template-scaffold</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
+    <Authors>ReactTemplate Contributors</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/t-rosa/ReactTemplate</RepositoryUrl>
+    <Description>CLI tool for scaffolding entities in ReactTemplate projects with server and client generation</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" Version="1.0.0.4" />
+    <PackageReference Include="Scriban" Version="6.5.0" />
+    <PackageReference Include="YamlDotNet" Version="16.3.0" />
+    <PackageReference Include="Spectre.Console" Version="0.53.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Copy Templates to output -->
+    <None Update="Templates\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

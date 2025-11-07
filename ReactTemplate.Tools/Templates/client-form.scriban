@@ -1,0 +1,54 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+// Zod validation schema - TODO: Add your fields
+export const Create{{ entity_name }}Schema = z.object({
+  // Add your fields here
+});
+
+export const Update{{ entity_name }}Schema = z.object({
+  // Add your fields here
+});
+
+export type Create{{ entity_name }}FormData = z.infer<typeof Create{{ entity_name }}Schema>;
+export type Update{{ entity_name }}FormData = z.infer<typeof Update{{ entity_name }}Schema>;
+
+// Create form component
+interface Create{{ entity_name }}FormProps {
+  onSubmit: (data: any) => Promise<void>;
+  isLoading?: boolean;
+}
+
+export function Create{{ entity_name }}Form({ onSubmit, isLoading }: Create{{ entity_name }}FormProps) {
+  const { handleSubmit } = useForm();
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* TODO: Add form fields */}
+      <button type="submit" disabled={isLoading} className="px-4 py-2 bg-blue-500 text-white rounded">
+        {isLoading ? 'Submitting...' : 'Submit'}
+      </button>
+    </form>
+  );
+}
+
+// Update form component
+interface Update{{ entity_name }}FormProps {
+  initialData?: any;
+  onSubmit: (data: any) => Promise<void>;
+  isLoading?: boolean;
+}
+
+export function Update{{ entity_name }}Form({ initialData, onSubmit, isLoading }: Update{{ entity_name }}FormProps) {
+  const { handleSubmit } = useForm({ defaultValues: initialData });
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* TODO: Add form fields */}
+      <button type="submit" disabled={isLoading} className="px-4 py-2 bg-green-500 text-white rounded">
+        {isLoading ? 'Updating...' : 'Update'}
+      </button>
+    </form>
+  );
+}

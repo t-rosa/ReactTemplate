@@ -1,0 +1,70 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { api } from '../lib/api';
+
+const QUERY_KEY = ['{{ entity_name_snakecase }}'];
+
+// List hook
+export function use{{ entity_name }}List() {
+  return useQuery({
+    queryKey: QUERY_KEY,
+    queryFn: async () => {
+      const response = await api.get(`/{{ entity_slug }}`);
+      return response.data;
+    },
+  });
+}
+
+// Get by ID hook
+export function use{{ entity_name }}(id: string | null) {
+  return useQuery({
+    queryKey: [QUERY_KEY, id],
+    queryFn: async () => {
+      if (!id) return null;
+      const response = await api.get(`/{{ entity_slug }}/${id}`);
+      return response.data;
+    },
+    enabled: !!id,
+  });
+}
+
+// Create hook
+export function useCreate{{ entity_name }}() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: any) => {
+      const response = await api.post(`/{{ entity_slug }}`, data);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+    },
+  });
+}
+
+// Update hook
+export function useUpdate{{ entity_name }}(id: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: any) => {
+      const response = await api.put(`/{{ entity_slug }}/${id}`, data);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY, id] });
+    },
+  });
+}
+
+// Delete hook
+export function useDelete{{ entity_name }}(id: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      await api.delete(`/{{ entity_slug }}/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+    },
+  });
+}

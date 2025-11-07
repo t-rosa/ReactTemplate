@@ -1,0 +1,28 @@
+namespace {{ module_name }}.Dtos;
+
+/// <summary>
+/// Request DTO for creating a new {{ entity_name }}
+/// </summary>
+public class Create{{ entity_name }}Request
+{
+    // TODO: Add properties based on entity fields
+}
+
+/// <summary>
+/// Request DTO for updating an existing {{ entity_name }}
+/// </summary>
+public class Update{{ entity_name }}Request
+{
+    // TODO: Add properties based on entity fields
+}
+
+/// <summary>
+/// Response DTO for {{ entity_name }}
+/// </summary>
+public class Get{{ entity_name }}Response
+{
+    public Guid Id { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+    // TODO: Add properties based on entity fields
+}

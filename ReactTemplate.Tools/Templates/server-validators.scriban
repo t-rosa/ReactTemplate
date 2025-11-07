@@ -1,0 +1,20 @@
+using FluentValidation;
+using {{ module_name }}.Dtos;
+
+namespace {{ module_name }}.Validators;
+
+public class Create{{ entity_name }}RequestValidator : AbstractValidator<Create{{ entity_name }}Request>
+{
+    public Create{{ entity_name }}RequestValidator()
+    {
+        // TODO: Add validation rules for Create{{ entity_name }}Request
+    }
+}
+
+public class Update{{ entity_name }}RequestValidator : AbstractValidator<Update{{ entity_name }}Request>
+{
+    public Update{{ entity_name }}RequestValidator()
+    {
+        // TODO: Add validation rules for Update{{ entity_name }}Request
+    }
+}

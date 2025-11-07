@@ -1,0 +1,3 @@
+import { {{ entity_name }}s } from "@/modules/{{ module_name_lower }}/{{ entity_name_snakecase }}s.view";
+
+export default {{ entity_name }}s;

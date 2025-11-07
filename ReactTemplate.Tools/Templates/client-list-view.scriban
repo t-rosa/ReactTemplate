@@ -1,0 +1,25 @@
+import { {{ entity_name }}Table } from "./{{ entity_name_snakecase }}-table/{{ entity_name_snakecase }}-table.view";
+import { Create{{ entity_name }} } from "./create-{{ entity_name_snakecase }}.view";
+import { $api } from "@/lib/api/client";
+
+export function {{ entity_name }}s() {
+  const { data, isLoading, error } = $api.useQuery("get", "/api/{{ entity_slug }}", {
+    query: {
+      limit: 10,
+      offset: 0,
+    },
+  });
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-between items-center">
+        <h1>{{ entity_name }}s</h1>
+        <Create{{ entity_name }} />
+      </div>
+
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Error loading {{ entity_name_lower }}s</p>}
+      {data && <{{ entity_name }}Table data={data} />}
+    </div>
+  );
+}

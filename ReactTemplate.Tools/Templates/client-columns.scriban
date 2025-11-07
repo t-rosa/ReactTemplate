@@ -1,0 +1,12 @@
+import { Get{{ entity_name }}Response } from "../{{ entity_name_snakecase }}.types";
+
+export function {{ entity_name }}Columns() {
+  return [
+    // TODO: Define table columns using ColumnDef from @tanstack/react-table
+    // Example:
+    // {
+    //   accessorKey: "name",
+    //   header: "Name",
+    // },
+  ];
+}

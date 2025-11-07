@@ -1,0 +1,35 @@
+import { Get{{ entity_name }}Response } from "../{{ entity_name_snakecase }}.types";
+import { {{ entity_name }}Columns } from "./{{ entity_name_snakecase }}-columns";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+export interface {{ entity_name }}TableProps {
+  data: Get{{ entity_name }}Response[];
+}
+
+export function {{ entity_name }}Table({ data }: {{ entity_name }}TableProps) {
+  return (
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {/* TODO: Add table headers based on columns */}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((item) => (
+            <TableRow key={item.id}>
+              {/* TODO: Add table cells */}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}

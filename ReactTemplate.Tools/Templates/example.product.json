@@ -1,0 +1,44 @@
+{
+  "entityName": "Product",
+  "moduleName": "Products",
+  "description": "Product entity for the e-commerce module",
+  "hasAuditFields": true,
+  "hasSoftDelete": false,
+  "tags": ["e-commerce", "inventory"],
+  "fields": [
+    {
+      "name": "Id",
+      "type": "Guid",
+      "isPrimaryKey": true
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "required": true,
+      "validation": "MinLength(3) && MaxLength(200)"
+    },
+    {
+      "name": "Description",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "Price",
+      "type": "decimal",
+      "required": true,
+      "validation": "GreaterThan(0)"
+    },
+    {
+      "name": "Stock",
+      "type": "int",
+      "required": true,
+      "defaultValue": "0"
+    },
+    {
+      "name": "IsActive",
+      "type": "bool",
+      "required": true,
+      "defaultValue": "true"
+    }
+  ]
+}

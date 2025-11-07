@@ -1,0 +1,83 @@
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { $api } from "@/lib/api/client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PlusIcon } from "lucide-react";
+import * as React from "react";
+import { useForm, Controller } from "react-hook-form";
+import { Create{{ entity_name }}FormSchema, create{{ entity_name }}Schema } from "./{{ entity_name_snakecase }}.schema";
+
+export function Create{{ entity_name }}() {
+  const [open, setOpen] = React.useState(false);
+
+  const form = useForm<Create{{ entity_name }}FormSchema>({
+    resolver: zodResolver(create{{ entity_name }}Schema),
+    defaultValues: {
+      // TODO: Set appropriate default values
+    },
+  });
+
+  const create{{ entity_name }} = $api.useMutation("post", "/api/{{ entity_slug }}", {
+    meta: {
+      invalidatesQuery: ["get", "/api/{{ entity_slug }}"],
+      successMessage: "{{ entity_name }} added",
+      errorMessage: "An error occurred.",
+    },
+    onSuccess() {
+      setOpen(!open);
+      form.reset();
+    },
+  });
+
+  function onSubmit(values: Create{{ entity_name }}FormSchema) {
+    create{{ entity_name }}.mutate({
+      body: {
+        // TODO: Map form values to API request
+      },
+    });
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <PlusIcon /> Add {{ entity_name_lower }}
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add {{ entity_name_lower }}</DialogTitle>
+          <DialogDescription>Add a new {{ entity_name_lower }} to your list.</DialogDescription>
+        </DialogHeader>
+        <form id="create-{{ entity_name_snakecase }}" onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup>
+            {/* TODO: Add form fields */}
+          </FieldGroup>
+        </form>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              Cancel
+            </Button>
+          </DialogClose>
+          <Button type="submit" form="create-{{ entity_name_snakecase }}" disabled={create{{ entity_name }}.isPending}>
+            {create{{ entity_name }}.isPending ? "Submitting..." : "Submit"}
+            {create{{ entity_name }}.isPending && <Spinner />}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
