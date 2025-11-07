@@ -32,32 +32,47 @@ dotnet new full-stack-react -o MyProject --title my-project
 
 ## Getting started
 
-1. Launch the database
+1. Initialize git
+
+```bash
+git init
+```
+
+2. Launch the database
 
 ```bash
 docker compose up -d
 ```
 
-2. Set environment variables
+3. Set environment variables
 
 ```bash
-# From ./ReactTemplate.Server/
-dotnet user-secrets set "SMTP_USERNAME" "value"
-dotnet user-secrets set "SMTP_PASSWORD" "value"
-dotnet user-secrets set "ADMIN_EMAIL" "value"
-dotnet user-secrets set "ADMIN_PASSWORD" "value"
-dotnet user-secrets set "CONNECTION_STRING" "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=react-template;"
-dotnet user-secrets set "OTEL_API_KEY" "768ba790-4261-4b9f-91d9-0fc21838463c"
+dotnet user-secrets --project ReactTemplate.Server set "SMTP_USERNAME" "value"
 ```
 
-3. Build the app
+```bash
+dotnet user-secrets --project ReactTemplate.Server set "SMTP_PASSWORD" "value"
+```
 
 ```bash
-# From the root (./)
+dotnet user-secrets --project ReactTemplate.Server set "ADMIN_EMAIL" "value"
+```
+
+```bash
+dotnet user-secrets --project ReactTemplate.Server set "ADMIN_PASSWORD" "value"
+```
+
+```bash
+dotnet user-secrets --project ReactTemplate.Server set "CONNECTION_STRING" "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=react-template;"
+```
+
+4. Build the app
+
+```bash
 dotnet publish ReactTemplate.Server -o ReactTemplate.Server/bin/Production
 ```
 
-4. Launch the app
+5. Launch the app
 
 ```bash
 dotnet run --project ReactTemplate.Server
@@ -142,7 +157,6 @@ docker compose up -d
 ## Deployment
 
 ```bash
-# From the root (./)
 rm -rf ReactTemplate.Server/bin/Publish && dotnet publish ReactTemplate.Server -t:PublishContainer -p ContainerArchiveOutputPath=../react-template.tar.gz -o ReactTemplate.Server/bin/Publish
 ```
 
@@ -151,8 +165,7 @@ rm -rf ReactTemplate.Server/bin/Publish && dotnet publish ReactTemplate.Server -
 From ReactTemplate.Server
 
 ```bash
-# From ./ReactTemplate.Server/
-dotnet ef migrations add MigrationName
+dotnet ef migrations add MigrationName --project ReactTemplate.Server
 ```
 
 ## Technologies
