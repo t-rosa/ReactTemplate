@@ -82,19 +82,19 @@ dotnet run --project ReactTemplate.Server
 
 - Execute automated tests:
 
+Run the server end-to-end commands from the root, `ReactTemplate` directory.
+
 ```bash
 dotnet test ReactTemplate.Tests
 ```
 
-Run the server end-to-end commands from the root : `ReactTemplate` directory.
+Run the client and end-to-end commands from the `ReactTemplate.Client` directory.
 
 ```bash
 cd ReactTemplate.Client
 npm run test
 npx playwright test
 ```
-
-Run the client and end-to-end commands from the `ReactTemplate.Client` directory.
 
 ## Debug
 
