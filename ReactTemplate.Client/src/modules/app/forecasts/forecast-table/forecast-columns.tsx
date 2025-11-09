@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import type { components } from "@/lib/api/schema";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { ForecastActions } from "../forecast-actions/forecast-actions.view";
+import { ForecastActions } from "../forecast-actions.view";
 
 export const FORECAST_COLUMNS: ColumnDef<components["schemas"]["GetWeatherForecastResponse"]>[] = [
   {

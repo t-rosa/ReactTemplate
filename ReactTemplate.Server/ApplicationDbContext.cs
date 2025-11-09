@@ -10,118 +10,118 @@ namespace ReactTemplate.Server;
 
 public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
-    private readonly ISystemClock _systemClock;
-    private readonly IHttpContextAccessor? _httpContextAccessor;
+      private readonly ISystemClock _systemClock;
+      private readonly IHttpContextAccessor? _httpContextAccessor;
 
-    internal DbSet<WeatherForecast> WeatherForecasts { get; set; }
+      internal DbSet<WeatherForecast> WeatherForecasts { get; set; }
 
-    public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options,
-        IHttpContextAccessor httpContextAccessor,
-        ISystemClock systemClock) : base(options)
-    {
-        _httpContextAccessor = httpContextAccessor;
-        _systemClock = systemClock;
-    }
+      public ApplicationDbContext(
+          DbContextOptions<ApplicationDbContext> options,
+          IHttpContextAccessor httpContextAccessor,
+          ISystemClock systemClock) : base(options)
+      {
+            _httpContextAccessor = httpContextAccessor;
+            _systemClock = systemClock;
+      }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+      protected override void OnModelCreating(ModelBuilder builder)
+      {
+            base.OnModelCreating(builder);
 
-        modelBuilder.Entity<WeatherForecast>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id)
-                  .ValueGeneratedOnAdd();
-
-            entity.HasOne(e => e.User)
-                  .WithMany(u => u.WeatherForecasts)
-                  .HasForeignKey(e => e.UserId)
-                  .OnDelete(DeleteBehavior.Cascade)
-                  .IsRequired();
-
-            entity.Property(e => e.Date)
-                  .IsRequired()
-                  .HasColumnType("date");
-
-            entity.Property(e => e.TemperatureC)
-                  .IsRequired();
-
-            entity.Property(e => e.Summary)
-                  .HasMaxLength(200)
-                  .IsRequired(false);
-
-            // Audit properties
-            entity.Property(e => e.CreatedAt)
-                  .IsRequired()
-                  .HasColumnType("timestamp with time zone");
-
-            entity.Property(e => e.CreatedBy)
-                  .IsRequired(false);
-
-            entity.Property(e => e.UpdatedAt)
-                  .HasColumnType("timestamp with time zone")
-                  .IsRequired(false);
-
-            entity.Property(e => e.UpdatedBy)
-                  .IsRequired(false);
-
-            // Soft delete
-            entity.Property(e => e.IsDeleted)
-                  .IsRequired()
-                  .HasDefaultValue(false);
-
-            entity.Property(e => e.DeletedAt)
-                  .HasColumnType("timestamp with time zone")
-                  .IsRequired(false);
-
-            entity.Property(e => e.DeletedBy)
-                  .IsRequired(false);
-
-            // Global Query Filter: Automatically exclude deleted entities (soft delete)
-            // Entities with IsDeleted = true will not be returned by default
-            // To explicitly include them: query.IgnoreQueryFilters()
-            entity.HasQueryFilter(e => !e.IsDeleted);
-        });
-    }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        HandleAuditFields();
-        return base.SaveChangesAsync(cancellationToken);
-    }
-
-    private void HandleAuditFields()
-    {
-        var userIdClaim = _httpContextAccessor?.HttpContext?.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        var currentUserId = Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
-
-        var now = _systemClock.UtcNow.UtcDateTime;
-
-        var entries = ChangeTracker.Entries<IAuditableEntity>();
-
-        foreach (var entry in entries)
-        {
-            switch (entry.State)
+            builder.Entity<WeatherForecast>(entity =>
             {
-                case EntityState.Added:
-                    entry.Entity.CreatedAt = now;
-                    entry.Entity.CreatedBy = currentUserId;
-                    break;
+                  entity.HasKey(e => e.Id);
+                  entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
 
-                case EntityState.Modified:
-                    entry.Entity.UpdatedAt = now;
-                    entry.Entity.UpdatedBy = currentUserId;
-                    break;
+                  entity.HasOne(e => e.User)
+                    .WithMany(u => u.WeatherForecasts)
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                case EntityState.Deleted:
-                    entry.State = EntityState.Modified;
-                    entry.Entity.IsDeleted = true;
-                    entry.Entity.DeletedAt = now;
-                    entry.Entity.DeletedBy = currentUserId;
-                    break;
+                  entity.Property(e => e.Date)
+                    .IsRequired()
+                    .HasColumnType("date");
+
+                  entity.Property(e => e.TemperatureC)
+                    .IsRequired();
+
+                  entity.Property(e => e.Summary)
+                    .HasMaxLength(200)
+                    .IsRequired(false);
+
+                  // Audit properties
+                  entity.Property(e => e.CreatedAt)
+                    .IsRequired()
+                    .HasColumnType("timestamp with time zone");
+
+                  entity.Property(e => e.CreatedBy)
+                    .IsRequired(false);
+
+                  entity.Property(e => e.UpdatedAt)
+                    .HasColumnType("timestamp with time zone")
+                    .IsRequired(false);
+
+                  entity.Property(e => e.UpdatedBy)
+                    .IsRequired(false);
+
+                  // Soft delete
+                  entity.Property(e => e.IsDeleted)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                  entity.Property(e => e.DeletedAt)
+                    .HasColumnType("timestamp with time zone")
+                    .IsRequired(false);
+
+                  entity.Property(e => e.DeletedBy)
+                    .IsRequired(false);
+
+                  // Global Query Filter: Automatically exclude deleted entities (soft delete)
+                  // Entities with IsDeleted = true will not be returned by default
+                  // To explicitly include them: query.IgnoreQueryFilters()
+                  entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+      }
+
+      public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+      {
+            HandleAuditFields();
+            return base.SaveChangesAsync(cancellationToken);
+      }
+
+      private void HandleAuditFields()
+      {
+            var userIdClaim = _httpContextAccessor?.HttpContext?.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var currentUserId = Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
+
+            var now = _systemClock.UtcNow.UtcDateTime;
+
+            var entries = ChangeTracker.Entries<IAuditableEntity>();
+
+            foreach (var entry in entries)
+            {
+                  switch (entry.State)
+                  {
+                        case EntityState.Added:
+                              entry.Entity.CreatedAt = now;
+                              entry.Entity.CreatedBy = currentUserId;
+                              break;
+
+                        case EntityState.Modified:
+                              entry.Entity.UpdatedAt = now;
+                              entry.Entity.UpdatedBy = currentUserId;
+                              break;
+
+                        case EntityState.Deleted:
+                              entry.State = EntityState.Modified;
+                              entry.Entity.IsDeleted = true;
+                              entry.Entity.DeletedAt = now;
+                              entry.Entity.DeletedBy = currentUserId;
+                              break;
+                  }
             }
-        }
-    }
+      }
 
 }

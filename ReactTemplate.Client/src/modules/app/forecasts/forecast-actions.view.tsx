@@ -9,9 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { components } from "@/lib/api/schema";
+import { RemoveForecast } from "@/modules/app/forecasts/remove-forecast";
 import type { CellContext } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { RemoveForecast } from "../remove-forecast/remove-forecast";
 
 type ForecastActionsProps = CellContext<
   components["schemas"]["GetWeatherForecastResponse"],
@@ -19,7 +19,7 @@ type ForecastActionsProps = CellContext<
 >;
 
 export function ForecastActions(props: ForecastActionsProps) {
-  const forecast = props.row.original;
+  const forecast: components["schemas"]["GetWeatherForecastResponse"] = props.row.original;
 
   function handleCopyIdClick() {
     void navigator.clipboard.writeText(forecast.id);

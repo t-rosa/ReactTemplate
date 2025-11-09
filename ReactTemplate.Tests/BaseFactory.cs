@@ -1,4 +1,5 @@
-﻿using DotNet.Testcontainers.Builders;
+﻿using System.Globalization;
+using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -10,7 +11,7 @@ using Testcontainers.PostgreSql;
 
 namespace ReactTemplate.Tests;
 
-public class BaseFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public class BaseFactory : WebApplicationFactory<IProgram>, IAsyncLifetime
 {
     public static TestSystemClock SystemClock { get; } = new TestSystemClock();
 
@@ -36,7 +37,7 @@ public class BaseFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
         builder.ConfigureTestServices(services =>
         {
-            var descriptor = services.SingleOrDefault(s => s.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+            ServiceDescriptor? descriptor = services.SingleOrDefault(s => s.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
             if (descriptor != null)
             {
                 services.Remove(descriptor);
@@ -46,7 +47,7 @@ public class BaseFactory : WebApplicationFactory<Program>, IAsyncLifetime
                 options.UseNpgsql(_container.GetConnectionString())
                         .UseSnakeCaseNamingConvention());
 
-            var systemClockDescriptor = services.Single(d => d.ServiceType == typeof(ISystemClock));
+            ServiceDescriptor systemClockDescriptor = services.Single(d => d.ServiceType == typeof(ISystemClock));
             services.Remove(systemClockDescriptor);
             services.AddSingleton<ISystemClock>(SystemClock);
         });
@@ -57,5 +58,7 @@ public class BaseFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
 public class TestSystemClock : ISystemClock
 {
-    public DateTimeOffset UtcNow { get; } = DateTimeOffset.Parse("2025-01-01T00:00:00Z");
+    private const string Input = "2025-01-01T00:00:00Z";
+
+    public DateTimeOffset UtcNow { get; } = DateTimeOffset.Parse(Input, CultureInfo.InvariantCulture);
 }

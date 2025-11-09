@@ -20,7 +20,7 @@ public class UsersController : ControllerBase
 
     [HttpGet("me")]
     [ProducesResponseType(typeof(GetUserResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetUser()
+    public async Task<IActionResult> GetCurrentUser()
     {
         var user = await _userManager.GetUserAsync(User);
         if (user == null)

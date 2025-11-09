@@ -28,7 +28,7 @@ public class WeatherForecastsControllerTests : IAsyncLifetime
     {
         _client = factory.CreateClient();
 
-        var scope = factory.Services.CreateScope();
+        using var scope = factory.Services.CreateScope();
         _configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
     }
 

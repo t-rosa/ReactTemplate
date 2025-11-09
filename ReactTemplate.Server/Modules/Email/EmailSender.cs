@@ -41,7 +41,7 @@ public class EmailSender : IEmailSender<User>
         );
         client.EnableSsl = _options.Value.EnableSSL;
 
-        MailMessage msg = new() { From = new MailAddress(username!) };
+        using MailMessage msg = new() { From = new MailAddress(username!) };
 
         msg.To.Add(toEmail);
         msg.Body = message;
@@ -51,11 +51,10 @@ public class EmailSender : IEmailSender<User>
         try
         {
             await client.SendMailAsync(msg);
-            _logger.LogInformation($"Email sent to {toEmail}");
         }
-        catch
+        catch (Exception)
         {
-            _logger.LogError($"Failed to send email to {toEmail}");
+            throw new Exception();
         }
     }
 

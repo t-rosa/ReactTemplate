@@ -6,11 +6,15 @@
   </Configurations>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="ReactTemplate.Client/ReactTemplate.Client.esproj">
-    <Platform Project="AnyCPU" />
-  </Project>
-  <Project Path="ReactTemplate.Server/ReactTemplate.Server.csproj" />
-  <Project Path="ReactTemplate.Tests/ReactTemplate.Tests.csproj" />
+  <Folder Name="/src/">
+    <Project Path="ReactTemplate.Client/ReactTemplate.Client.esproj">
+      <Platform Project="AnyCPU" />
+    </Project>
+    <Project Path="ReactTemplate.Server/ReactTemplate.Server.csproj" />
+    <Project Path="ReactTemplate.Tests/ReactTemplate.Tests.csproj" />
+  </Folder>
 </Solution>

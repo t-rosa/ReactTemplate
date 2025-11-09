@@ -4,8 +4,10 @@ namespace ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
 
 public class UpdateWeatherForecastRequest
 {
-    public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
-    public int TemperatureC { get; set; }
+    public required DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
+
+    public required int TemperatureC { get; set; }
+
     public string? Summary { get; set; }
 }
 

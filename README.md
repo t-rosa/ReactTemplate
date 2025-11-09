@@ -49,23 +49,35 @@ docker compose up -d
 3. Configure required secrets
 
 ```bash
-dotnet user-secrets --project ReactTemplate.Server set "SMTP_USERNAME" "value"
+dotnet user-secrets init --project ReactTemplate.Server
 ```
 
 ```bash
-dotnet user-secrets --project ReactTemplate.Server set "SMTP_PASSWORD" "value"
+dotnet user-secrets set "SMTP_USERNAME" "value" --project ReactTemplate.Server
 ```
 
 ```bash
-dotnet user-secrets --project ReactTemplate.Server set "ADMIN_EMAIL" "value"
+dotnet user-secrets set "SMTP_PASSWORD" "value" --project ReactTemplate.Server
 ```
 
 ```bash
-dotnet user-secrets --project ReactTemplate.Server set "ADMIN_PASSWORD" "value"
+dotnet user-secrets set "ADMIN_EMAIL" "value" --project ReactTemplate.Server
 ```
 
 ```bash
-dotnet user-secrets --project ReactTemplate.Server set "CONNECTION_STRING" "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=react-template;"
+dotnet user-secrets set "ADMIN_PASSWORD" "value" --project ReactTemplate.Server
+```
+
+```bash
+dotnet user-secrets set "CONNECTION_STRING" "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=react-template;" --project ReactTemplate.Server
+```
+
+```bash
+dotnet user-secrets set "OTEL_EXPORTER_OTLP_ENDPOINT" "http://react-template.aspire-dashboard:18889"
+```
+
+```bash
+dotnet user-secrets set "OTEL_EXPORTER_OTLP_PROTOCOL" "grpc"
 ```
 
 4. Build the app

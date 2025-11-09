@@ -31,8 +31,8 @@ import {
 import { FolderCodeIcon } from "lucide-react";
 import * as React from "react";
 import { TableContainer } from "../../../../components/table-container";
-import { CreateForecast } from "../create-forecast/create-forecast.view";
-import { RemoveForecasts } from "../remove-forecasts/remove-forecasts";
+import { CreateForecast } from "../create-forecast.view";
+import { RemoveForecasts } from "../remove-forecasts";
 
 interface ForecastTableProps {
   columns: ColumnDef<components["schemas"]["GetWeatherForecastResponse"]>[];

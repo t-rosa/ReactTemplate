@@ -3,8 +3,8 @@
   "author": "Toma Rosa",
   "classifications": ["Web"],
   "identity": "ReactTemplate",
-  "name": "Full Stack React with ASP.NET Core and Identity",
-  "shortName": "full-stack-react",
+  "name": "Full Stack React SPA with ASP.NET Core and Identity",
+  "shortName": "full-stack-react-spa",
   "sourceName": "ReactTemplate",
   "tags": {
     "language": "C#, React, TypeScript",

@@ -1,473 +1,251 @@
-import { Link } from "@tanstack/react-router";
-import {
-  CheckIcon,
-  Code2,
-  CopyIcon,
-  Database,
-  Layers,
-  MoonIcon,
-  Rocket,
-  Shield,
-  SunIcon,
-  Zap,
-} from "lucide-react";
-import * as React from "react";
-
 import { Container } from "@/components/container";
-import { useTheme } from "@/components/theme-provider";
-import { Button } from "@/components/ui/button";
-
-const quickStartSteps = [
-  {
-    step: "01",
-    title: "Install",
-    command: "dotnet new install .",
-    color: { bg: "bg-blue-500/10", text: "text-blue-500" },
-  },
-  {
-    step: "02",
-    title: "Create",
-    command: "dotnet new full-stack-react -o MyProject --title my-project",
-    color: { bg: "bg-purple-500/10", text: "text-purple-500" },
-  },
-  {
-    step: "03",
-    title: "Configure",
-    command: 'dotnet user-secrets set "ADMIN_EMAIL" "admin@example.com"',
-    color: { bg: "bg-pink-500/10", text: "text-pink-500" },
-  },
-  {
-    step: "04",
-    title: "Launch",
-    command: "docker compose up -d && dotnet run --project ReactTemplate.Server",
-    color: { bg: "bg-green-500/10", text: "text-green-500" },
-  },
-];
-
-const features = [
-  {
-    icon: Rocket,
-    title: "Production Ready",
-    description: "Full-stack architecture with ASP.NET Core 9 and React 19.2",
-    accentColor: "text-blue-500",
-  },
-  {
-    icon: Layers,
-    title: "Vertical Slices",
-    description: "Feature-first modules for clean, maintainable code",
-    accentColor: "text-purple-500",
-  },
-  {
-    icon: Shield,
-    title: "Auth Built-in",
-    description: "Identity, roles, and protected routes out of the box",
-    accentColor: "text-green-500",
-  },
-  {
-    icon: Zap,
-    title: "Type-Safe",
-    description: "OpenAPI-generated types for end-to-end safety",
-    accentColor: "text-orange-500",
-  },
-];
-
-const techStack = {
-  server: [
-    { name: "ASP.NET Core 9", category: "Framework" },
-    { name: "Entity Framework Core", category: "ORM" },
-    { name: "Identity", category: "Auth" },
-    { name: "FluentValidation", category: "Validation" },
-    { name: "xUnit", category: "Testing" },
-    { name: "Testcontainers", category: "Testing" },
-  ],
-  client: [
-    { name: "React 19.2", category: "Framework" },
-    { name: "Vite", category: "Build Tool" },
-    { name: "TanStack Router", category: "Routing" },
-    { name: "TanStack Query", category: "Data Fetching" },
-    { name: "React Hook Form", category: "Forms" },
-    { name: "Tailwind CSS", category: "Styling" },
-    { name: "shadcn/ui", category: "Components" },
-    { name: "Zod", category: "Validation" },
-    { name: "openapi-typescript", category: "Types" },
-    { name: "Playwright", category: "E2E Testing" },
-  ],
-};
 
 export function HomeView() {
   return (
-    <div className="relative overflow-hidden">
-      <div className="bg-primary/5 absolute top-0 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full blur-3xl" />
-      <HeroSection />
-      <FeaturesSection />
-      <QuickStartSection />
-      <TechStackSection />
-      <CTASection />
-    </div>
-  );
-}
-
-function HeroSection() {
-  return (
-    <section className="relative py-16 sm:py-24 lg:py-32">
-      <Container>
-        <div className="flex flex-col gap-8 sm:gap-12">
-          <div className="flex justify-end">
-            <ThemeToggleButton />
-          </div>
-
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
-            <div className="flex flex-col gap-6 sm:gap-8">
-              <div className="inline-flex w-max items-center gap-2">
-                <div className="flex items-center justify-center rounded-lg bg-blue-500/10 p-2">
-                  <Rocket className="size-5 text-blue-500" />
-                </div>
-                <span className="text-muted-foreground text-sm font-medium">
-                  Full-Stack Template
-                </span>
-              </div>
-
-              <h1 className="text-foreground text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                Build faster with{" "}
-                <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-                  React + .NET
-                </span>
-              </h1>
-
-              <p className="text-muted-foreground text-base leading-relaxed sm:text-lg">
-                Production-ready template combining ASP.NET Core 9 and React 19.2. Vertical slice
-                architecture, type-safe APIs, and everything you need to ship fast.
-              </p>
-
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Link
-                  to="/register"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold shadow-lg transition-all"
-                >
-                  Try Demo
-                </Link>
-                <Link
-                  to="/forecasts"
-                  className="border-border hover:bg-muted inline-flex items-center justify-center rounded-lg border px-6 py-3 text-sm font-semibold transition-colors"
-                >
-                  View Features
-                </Link>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-6 pt-4">
-                <div className="flex items-center gap-2">
-                  <Code2 className="text-primary size-5" />
-                  <span className="text-muted-foreground text-sm">Type-Safe</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Database className="text-primary size-5" />
-                  <span className="text-muted-foreground text-sm">PostgreSQL</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="text-primary size-5" />
-                  <span className="text-muted-foreground text-sm">Auth Ready</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-border bg-card relative overflow-hidden rounded-2xl border p-6 shadow-2xl sm:p-8">
-              <div className="bg-primary/10 absolute -top-20 -right-20 h-40 w-40 rounded-full blur-3xl" />
-              <div className="bg-primary/10 absolute -bottom-20 -left-20 h-40 w-40 rounded-full blur-3xl" />
-
-              <div className="relative space-y-4">
-                <div className="bg-muted/50 rounded-lg p-4">
-                  <p className="text-primary font-mono text-xs">$ dotnet new install .</p>
-                </div>
-                <div className="bg-muted/50 rounded-lg p-4">
-                  <p className="text-primary font-mono text-xs">
-                    $ dotnet new full-stack-react -o MyApp
-                  </p>
-                </div>
-                <div className="bg-muted/50 rounded-lg p-4">
-                  <p className="text-primary font-mono text-xs">$ docker compose up -d</p>
-                </div>
-                <div className="flex items-center gap-2 rounded-lg bg-green-500/10 p-4">
-                  <CheckIcon className="size-4 text-green-500" />
-                  <p className="text-foreground text-sm font-medium">Ready to code in seconds</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-function FeaturesSection() {
-  return (
-    <section className="py-16 sm:py-24">
-      <Container>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-          {features.map((feature) => (
-            <div
-              key={feature.title}
-              className="group border-border hover:border-primary/50 bg-card hover:shadow-primary/5 relative overflow-hidden rounded-xl border p-6 transition-all hover:shadow-lg"
-            >
-              <div className="bg-primary/10 group-hover:bg-primary/20 mb-4 flex h-12 w-12 items-center justify-center rounded-lg transition-colors">
-                <feature.icon className={`${feature.accentColor} size-6`} />
-              </div>
-              <h3 className="text-foreground mb-2 text-base font-semibold">{feature.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-function QuickStartSection() {
-  const [copiedIndex, setCopiedIndex] = React.useState<number | null>(null);
-  const timerRef = React.useRef<number | null>(null);
-
-  React.useEffect(() => {
-    return () => {
-      if (timerRef.current) {
-        window.clearTimeout(timerRef.current);
-      }
-    };
-  }, []);
-
-  async function handleCopy(command: string, index: number) {
-    if (typeof navigator === "undefined" || !navigator.clipboard) {
-      return;
-    }
-
-    try {
-      await navigator.clipboard.writeText(command);
-      setCopiedIndex(index);
-      if (timerRef.current) {
-        window.clearTimeout(timerRef.current);
-      }
-      timerRef.current = window.setTimeout(() => {
-        setCopiedIndex(null);
-      }, 2000);
-    } catch (error) {
-      console.error("Failed to copy command", error);
-    }
-  }
-
-  return (
-    <section className="bg-muted/30 py-16 sm:py-24">
-      <Container>
-        <div className="flex flex-col gap-12">
-          <div className="flex flex-col gap-3">
-            <h2 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
-              Quick Start
-            </h2>
-            <p className="text-muted-foreground max-w-2xl text-base">
-              Get your full-stack app running in 4 simple steps
+    <div>
+      <Container className="border-b">
+        <header className="flex flex-col gap-4 border-x p-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-xl">
+              <code>Core(stack)</code>
+            </h1>
+            <p className="text-muted-foreground text-sm md:text-base">
+              Full-stack starter for ASP.NET Core 9 and React 19.2 so you can launch faster.
             </p>
           </div>
-
-          <div className="grid gap-6 sm:grid-cols-2 lg:gap-8">
-            {quickStartSteps.map((step, index) => (
-              <div
-                key={step.step}
-                className="border-border bg-card group relative overflow-hidden rounded-xl border p-6 shadow-sm transition-all hover:shadow-md"
-              >
-                <div className="mb-4 flex items-start justify-between">
-                  <div
-                    className={`${step.color.bg} flex h-10 w-10 items-center justify-center rounded-lg`}
-                  >
-                    <span className={`${step.color.text} text-sm font-bold`}>{step.step}</span>
-                  </div>
-                </div>
-
-                <h3 className="text-foreground mb-3 text-lg font-semibold">{step.title}</h3>
-
-                <div className="bg-muted/50 group relative overflow-hidden rounded-lg">
-                  <pre className="text-muted-foreground overflow-x-auto px-4 py-3 font-mono text-xs">
-                    {step.command}
-                  </pre>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
-                    className="absolute top-2 right-2 opacity-0 transition-opacity group-hover:opacity-100"
-                    onClick={() => handleCopy(step.command, index)}
-                    aria-label={`Copy ${step.title}`}
-                  >
-                    {copiedIndex === index ?
-                      <CheckIcon className="size-4" />
-                    : <CopyIcon className="size-4" />}
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+          <span className="text-muted-foreground text-xs tracking-wide uppercase">
+            Production ready
+          </span>
+        </header>
       </Container>
-    </section>
-  );
-}
 
-function TechStackSection() {
-  return (
-    <section className="py-16 sm:py-24">
-      <Container>
-        <div className="flex flex-col gap-12">
-          <div className="flex flex-col gap-3">
-            <h2 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
-              Modern Tech Stack
-            </h2>
-            <p className="text-muted-foreground max-w-2xl text-base">
-              Production-grade technologies carefully selected for performance and developer
-              experience
-            </p>
-          </div>
-
-          <div className="grid gap-8 lg:grid-cols-2">
-            <TechStackColumn
-              heading="Server"
-              icon={Database}
-              items={techStack.server}
-              iconColor="text-blue-500"
-              bgColor="bg-blue-500/10"
-            />
-            <TechStackColumn
-              heading="Client"
-              icon={Code2}
-              items={techStack.client}
-              iconColor="text-purple-500"
-              bgColor="bg-purple-500/10"
-            />
-          </div>
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-interface TechStackColumnProps {
-  heading: string;
-  icon: React.ElementType;
-  items: { name: string; category: string }[];
-  iconColor: string;
-  bgColor: string;
-}
-
-function TechStackColumn(props: TechStackColumnProps) {
-  return (
-    <div className="border-border bg-card rounded-xl border p-6 shadow-sm sm:p-8">
-      <div className="mb-6 flex items-center gap-3">
-        <div className={`${props.bgColor} flex h-10 w-10 items-center justify-center rounded-lg`}>
-          <props.icon className={`${props.iconColor} size-5`} />
-        </div>
-        <h3 className="text-foreground text-xl font-semibold">{props.heading}</h3>
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        {props.items.map((item) => (
-          <div
-            key={item.name}
-            className="border-border hover:border-primary/50 group flex flex-col gap-1 rounded-lg border p-3 transition-colors"
-          >
-            <span className="text-foreground text-sm font-medium">{item.name}</span>
-            <span className="text-muted-foreground text-xs">{item.category}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function CTASection() {
-  return (
-    <section className="py-16 sm:py-24">
-      <Container>
-        <div className="from-primary/10 via-primary/5 to-background relative overflow-hidden rounded-2xl bg-gradient-to-br p-8 sm:p-12 lg:p-16">
-          <div className="bg-primary/20 absolute -top-20 -right-20 h-60 w-60 rounded-full blur-3xl" />
-          <div className="bg-primary/20 absolute -bottom-20 -left-20 h-60 w-60 rounded-full blur-3xl" />
-
-          <div className="relative mx-auto flex max-w-3xl flex-col gap-8 text-center">
-            <div className="flex flex-col gap-4">
-              <h2 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-                Ready to build something amazing?
+      <Container className="border-b">
+        <section className="border-x px-3 py-12">
+          <div className="grid gap-8 md:grid-cols-[minmax(0,2fr),minmax(0,1fr)] md:items-center">
+            <div className="space-y-5">
+              <h2 className="text-3xl font-semibold md:text-4xl">
+                Launch production-grade apps without the boilerplate.
               </h2>
-              <p className="text-muted-foreground mx-auto max-w-2xl text-base sm:text-lg">
-                Experience the template with a live demo or dive into the code on GitHub
+              <p className="text-muted-foreground text-base">
+                Core(stack) ships a ready-to-run backend, modern React front-end, and batteries
+                included authentication so your team can focus on product outcomes instead of
+                plumbing.
               </p>
-            </div>
-
-            <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-              <Link
-                to="/login"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-lg px-8 py-4 text-base font-semibold shadow-lg transition-all"
-              >
-                Try Live Demo
-              </Link>
-              <a
-                href="https://github.com/t-rosa/ReactTemplate"
-                target="_blank"
-                rel="noreferrer"
-                className="border-border bg-background hover:bg-muted inline-flex items-center justify-center rounded-lg border px-8 py-4 text-base font-semibold shadow-sm transition-colors"
-              >
-                View on GitHub
-              </a>
-            </div>
-
-            <div className="border-border bg-background/50 mx-auto flex flex-wrap items-center justify-center gap-4 rounded-lg border px-6 py-3 backdrop-blur-sm sm:gap-6">
-              <div className="flex items-center gap-2">
-                <CheckIcon className="size-4 text-green-500" />
-                <span className="text-foreground text-sm font-medium">MIT License</span>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  className="border-foreground hover:bg-foreground hover:text-background inline-flex items-center justify-center rounded border px-4 py-2 text-sm font-medium transition"
+                  href="https://github.com/t-rosa/ReactTemplate"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  Explore the template
+                </a>
+                <a
+                  className="bg-foreground text-background inline-flex items-center justify-center rounded px-4 py-2 text-sm font-medium transition hover:opacity-90"
+                  href="#quickstart"
+                >
+                  Start in 5 minutes
+                </a>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckIcon className="size-4 text-blue-500" />
-                <span className="text-foreground text-sm font-medium">Open Source</span>
+            </div>
+            <dl className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded border p-4">
+                <dt className="text-muted-foreground text-xs tracking-wide uppercase">API</dt>
+                <dd className="text-lg font-semibold">ASP.NET Core 9</dd>
+                <dd className="text-muted-foreground text-sm">
+                  Identity, EF Core, FluentValidation
+                </dd>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckIcon className="size-4 text-purple-500" />
-                <span className="text-foreground text-sm font-medium">Free to Use</span>
+              <div className="rounded border p-4">
+                <dt className="text-muted-foreground text-xs tracking-wide uppercase">Front-end</dt>
+                <dd className="text-lg font-semibold">React 19.2 + Vite</dd>
+                <dd className="text-muted-foreground text-sm">TanStack, Tailwind, shadcn/ui</dd>
+              </div>
+              <div className="rounded border p-4">
+                <dt className="text-muted-foreground text-xs tracking-wide uppercase">Testing</dt>
+                <dd className="text-lg font-semibold">xUnit &amp; Playwright</dd>
+                <dd className="text-muted-foreground text-sm">
+                  Unit, API, and e2e coverage baked in
+                </dd>
+              </div>
+              <div className="rounded border p-4">
+                <dt className="text-muted-foreground text-xs tracking-wide uppercase">DevOps</dt>
+                <dd className="text-lg font-semibold">Docker ready</dd>
+                <dd className="text-muted-foreground text-sm">
+                  Preview and production container workflows
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </section>
+      </Container>
+
+      <Container className="border-b">
+        <section className="border-x px-3 py-12" id="features">
+          <div className="flex items-center justify-between gap-3 pr-3">
+            <code className="block w-fit border-r border-b px-4 py-2">01</code>
+            <h2 className="text-lg font-semibold md:text-2xl">
+              Production foundation out of the box
+            </h2>
+          </div>
+          <div className="space-y-6 px-3 py-6 md:px-6">
+            <p className="text-muted-foreground text-sm md:text-base">
+              Everything in the template is wired for real workloads: a secure API, curated database
+              setup, transactional email, and role-based access flows that work from day one.
+            </p>
+            <ul className="grid gap-4 sm:grid-cols-2">
+              <li className="rounded border p-4">
+                <h3 className="text-sm font-medium">Identity &amp; Auth</h3>
+                <p className="text-muted-foreground text-sm">
+                  ASP.NET Core Identity with ready-made auth flows, password reset, and seed users.
+                </p>
+              </li>
+              <li className="rounded border p-4">
+                <h3 className="text-sm font-medium">Data layer</h3>
+                <p className="text-muted-foreground text-sm">
+                  EF Core migrations plus PostgreSQL containers for local development and CI setups.
+                </p>
+              </li>
+              <li className="rounded border p-4">
+                <h3 className="text-sm font-medium">Email ready</h3>
+                <p className="text-muted-foreground text-sm">
+                  SMTP configuration, templated emails, and background queues already wired.
+                </p>
+              </li>
+              <li className="rounded border p-4">
+                <h3 className="text-sm font-medium">Validation pipeline</h3>
+                <p className="text-muted-foreground text-sm">
+                  FluentValidation policies wrap every request to keep contracts tight and
+                  predictable.
+                </p>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </Container>
+
+      <Container className="border-b">
+        <section className="border-x px-3 py-12" id="experience">
+          <div className="flex items-center justify-between gap-3 pl-3">
+            <h2 className="text-lg font-semibold md:text-2xl">
+              Developer experience that scales with your team
+            </h2>
+            <code className="block w-fit border-b border-l px-4 py-2">02</code>
+          </div>
+          <div className="space-y-6 px-3 py-6 md:px-6">
+            <p className="text-muted-foreground text-sm md:text-base">
+              Enjoy a cohesive front-end toolkit with sensible defaults: TanStack Router for
+              routing, Query for data fetching, and a shadcn/ui design system with Tailwind for
+              polish.
+            </p>
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="rounded border p-4">
+                <h3 className="text-sm font-medium">Type-safe APIs</h3>
+                <p className="text-muted-foreground text-sm">
+                  openapi-typescript keeps server contracts in sync with generated React hooks.
+                </p>
+              </div>
+              <div className="rounded border p-4">
+                <h3 className="text-sm font-medium">UI primitives</h3>
+                <p className="text-muted-foreground text-sm">
+                  Reusable components, containers, and layout helpers speed up marketing and app
+                  pages.
+                </p>
+              </div>
+              <div className="rounded border p-4">
+                <h3 className="text-sm font-medium">Fast feedback</h3>
+                <p className="text-muted-foreground text-sm">
+                  Vitest, ESLint, and Playwright are preconfigured, offering confidence with each
+                  commit.
+                </p>
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </Container>
-    </section>
-  );
-}
 
-function ThemeToggleButton() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
+      <Container className="border-b">
+        <section className="border-x px-3 py-12" id="quickstart">
+          <div className="flex items-center justify-between gap-3 pr-3">
+            <code className="block w-fit border-r border-b px-4 py-2">03</code>
+            <h2 className="text-lg font-semibold md:text-2xl">
+              Quickstart that gets you coding now
+            </h2>
+          </div>
+          <div className="space-y-6 px-3 py-6 md:px-6">
+            <p className="text-muted-foreground text-sm md:text-base">
+              Follow the documented workflow below and have the full stack running locally in
+              minutes.
+            </p>
+            <ol className="grid gap-4 md:grid-cols-3">
+              <li className="rounded border p-4">
+                <span className="text-muted-foreground text-xs tracking-wide uppercase">
+                  Step 1
+                </span>
+                <p className="text-sm font-medium">Install the template</p>
+                <pre className="bg-muted/50 mt-3 overflow-x-auto rounded border p-3 font-mono text-xs md:text-sm">
+                  <code>dotnet new install .</code>
+                </pre>
+              </li>
+              <li className="rounded border p-4">
+                <span className="text-muted-foreground text-xs tracking-wide uppercase">
+                  Step 2
+                </span>
+                <p className="text-sm font-medium">Configure secrets</p>
+                <div className="mt-3 space-y-2">
+                  {[
+                    "dotnet user-secrets init --project ReactTemplate.Server",
+                    'dotnet user-secrets set "SMTP_USERNAME" "value" --project ReactTemplate.Server',
+                    'dotnet user-secrets set "SMTP_PASSWORD" "value" --project ReactTemplate.Server',
+                    'dotnet user-secrets set "ADMIN_EMAIL" "value" --project ReactTemplate.Server',
+                    'dotnet user-secrets set "ADMIN_PASSWORD" "value" --project ReactTemplate.Server',
+                    'dotnet user-secrets set "CONNECTION_STRING" "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=react-template;" --project ReactTemplate.Server',
+                  ].map((command) => (
+                    <pre
+                      key={command}
+                      className="bg-muted/50 overflow-x-auto rounded border p-3 font-mono text-xs md:text-sm"
+                    >
+                      <code>{command}</code>
+                    </pre>
+                  ))}
+                </div>
+              </li>
+              <li className="rounded border p-4">
+                <span className="text-muted-foreground text-xs tracking-wide uppercase">
+                  Step 3
+                </span>
+                <p className="text-sm font-medium">Run and validate</p>
+                <div className="mt-3 space-y-2">
+                  {[
+                    "dotnet run --project ReactTemplate.Server",
+                    "cd ReactTemplate.Client",
+                    "npm install",
+                    "npm run dev",
+                    "npm run test",
+                    "npx playwright test",
+                  ].map((command) => (
+                    <pre
+                      key={command}
+                      className="bg-muted/50 overflow-x-auto rounded border p-3 font-mono text-xs md:text-sm"
+                    >
+                      <code>{command}</code>
+                    </pre>
+                  ))}
+                </div>
+              </li>
+            </ol>
+          </div>
+        </section>
+      </Container>
 
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  function handleToggle() {
-    if (!mounted) {
-      return;
-    }
-
-    if (theme === "dark") {
-      setTheme("light");
-    } else {
-      setTheme("dark");
-    }
-  }
-
-  return (
-    <Button
-      type="button"
-      variant="ghost"
-      size="icon-sm"
-      className="border-border bg-background/80 shadow-sm backdrop-blur"
-      onClick={handleToggle}
-      aria-label="Toggle theme"
-    >
-      {mounted ?
-        theme === "dark" ?
-          <SunIcon className="size-4" />
-        : <MoonIcon className="size-4" />
-      : <span className="bg-muted block h-4 w-4 rounded-full" />}
-    </Button>
+      <Container>
+        <footer className="text-muted-foreground border-x p-3 text-center text-sm">
+          <p>
+            Built with <span className="text-red-500">❤️</span> on ASP.NET Core 9, React 19.2, and
+            the tools we trust every day.
+          </p>
+        </footer>
+      </Container>
+    </div>
   );
 }

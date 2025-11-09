@@ -14,7 +14,9 @@ namespace ReactTemplate.Server.Modules.Auth;
 [Authorize]
 [ApiController]
 [Route("api/auth")]
+#pragma warning disable S6960 // Controllers should not have mixed responsibilities
 public class AuthController : ControllerBase
+#pragma warning restore S6960 // Controllers should not have mixed responsibilities
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
@@ -35,14 +37,19 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Register([FromBody] RegisterRequest registration)
     {
         if (string.IsNullOrEmpty(registration.Email) || !_emailAddressAttribute.IsValid(registration.Email))
+        {
             return ValidationProblem();
+        }
 
         var user = new User();
         await _userManager.SetUserNameAsync(user, registration.Email);
         await _userManager.SetEmailAsync(user, registration.Email);
 
         var result = await _userManager.CreateAsync(user, registration.Password);
-        if (!result.Succeeded) return ValidationProblem();
+        if (!result.Succeeded)
+        {
+            return ValidationProblem();
+        }
 
         if (!await _userManager.IsInRoleAsync(user, "User"))
         {
@@ -58,8 +65,8 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Login([FromBody] LoginRequest login, [FromQuery] bool? useCookies, [FromQuery] bool? useSessionCookies)
     {
-        var useCookieScheme = (useCookies == true) || (useSessionCookies == true);
-        var isPersistent = (useCookies == true) && (useSessionCookies != true);
+        var useCookieScheme = useCookies == true || useSessionCookies == true;
+        var isPersistent = useCookies == true && useSessionCookies != true;
         _signInManager.AuthenticationScheme = useCookieScheme
             ? IdentityConstants.ApplicationScheme
             : IdentityConstants.BearerScheme;
@@ -78,7 +85,11 @@ public class AuthController : ControllerBase
             }
         }
 
-        if (!result.Succeeded) return Unauthorized(result.ToString());
+        if (!result.Succeeded)
+        {
+            return Unauthorized(result.ToString());
+        }
+
         return NoContent();
     }
 
@@ -96,21 +107,34 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string code, [FromQuery] string? changedEmail)
     {
         var user = await _userManager.FindByIdAsync(userId);
-        if (user == null) return Unauthorized();
+        if (user == null)
+        {
+            return Unauthorized();
+        }
 
-        try { code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code)); }
+        try
+        { code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code)); }
         catch (FormatException) { return Unauthorized(); }
 
         IdentityResult result;
         if (string.IsNullOrEmpty(changedEmail))
+        {
             result = await _userManager.ConfirmEmailAsync(user, code);
+        }
         else
         {
             result = await _userManager.ChangeEmailAsync(user, changedEmail, code);
-            if (result.Succeeded) result = await _userManager.SetUserNameAsync(user, changedEmail);
+            if (result.Succeeded)
+            {
+                result = await _userManager.SetUserNameAsync(user, changedEmail);
+            }
         }
 
-        if (!result.Succeeded) return Unauthorized();
+        if (!result.Succeeded)
+        {
+            return Unauthorized();
+        }
+
         return Redirect("/");
     }
 
@@ -120,7 +144,10 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequest resendRequest)
     {
         var user = await _userManager.FindByEmailAsync(resendRequest.Email);
-        if (user == null) return Ok();
+        if (user == null)
+        {
+            return Ok();
+        }
 
         await SendConfirmationEmailAsync(user, resendRequest.Email);
         return Ok();
@@ -148,7 +175,9 @@ public class AuthController : ControllerBase
     {
         var user = await _userManager.FindByEmailAsync(resetRequest.Email);
         if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+        {
             return ValidationProblem();
+        }
 
         IdentityResult result;
         try
@@ -161,7 +190,11 @@ public class AuthController : ControllerBase
             result = IdentityResult.Failed(_userManager.ErrorDescriber.InvalidToken());
         }
 
-        if (!result.Succeeded) return ValidationProblem();
+        if (!result.Succeeded)
+        {
+            return ValidationProblem();
+        }
+
         return Ok();
     }
 
@@ -170,25 +203,37 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> UpdateInfo([FromBody] UpdateUserRequest infoRequest)
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user == null) return NotFound();
+        if (user == null)
+        {
+            return NotFound();
+        }
 
         if (!string.IsNullOrEmpty(infoRequest.NewEmail) && !_emailAddressAttribute.IsValid(infoRequest.NewEmail))
+        {
             return ValidationProblem();
+        }
 
         if (!string.IsNullOrEmpty(infoRequest.NewPassword))
         {
             if (string.IsNullOrEmpty(infoRequest.OldPassword))
+            {
                 return ValidationProblem();
+            }
 
             var pwdResult = await _userManager.ChangePasswordAsync(user, infoRequest.OldPassword, infoRequest.NewPassword);
-            if (!pwdResult.Succeeded) return ValidationProblem();
+            if (!pwdResult.Succeeded)
+            {
+                return ValidationProblem();
+            }
         }
 
         if (!string.IsNullOrEmpty(infoRequest.NewEmail))
         {
             var current = await _userManager.GetEmailAsync(user);
             if (current != infoRequest.NewEmail)
+            {
                 await SendConfirmationEmailAsync(user, infoRequest.NewEmail, isChange: true);
+            }
         }
 
         var response = new GetUserResponse

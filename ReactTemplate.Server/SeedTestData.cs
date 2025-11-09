@@ -5,7 +5,7 @@ namespace ReactTemplate.Server;
 
 public static class SeedTestData
 {
-    public static async Task ExecuteAsync(IServiceProvider services, IConfiguration config)
+    public static async Task ExecuteAsync(IServiceProvider services, ConfigurationManager _)
     {
         using var scope = services.CreateScope();
         var scopedServices = scope.ServiceProvider;
