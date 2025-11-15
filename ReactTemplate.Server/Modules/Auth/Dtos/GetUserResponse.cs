@@ -1,12 +1,9 @@
 namespace ReactTemplate.Server.Modules.Auth.Dtos;
 
-public class GetUserResponse
+public sealed record GetUserResponse
 {
-    public string Id { get; set; } = string.Empty;
-
-    public string Email { get; set; } = string.Empty;
-
-    public IList<string> Roles { get; set; } = new List<string>();
-
-    public bool IsEmailConfirmed { get; set; }
+    public string Id { get; init; }
+    public string Email { get; init; }
+    public IList<string> Roles { get; init; }
+    public bool IsEmailConfirmed { get; init; }
 }

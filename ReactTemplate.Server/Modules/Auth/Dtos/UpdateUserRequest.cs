@@ -1,10 +1,8 @@
 namespace ReactTemplate.Server.Modules.Auth.Dtos;
 
-public class UpdateUserRequest
+public sealed record UpdateUserRequest
 {
-    public string NewEmail { get; set; } = string.Empty;
-
-    public string NewPassword { get; set; } = string.Empty;
-
-    public string OldPassword { get; set; } = string.Empty;
+    public required string NewEmail { get; init; }
+    public required string NewPassword { get; init; }
+    public required string OldPassword { get; init; }
 }

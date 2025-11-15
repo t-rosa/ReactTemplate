@@ -51,7 +51,7 @@ public class WeatherForecastsControllerTests : IAsyncLifetime
         var response = await _client.GetAsync("/api/weather-forecasts");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var forecasts = await response.Content.ReadFromJsonAsync<IEnumerable<GetWeatherForecastResponse>>();
+        var forecasts = await response.Content.ReadFromJsonAsync<IEnumerable<WeatherForecastResponse>>();
         forecasts.Should().NotBeNull();
     }
 
@@ -63,7 +63,7 @@ public class WeatherForecastsControllerTests : IAsyncLifetime
         var response = await _client.PostAsJsonAsync("/api/weather-forecasts", request);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        var created = await response.Content.ReadFromJsonAsync<GetWeatherForecastResponse>();
+        var created = await response.Content.ReadFromJsonAsync<WeatherForecastResponse>();
         created.Should().NotBeNull();
         created.Summary.Should().Be(request.Summary);
     }
@@ -73,12 +73,12 @@ public class WeatherForecastsControllerTests : IAsyncLifetime
     {
         var request = _createWeatherForecastFaker.Generate();
         var postResponse = await _client.PostAsJsonAsync("/api/weather-forecasts", request);
-        var created = await postResponse.Content.ReadFromJsonAsync<GetWeatherForecastResponse>();
+        var created = await postResponse.Content.ReadFromJsonAsync<WeatherForecastResponse>();
 
         var getResponse = await _client.GetAsync($"/api/weather-forecasts/{created!.Id}");
         getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var fetched = await getResponse.Content.ReadFromJsonAsync<GetWeatherForecastResponse>();
+        var fetched = await getResponse.Content.ReadFromJsonAsync<WeatherForecastResponse>();
         fetched.Should().NotBeNull();
         fetched.Id.Should().Be(created.Id);
     }
@@ -95,7 +95,7 @@ public class WeatherForecastsControllerTests : IAsyncLifetime
     {
         var createRequest = _createWeatherForecastFaker.Generate();
         var createResponse = await _client.PostAsJsonAsync("/api/weather-forecasts", createRequest);
-        var created = await createResponse.Content.ReadFromJsonAsync<GetWeatherForecastResponse>();
+        var created = await createResponse.Content.ReadFromJsonAsync<WeatherForecastResponse>();
 
         var updateRequest = _updateWeatherForecastFaker.Generate();
 
@@ -116,7 +116,7 @@ public class WeatherForecastsControllerTests : IAsyncLifetime
     {
         var request = _createWeatherForecastFaker.Generate();
         var postResponse = await _client.PostAsJsonAsync("/api/weather-forecasts", request);
-        var created = await postResponse.Content.ReadFromJsonAsync<GetWeatherForecastResponse>();
+        var created = await postResponse.Content.ReadFromJsonAsync<WeatherForecastResponse>();
 
         var deleteResponse = await _client.DeleteAsync($"/api/weather-forecasts/{created!.Id}");
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);

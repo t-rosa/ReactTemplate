@@ -11,56 +11,42 @@ namespace ReactTemplate.Server.Modules.WeatherForecasts;
 [ApiController]
 [Route("api/weather-forecasts")]
 [Authorize]
-public class WeatherForecastsController : ControllerBase
+public sealed class WeatherForecastsController(ApplicationDbContext db, UserManager<User> userManager) : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
-    private readonly UserManager<User> _userManager;
-
-    public WeatherForecastsController(ApplicationDbContext context, UserManager<User> userManager)
-    {
-        _context = context;
-        _userManager = userManager;
-    }
-
     [HttpGet()]
-    [ProducesResponseType(typeof(IEnumerable<GetWeatherForecastResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<WeatherForecastResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetWeatherForecasts()
     {
-        var user = await _userManager.GetUserAsync(HttpContext.User);
+        var user = await userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
             return Unauthorized();
         }
 
+        var response = db.WeatherForecasts
+            .AsNoTracking()
+            .Where(e => e.UserId == user.Id)
+            .Select(WeatherForecastQueries.ProjectToResponse());
 
-        var response = _context.WeatherForecasts.AsNoTracking()
-                                                .Where(e => e.UserId == user.Id)
-                                                .Select((forecast) => new GetWeatherForecastResponse
-                                                {
-                                                    Id = forecast.Id,
-                                                    Date = forecast.Date,
-                                                    TemperatureC = forecast.TemperatureC,
-                                                    Summary = forecast.Summary
-                                                });
         return Ok(response);
     }
 
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(GetWeatherForecastResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(WeatherForecastResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetWeatherForecast([FromRoute] Guid id)
     {
-        var user = await _userManager.GetUserAsync(HttpContext.User);
+        var user = await userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
             return Unauthorized();
         }
 
-        var query = _context.WeatherForecasts.Where(e => e.UserId == user.Id)
+        var query = db.WeatherForecasts.Where(e => e.UserId == user.Id)
                                              .Where(e => e.Id == id)
-                                             .Select((forecast) => new GetWeatherForecastResponse
+                                             .Select((forecast) => new WeatherForecastResponse
                                              {
                                                  Id = forecast.Id,
                                                  Date = forecast.Date,
@@ -78,14 +64,14 @@ public class WeatherForecastsController : ControllerBase
     }
 
     [HttpPost()]
-    [ProducesResponseType(typeof(GetWeatherForecastResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(WeatherForecastResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateWeatherForecast(
         [FromBody] CreateWeatherForecastRequest request,
         [FromServices] IValidator<CreateWeatherForecastRequest> validator)
     {
-        var user = await _userManager.GetUserAsync(HttpContext.User);
+        var user = await userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
             return Unauthorized();
@@ -106,18 +92,18 @@ public class WeatherForecastsController : ControllerBase
             UserId = user.Id
         };
 
-        await _context.WeatherForecasts.AddAsync(forecast);
+        await db.WeatherForecasts.AddAsync(forecast);
 
         try
         {
-            await _context.SaveChangesAsync();
+            await db.SaveChangesAsync();
         }
         catch (Exception exception)
         {
             return StatusCode(500, exception);
         }
 
-        var response = new GetWeatherForecastResponse
+        var response = new WeatherForecastResponse
         {
             Id = forecast.Id,
             Date = forecast.Date,
@@ -129,7 +115,7 @@ public class WeatherForecastsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    [ProducesResponseType(typeof(GetWeatherForecastResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(WeatherForecastResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateWeatherForecast(
@@ -137,7 +123,7 @@ public class WeatherForecastsController : ControllerBase
         [FromBody] UpdateWeatherForecastRequest request,
         [FromServices] IValidator<UpdateWeatherForecastRequest> validator)
     {
-        var user = await _userManager.GetUserAsync(HttpContext.User);
+        var user = await userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
             return Unauthorized();
@@ -150,7 +136,7 @@ public class WeatherForecastsController : ControllerBase
             return ValidationProblem(problem);
         }
 
-        var forecast = await _context.WeatherForecasts.Where(e => e.UserId == user.Id)
+        var forecast = await db.WeatherForecasts.Where(e => e.UserId == user.Id)
                                                       .Where(e => e.Id == id)
                                                       .SingleOrDefaultAsync();
         if (forecast is null)
@@ -158,20 +144,20 @@ public class WeatherForecastsController : ControllerBase
             return NotFound();
         }
 
-        _context.Entry(forecast).CurrentValues.SetValues(request);
-        _context.Entry(forecast).State = EntityState.Modified;
+        db.Entry(forecast).CurrentValues.SetValues(request);
+        db.Entry(forecast).State = EntityState.Modified;
 
         try
         {
-            await _context.SaveChangesAsync();
+            await db.SaveChangesAsync();
         }
         catch (Exception exception)
         {
             return StatusCode(500, exception);
         }
 
-        var response = _context.WeatherForecasts.Where(e => e.Id == id)
-                                                .Select((forecast) => new GetWeatherForecastResponse
+        var response = db.WeatherForecasts.Where(e => e.Id == id)
+                                                .Select((forecast) => new WeatherForecastResponse
                                                 {
                                                     Id = forecast.Id,
                                                     Date = forecast.Date,
@@ -188,13 +174,13 @@ public class WeatherForecastsController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RemoveWeatherForecast([FromRoute] Guid id)
     {
-        var user = await _userManager.GetUserAsync(HttpContext.User);
+        var user = await userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
             return Unauthorized();
         }
 
-        var forecast = await _context.WeatherForecasts.Where(e => e.UserId == user.Id)
+        var forecast = await db.WeatherForecasts.Where(e => e.UserId == user.Id)
                                                       .Where(e => e.Id == id)
                                                       .SingleOrDefaultAsync();
         if (forecast is null)
@@ -202,11 +188,11 @@ public class WeatherForecastsController : ControllerBase
             return NotFound();
         }
 
-        _context.WeatherForecasts.Remove(forecast);
+        db.WeatherForecasts.Remove(forecast);
 
         try
         {
-            await _context.SaveChangesAsync();
+            await db.SaveChangesAsync();
         }
         catch (Exception exception)
         {
@@ -220,7 +206,7 @@ public class WeatherForecastsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> RemoveWeatherForecasts([FromBody] List<Guid> ids)
     {
-        var courses = await _context.WeatherForecasts
+        var courses = await db.WeatherForecasts
             .Where(c => ids.Contains(c.Id))
             .ToListAsync();
 
@@ -229,8 +215,8 @@ public class WeatherForecastsController : ControllerBase
             return NotFound();
         }
 
-        _context.WeatherForecasts.RemoveRange(courses);
-        await _context.SaveChangesAsync();
+        db.WeatherForecasts.RemoveRange(courses);
+        await db.SaveChangesAsync();
 
         return NoContent();
     }
