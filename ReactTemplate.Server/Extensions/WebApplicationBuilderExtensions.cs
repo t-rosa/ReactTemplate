@@ -2,12 +2,14 @@ using FluentValidation;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Internal;
+using Microsoft.EntityFrameworkCore.Migrations;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using ReactTemplate.Server.Database;
 using ReactTemplate.Server.Extensions;
+using ReactTemplate.Server.Middlewares;
 using ReactTemplate.Server.Modules.Email;
 using ReactTemplate.Server.Modules.Users;
 
@@ -28,16 +30,37 @@ public static class WebApplicationBuilderExtensions
             return builder;
         }
 
+        public WebApplicationBuilder AddErrorHandling()
+        {
+            builder.Services.AddProblemDetails(options =>
+            {
+                options.CustomizeProblemDetails = context =>
+                {
+                    context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+                };
+            });
+
+            builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+            return builder;
+        }
+
         public WebApplicationBuilder AddDatabase()
         {
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options
                     .UseNpgsql(
-                        builder.Configuration["CONNECTION_STRING"]
+                        builder.Configuration["CONNECTION_STRING"],
+                        npgsqlOptions =>
+                        {
+                            npgsqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Application);
+                        }
                     )
                     .UseSnakeCaseNamingConvention();
             });
+
             return builder;
         }
 
@@ -74,7 +97,7 @@ public static class WebApplicationBuilderExtensions
                     options.SignIn.RequireConfirmedEmail = true;
                     options.User.RequireUniqueEmail = true;
                 })
-                .AddRoles<IdentityRole<Guid>>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.Configure<IdentityOptions>(options =>

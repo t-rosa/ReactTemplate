@@ -13,13 +13,10 @@ import { RemoveForecast } from "@/modules/app/forecasts/remove-forecast";
 import type { CellContext } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
-type ForecastActionsProps = CellContext<
-  components["schemas"]["GetWeatherForecastResponse"],
-  unknown
->;
+type ForecastActionsProps = CellContext<components["schemas"]["WeatherForecastResponse"], unknown>;
 
 export function ForecastActions(props: ForecastActionsProps) {
-  const forecast: components["schemas"]["GetWeatherForecastResponse"] = props.row.original;
+  const forecast: components["schemas"]["WeatherForecastResponse"] = props.row.original;
 
   function handleCopyIdClick() {
     void navigator.clipboard.writeText(forecast.id);

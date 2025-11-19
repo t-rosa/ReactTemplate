@@ -4,7 +4,7 @@ using Bogus;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
+using ReactTemplate.Server.Modules.WeatherForecasts.DTOs;
 
 namespace ReactTemplate.Tests.Modules.WeatherForecasts;
 

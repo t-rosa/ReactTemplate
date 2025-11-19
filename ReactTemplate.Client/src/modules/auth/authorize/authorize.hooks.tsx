@@ -1,6 +1,6 @@
 import { $api } from "@/lib/api/client";
 
-export type UserRole = "Admin" | "Member" | "User";
+export type UserRole = "Admin" | "Member";
 
 export function useUser() {
   const { data: user } = $api.useSuspenseQuery("get", "/api/users/me");

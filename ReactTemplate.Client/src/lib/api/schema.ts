@@ -26,9 +26,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["GetWeatherForecastResponse"][];
-                        "application/json": components["schemas"]["GetWeatherForecastResponse"][];
-                        "text/json": components["schemas"]["GetWeatherForecastResponse"][];
+                        "text/plain": components["schemas"]["WeatherForecastResponse"][];
+                        "application/json": components["schemas"]["WeatherForecastResponse"][];
+                        "text/json": components["schemas"]["WeatherForecastResponse"][];
                     };
                 };
                 /** @description Internal Server Error */
@@ -66,9 +66,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["GetWeatherForecastResponse"];
-                        "application/json": components["schemas"]["GetWeatherForecastResponse"];
-                        "text/json": components["schemas"]["GetWeatherForecastResponse"];
+                        "text/plain": components["schemas"]["WeatherForecastResponse"];
+                        "application/json": components["schemas"]["WeatherForecastResponse"];
+                        "text/json": components["schemas"]["WeatherForecastResponse"];
                     };
                 };
                 /** @description Bad Request */
@@ -125,9 +125,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["GetWeatherForecastResponse"];
-                        "application/json": components["schemas"]["GetWeatherForecastResponse"];
-                        "text/json": components["schemas"]["GetWeatherForecastResponse"];
+                        "text/plain": components["schemas"]["WeatherForecastResponse"];
+                        "application/json": components["schemas"]["WeatherForecastResponse"];
+                        "text/json": components["schemas"]["WeatherForecastResponse"];
                     };
                 };
                 /** @description Not Found */
@@ -171,16 +171,12 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description OK */
-                200: {
+                /** @description No Content */
+                204: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content: {
-                        "text/plain": components["schemas"]["GetWeatherForecastResponse"];
-                        "application/json": components["schemas"]["GetWeatherForecastResponse"];
-                        "text/json": components["schemas"]["GetWeatherForecastResponse"];
-                    };
+                    content?: never;
                 };
                 /** @description Bad Request */
                 400: {
@@ -287,6 +283,43 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["UserResponse"];
+                        "application/json": components["schemas"]["UserResponse"];
+                        "text/json": components["schemas"]["UserResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -591,50 +624,13 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["GetUserResponse"];
-                        "application/json": components["schemas"]["GetUserResponse"];
-                        "text/json": components["schemas"]["GetUserResponse"];
+                        "text/plain": components["schemas"]["UserResponse"];
+                        "application/json": components["schemas"]["UserResponse"];
+                        "text/json": components["schemas"]["UserResponse"];
                     };
                 };
             };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/users/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetUserResponse"];
-                        "application/json": components["schemas"]["GetUserResponse"];
-                        "text/json": components["schemas"]["GetUserResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -646,43 +642,28 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         CreateWeatherForecastRequest: {
-            /** Format: int32 */
-            temperatureC: number;
-            summary: string | null;
             /** Format: date */
-            date?: string;
+            date: string;
+            /** Format: int32 */
+            temperatureC: number | string;
+            summary?: null | string;
         };
         ForgotPasswordRequest: {
             email: string;
         };
-        GetUserResponse: {
-            id: string;
-            email: string;
-            roles: string[];
-            isEmailConfirmed: boolean;
-        };
-        GetWeatherForecastResponse: {
-            /** Format: uuid */
-            id: string;
-            /** Format: date */
-            date: string;
-            /** Format: int32 */
-            temperatureC: number;
-            summary: string | null;
-        };
         LoginRequest: {
             email: string;
             password: string;
-            twoFactorCode?: string | null;
-            twoFactorRecoveryCode?: string | null;
+            twoFactorCode?: null | string;
+            twoFactorRecoveryCode?: null | string;
         };
         ProblemDetails: {
-            type?: string | null;
-            title?: string | null;
+            type?: null | string;
+            title?: null | string;
             /** Format: int32 */
-            status?: number | null;
-            detail?: string | null;
-            instance?: string | null;
+            status?: null | number | string;
+            detail?: null | string;
+            instance?: null | string;
         };
         RegisterRequest: {
             email: string;
@@ -697,27 +678,41 @@ export interface components {
             newPassword: string;
         };
         UpdateUserRequest: {
-            newEmail?: string;
-            newPassword?: string;
-            oldPassword?: string;
+            newEmail: string;
+            newPassword: string;
+            oldPassword: string;
         };
         UpdateWeatherForecastRequest: {
-            /** Format: int32 */
-            temperatureC: number;
-            summary: string | null;
             /** Format: date */
-            date?: string;
+            date: string;
+            /** Format: int32 */
+            temperatureC: number | string;
+            summary?: null | string;
+        };
+        UserResponse: {
+            id: string;
+            email: string;
+            roles: string[];
+            isEmailConfirmed: boolean;
         };
         ValidationProblemDetails: {
-            type?: string | null;
-            title?: string | null;
+            type?: null | string;
+            title?: null | string;
             /** Format: int32 */
-            status?: number | null;
-            detail?: string | null;
-            instance?: string | null;
+            status?: null | number | string;
+            detail?: null | string;
+            instance?: null | string;
             errors?: {
                 [key: string]: string[];
             };
+        };
+        WeatherForecastResponse: {
+            id: string;
+            /** Format: date */
+            date: string;
+            /** Format: int32 */
+            temperatureC: number | string;
+            summary: null | string;
         };
     };
     responses: never;

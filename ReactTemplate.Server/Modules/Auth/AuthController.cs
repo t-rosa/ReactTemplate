@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using ReactTemplate.Server.Modules.Auth.Dtos;
+using ReactTemplate.Server.Modules.Auth.DTOs;
 using ReactTemplate.Server.Modules.Users;
 
 namespace ReactTemplate.Server.Modules.Auth;
@@ -15,48 +15,47 @@ namespace ReactTemplate.Server.Modules.Auth;
 [ApiController]
 [Route("api/auth")]
 #pragma warning disable S6960 // Controllers should not have mixed responsibilities
-public class AuthController : ControllerBase
+public class AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender<User> emailSender) : ControllerBase
 #pragma warning restore S6960 // Controllers should not have mixed responsibilities
 {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
-    private readonly IEmailSender<User> _emailSender;
-
-    private static readonly EmailAddressAttribute _emailAddressAttribute = new();
-
-    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender<User> emailSender)
-    {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _emailSender = emailSender;
-    }
+    private static readonly EmailAddressAttribute emailAddressAttribute = new();
 
     [AllowAnonymous]
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest registration)
     {
-        if (string.IsNullOrEmpty(registration.Email) || !_emailAddressAttribute.IsValid(registration.Email))
+        if (string.IsNullOrEmpty(registration.Email) || !emailAddressAttribute.IsValid(registration.Email))
         {
             return ValidationProblem();
         }
 
         var user = new User();
-        await _userManager.SetUserNameAsync(user, registration.Email);
-        await _userManager.SetEmailAsync(user, registration.Email);
+        await userManager.SetUserNameAsync(user, registration.Email);
+        await userManager.SetEmailAsync(user, registration.Email);
 
-        var result = await _userManager.CreateAsync(user, registration.Password);
+        var result = await userManager.CreateAsync(user, registration.Password);
         if (!result.Succeeded)
         {
             return ValidationProblem();
         }
 
-        if (!await _userManager.IsInRoleAsync(user, "User"))
+        if (!await userManager.IsInRoleAsync(user, Roles.Member))
         {
-            await _userManager.AddToRoleAsync(user, "User");
+            await userManager.AddToRoleAsync(user, Roles.Member);
         }
 
-        await SendConfirmationEmailAsync(user, registration.Email);
+        try
+        {
+            await SendConfirmationEmailAsync(user, registration.Email);
+        }
+        catch (Exception ex)
+        {
+            // Log the error but don't fail registration
+            Console.WriteLine($"Email sending failed: {ex.Message}");
+            throw;
+        }
+
         return Ok();
     }
 
@@ -67,21 +66,21 @@ public class AuthController : ControllerBase
     {
         var useCookieScheme = useCookies == true || useSessionCookies == true;
         var isPersistent = useCookies == true && useSessionCookies != true;
-        _signInManager.AuthenticationScheme = useCookieScheme
+        signInManager.AuthenticationScheme = useCookieScheme
             ? IdentityConstants.ApplicationScheme
             : IdentityConstants.BearerScheme;
 
-        var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent, lockoutOnFailure: true);
+        var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent, lockoutOnFailure: true);
 
         if (result.RequiresTwoFactor)
         {
             if (!string.IsNullOrEmpty(login.TwoFactorCode))
             {
-                result = await _signInManager.TwoFactorAuthenticatorSignInAsync(login.TwoFactorCode, isPersistent, isPersistent);
+                result = await signInManager.TwoFactorAuthenticatorSignInAsync(login.TwoFactorCode, isPersistent, isPersistent);
             }
             else if (!string.IsNullOrEmpty(login.TwoFactorRecoveryCode))
             {
-                result = await _signInManager.TwoFactorRecoveryCodeSignInAsync(login.TwoFactorRecoveryCode);
+                result = await signInManager.TwoFactorRecoveryCodeSignInAsync(login.TwoFactorRecoveryCode);
             }
         }
 
@@ -97,7 +96,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Logout()
     {
-        await _signInManager.SignOutAsync();
+        await signInManager.SignOutAsync();
         return Ok();
     }
 
@@ -106,7 +105,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status302Found)]
     public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string code, [FromQuery] string? changedEmail)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByIdAsync(userId);
         if (user == null)
         {
             return Unauthorized();
@@ -119,14 +118,14 @@ public class AuthController : ControllerBase
         IdentityResult result;
         if (string.IsNullOrEmpty(changedEmail))
         {
-            result = await _userManager.ConfirmEmailAsync(user, code);
+            result = await userManager.ConfirmEmailAsync(user, code);
         }
         else
         {
-            result = await _userManager.ChangeEmailAsync(user, changedEmail, code);
+            result = await userManager.ChangeEmailAsync(user, changedEmail, code);
             if (result.Succeeded)
             {
-                result = await _userManager.SetUserNameAsync(user, changedEmail);
+                result = await userManager.SetUserNameAsync(user, changedEmail);
             }
         }
 
@@ -143,7 +142,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequest resendRequest)
     {
-        var user = await _userManager.FindByEmailAsync(resendRequest.Email);
+        var user = await userManager.FindByEmailAsync(resendRequest.Email);
         if (user == null)
         {
             return Ok();
@@ -158,12 +157,12 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest resetRequest)
     {
-        var user = await _userManager.FindByEmailAsync(resetRequest.Email);
-        if (user != null && await _userManager.IsEmailConfirmedAsync(user))
+        var user = await userManager.FindByEmailAsync(resetRequest.Email);
+        if (user != null && await userManager.IsEmailConfirmedAsync(user))
         {
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var code = await userManager.GeneratePasswordResetTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            await _emailSender.SendPasswordResetCodeAsync(user, resetRequest.Email, HtmlEncoder.Default.Encode(code));
+            await emailSender.SendPasswordResetCodeAsync(user, resetRequest.Email, HtmlEncoder.Default.Encode(code));
         }
         return Ok();
     }
@@ -173,8 +172,8 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest resetRequest)
     {
-        var user = await _userManager.FindByEmailAsync(resetRequest.Email);
-        if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+        var user = await userManager.FindByEmailAsync(resetRequest.Email);
+        if (user == null || !await userManager.IsEmailConfirmedAsync(user))
         {
             return ValidationProblem();
         }
@@ -183,11 +182,11 @@ public class AuthController : ControllerBase
         try
         {
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(resetRequest.ResetCode));
-            result = await _userManager.ResetPasswordAsync(user, code, resetRequest.NewPassword);
+            result = await userManager.ResetPasswordAsync(user, code, resetRequest.NewPassword);
         }
         catch (FormatException)
         {
-            result = IdentityResult.Failed(_userManager.ErrorDescriber.InvalidToken());
+            result = IdentityResult.Failed(userManager.ErrorDescriber.InvalidToken());
         }
 
         if (!result.Succeeded)
@@ -199,16 +198,16 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("info")]
-    [ProducesResponseType(typeof(GetUserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateInfo([FromBody] UpdateUserRequest infoRequest)
     {
-        var user = await _userManager.GetUserAsync(User);
+        var user = await userManager.GetUserAsync(User);
         if (user == null)
         {
             return NotFound();
         }
 
-        if (!string.IsNullOrEmpty(infoRequest.NewEmail) && !_emailAddressAttribute.IsValid(infoRequest.NewEmail))
+        if (!string.IsNullOrEmpty(infoRequest.NewEmail) && !emailAddressAttribute.IsValid(infoRequest.NewEmail))
         {
             return ValidationProblem();
         }
@@ -220,7 +219,7 @@ public class AuthController : ControllerBase
                 return ValidationProblem();
             }
 
-            var pwdResult = await _userManager.ChangePasswordAsync(user, infoRequest.OldPassword, infoRequest.NewPassword);
+            var pwdResult = await userManager.ChangePasswordAsync(user, infoRequest.OldPassword, infoRequest.NewPassword);
             if (!pwdResult.Succeeded)
             {
                 return ValidationProblem();
@@ -229,19 +228,19 @@ public class AuthController : ControllerBase
 
         if (!string.IsNullOrEmpty(infoRequest.NewEmail))
         {
-            var current = await _userManager.GetEmailAsync(user);
+            var current = await userManager.GetEmailAsync(user);
             if (current != infoRequest.NewEmail)
             {
                 await SendConfirmationEmailAsync(user, infoRequest.NewEmail, isChange: true);
             }
         }
 
-        var response = new GetUserResponse
+        var response = new UserResponse
         {
-            Id = await _userManager.GetUserIdAsync(user) ?? throw new NotSupportedException("Users must have an Id."),
-            Email = await _userManager.GetEmailAsync(user) ?? throw new NotSupportedException("Users must have an email."),
-            Roles = await _userManager.GetRolesAsync(user) ?? throw new NotSupportedException("Users must have a role."),
-            IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user)
+            Id = await userManager.GetUserIdAsync(user) ?? throw new NotSupportedException("Users must have an Id."),
+            Email = await userManager.GetEmailAsync(user) ?? throw new NotSupportedException("Users must have an email."),
+            Roles = await userManager.GetRolesAsync(user) ?? throw new NotSupportedException("Users must have a role."),
+            IsEmailConfirmed = await userManager.IsEmailConfirmedAsync(user)
         };
 
         return Ok(response);
@@ -250,13 +249,18 @@ public class AuthController : ControllerBase
     private async Task SendConfirmationEmailAsync(User user, string email, bool isChange = false)
     {
         var code = isChange
-            ? await _userManager.GenerateChangeEmailTokenAsync(user, email)
-            : await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            ? await userManager.GenerateChangeEmailTokenAsync(user, email)
+            : await userManager.GenerateEmailConfirmationTokenAsync(user);
 
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        var userId = await _userManager.GetUserIdAsync(user);
+        var userId = await userManager.GetUserIdAsync(user);
 
-        var url = Url.Action(nameof(ConfirmEmail), "Users", new { userId, code, changedEmail = isChange ? email : null }, Request.Scheme)!;
-        await _emailSender.SendConfirmationLinkAsync(user, email, HtmlEncoder.Default.Encode(url));
+        var url = Url.Action(nameof(ConfirmEmail), "Auth", new { userId, code, changedEmail = isChange ? email : null }, Request.Scheme);
+        if (string.IsNullOrEmpty(url))
+        {
+            throw new InvalidOperationException("Failed to generate confirmation email URL.");
+        }
+
+        await emailSender.SendConfirmationLinkAsync(user, email, HtmlEncoder.Default.Encode(url));
     }
 }

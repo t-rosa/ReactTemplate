@@ -35,8 +35,8 @@ import { CreateForecast } from "../create-forecast.view";
 import { RemoveForecasts } from "../remove-forecasts";
 
 interface ForecastTableProps {
-  columns: ColumnDef<components["schemas"]["GetWeatherForecastResponse"]>[];
-  data: components["schemas"]["GetWeatherForecastResponse"][];
+  columns: ColumnDef<components["schemas"]["WeatherForecastResponse"]>[];
+  data: components["schemas"]["WeatherForecastResponse"][];
 }
 
 export function ForecastTable(props: ForecastTableProps) {

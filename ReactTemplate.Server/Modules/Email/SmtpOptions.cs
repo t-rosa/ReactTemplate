@@ -1,8 +1,8 @@
 namespace ReactTemplate.Server.Modules.Email;
 
-public class SmtpOptions
+public sealed record SmtpOptions
 {
-    public string Server { get; set; } = default!;
-    public int Port { get; set; }
-    public bool EnableSSL { get; set; }
+    public required string Server { get; init; }
+    public required int Port { get; init; }
+    public required bool EnableSSL { get; init; }
 }
