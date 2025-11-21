@@ -10,7 +10,7 @@ using ReactTemplate.Server.Modules.WeatherForecasts.DTOs;
 
 namespace ReactTemplate.Server.Modules.WeatherForecasts;
 
-[Authorize(Roles = Roles.Member)]
+[Authorize(Roles = $"{Roles.Member}, {Roles.Admin}")]
 [ApiController]
 [Route("api/weather-forecasts")]
 public sealed class WeatherForecastsController(ApplicationDbContext db, UserManager<User> userManager) : ControllerBase

@@ -30,7 +30,7 @@ function Header() {
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton asChild className="hover:bg-card">
-            <Link to="/home">
+            <Link to="/login">
               <FrameIcon />
               <span>ReactTemplate</span>
             </Link>
