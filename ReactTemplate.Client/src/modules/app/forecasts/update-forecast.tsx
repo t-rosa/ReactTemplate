@@ -10,17 +10,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { $api } from "@/lib/api/client";
+import type { components } from "@/lib/api/schema";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format, formatISO } from "date-fns";
 import { fr } from "date-fns/locale";
-import { CalendarIcon, PlusIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
@@ -31,34 +32,42 @@ const formSchema = z.object({
   summary: z.string(),
 });
 
-export type CreateForecastFormSchema = z.infer<typeof formSchema>;
+export type UpdateForecastFormSchema = z.infer<typeof formSchema>;
 
-export function CreateForecast() {
+interface UpdateForecastProps {
+  forecast: components["schemas"]["WeatherForecastResponse"];
+}
+
+export function UpdateForecast(props: UpdateForecastProps) {
   const [open, setOpen] = React.useState(false);
 
-  const form = useForm<CreateForecastFormSchema>({
+  const form = useForm<UpdateForecastFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      date: new Date(),
-      temperatureC: "",
-      summary: "",
+      date: new Date(props.forecast.date),
+      temperatureC: props.forecast.temperatureC.toString(),
+      summary: props.forecast.summary ?? "",
     },
   });
 
-  const createForecast = $api.useMutation("post", "/api/weather-forecasts", {
+  const updateForecast = $api.useMutation("put", "/api/weather-forecasts/{id}", {
     meta: {
       invalidatesQuery: $api.queryOptions("get", "/api/weather-forecasts").queryKey,
     },
     onSuccess() {
-      setOpen(!open);
-      form.reset();
+      setOpen(false);
     },
   });
 
-  function onSubmit(values: CreateForecastFormSchema) {
-    createForecast.mutate({
+  function onSubmit(values: UpdateForecastFormSchema) {
+    updateForecast.mutate({
+      params: {
+        path: {
+          id: props.forecast.id,
+        },
+      },
       body: {
-        temperatureC: parseInt(values.temperatureC),
+        temperatureC: parseInt(values.temperatureC.toString()),
         date: formatISO(values.date, { representation: "date" }),
         summary: values.summary,
       },
@@ -67,17 +76,17 @@ export function CreateForecast() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <PlusIcon /> Add forecast
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Add forecast</DialogTitle>
-          <DialogDescription>Add a new weather forecast to your list.</DialogDescription>
-        </DialogHeader>
-        <form id="create-forecast" onSubmit={form.handleSubmit(onSubmit)}>
+      <form id="update-forecast" onSubmit={form.handleSubmit(onSubmit)}>
+        <DialogTrigger asChild onSelect={(e) => e.preventDefault()}>
+          <DropdownMenuItem>Edit</DropdownMenuItem>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit forecast</DialogTitle>
+            <DialogDescription>
+              Make changes to your profile here. Click save when you&apos;re done.
+            </DialogDescription>
+          </DialogHeader>
           <FieldGroup>
             <Controller
               control={form.control}
@@ -144,19 +153,16 @@ export function CreateForecast() {
               )}
             />
           </FieldGroup>
-        </form>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button type="button" variant="outline">
-              Cancel
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit" form="update-forecast">
+              Save changes
             </Button>
-          </DialogClose>
-          <Button type="submit" form="create-forecast" disabled={createForecast.isPending}>
-            {createForecast.isPending ? "Submitting..." : "Submit"}
-            {createForecast.isPending && <Spinner />}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
+          </DialogFooter>
+        </DialogContent>
+      </form>
     </Dialog>
   );
 }

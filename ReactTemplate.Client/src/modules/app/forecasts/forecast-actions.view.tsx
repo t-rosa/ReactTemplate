@@ -1,4 +1,3 @@
-import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +11,7 @@ import type { components } from "@/lib/api/schema";
 import { RemoveForecast } from "@/modules/app/forecasts/remove-forecast";
 import type { CellContext } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import { UpdateForecast } from "./update-forecast";
 
 type ForecastActionsProps = CellContext<components["schemas"]["WeatherForecastResponse"], unknown>;
 
@@ -29,17 +29,13 @@ export function ForecastActions(props: ForecastActionsProps) {
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>
-      <AlertDialog>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={handleCopyIdClick}>Copy ID</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem asChild variant="destructive">
-            <AlertDialogTrigger className="w-full">Remove</AlertDialogTrigger>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem onClick={handleCopyIdClick}>Copy ID</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <UpdateForecast forecast={forecast} />
         <RemoveForecast id={forecast.id} />
-      </AlertDialog>
+      </DropdownMenuContent>
     </DropdownMenu>
   );
 }

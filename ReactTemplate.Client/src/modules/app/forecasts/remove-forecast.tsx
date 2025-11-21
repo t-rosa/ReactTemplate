@@ -1,4 +1,5 @@
 import {
+  AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
@@ -6,7 +7,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { $api } from "@/lib/api/client";
 
 interface RemoveForecastProps {
@@ -14,12 +17,12 @@ interface RemoveForecastProps {
 }
 
 export function RemoveForecast(props: RemoveForecastProps) {
-  const removeForecasts = $api.useMutation("delete", "/api/weather-forecasts/{id}", {
+  const removeForecast = $api.useMutation("delete", "/api/weather-forecasts/{id}", {
     meta: { invalidatesQuery: $api.queryOptions("get", "/api/weather-forecasts").queryKey },
   });
 
   function handleRemoveClick() {
-    removeForecasts.mutate({
+    removeForecast.mutate({
       params: {
         path: {
           id: props.id,
@@ -29,18 +32,25 @@ export function RemoveForecast(props: RemoveForecastProps) {
   }
 
   return (
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-        <AlertDialogDescription>
-          This action cannot be undone. This will permanently delete your account and remove your
-          data from our servers.
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction onClick={handleRemoveClick}>Continue</AlertDialogAction>
-      </AlertDialogFooter>
-    </AlertDialogContent>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
+          Remove
+        </DropdownMenuItem>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete your account and remove your
+            data from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleRemoveClick}>Continue</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
