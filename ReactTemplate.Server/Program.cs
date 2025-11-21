@@ -26,9 +26,9 @@ public interface IProgram
             app.MapScalarApiReference();
 
             await app.ApplyMigrationAsync();
-
-            await app.SeedInitialDataAsync();
         }
+
+        await app.SeedInitialDataAsync();
 
         app.UseResponseCompression();
 
