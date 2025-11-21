@@ -6,87 +6,59 @@ using ReactTemplate.Server.Modules.Users;
 
 namespace ReactTemplate.Server.Modules.Email;
 
-public class EmailSender : IEmailSender<User>
+public sealed class EmailSender(IOptions<SmtpOptions> options, IConfiguration configuration) : IEmailSender<User>
 {
-    private readonly IOptions<SmtpOptions> _options;
-    private readonly ILogger<EmailSender> _logger;
-    private readonly IConfiguration _configuration;
+    private readonly SmtpOptions _options = options.Value;
 
-    public EmailSender(IOptions<SmtpOptions> options, ILogger<EmailSender> logger, IConfiguration configuration)
+    public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
-        _options = options;
-        _logger = logger;
-        _configuration = configuration;
-    }
+        var username = configuration["SMTP_USERNAME"];
+        var password = configuration["SMTP_PASSWORD"];
 
-    public async Task SendEmailAsync(string toEmail, string subject, string message)
-    {
-        await Execute(subject, message, toEmail);
-    }
-
-    public async Task Execute(string subject, string message, string toEmail)
-    {
-        var username = _configuration["SMTP_USERNAME"];
-        var password = _configuration["SMTP_PASSWORD"];
-
-        if (username == null && password == null)
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            throw new Exception();
+            throw new InvalidOperationException("SMTP_USERNAME and SMTP_PASSWORD must be configured. For Gmail, use an App Password (not your regular password).");
         }
 
-        using SmtpClient client = new(_options.Value.Server, _options.Value.Port);
-        client.Credentials = new NetworkCredential(
-            username,
-            password
-        );
-        client.EnableSsl = _options.Value.EnableSSL;
+        using MailMessage message = new() { From = new MailAddress(username) };
+        message.To.Add(email);
+        message.Body = htmlMessage;
+        message.Subject = subject;
+        message.IsBodyHtml = true;
 
-        using MailMessage msg = new() { From = new MailAddress(username!) };
+        using SmtpClient client = new(_options.Server, _options.Port);
+        client.EnableSsl = _options.EnableSSL;
+        client.Credentials = new NetworkCredential(username, password);
 
-        msg.To.Add(toEmail);
-        msg.Body = message;
-        msg.Subject = subject;
-        msg.IsBodyHtml = true;
-
-        try
-        {
-            await client.SendMailAsync(msg);
-        }
-        catch (Exception)
-        {
-            throw new Exception();
-        }
+        await client.SendMailAsync(message);
     }
 
     public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
     {
-        var subject = "Bienvenue ! Confirme ton compte";
+        var subject = "Welcome! Confirm your account";
         var body = $@"
-            <h1>Bonjour {user.UserName},</h1>
-            <p>Merci de t’être inscrit. Clique sur le lien ci-dessous pour activer ton compte :</p>
-            <p><a href='{confirmationLink}'>Confirmer mon compte</a></p>";
+            <h1>Hello {user.UserName},</h1>
+            <p>Thank you for signing up. Click the link below to activate your account:</p>
+            <p><a href='{confirmationLink}'>Confirm my account</a></p>";
 
-        await Execute(subject, body, email);
-        _logger.LogInformation("Mail de confirmation envoyé à {Email} avec lien {Link}", email, confirmationLink);
+        await SendEmailAsync(email, subject, body);
     }
 
-    public async Task SendPasswordResetLinkAsync(User user, string email, string resetLink)
+    public async Task SendPasswordResetLinkAsync(User _, string email, string resetLink)
     {
-        var subject = "Réinitialisation du mot de passe";
+        var subject = "Password Reset";
         var body = $@"
-            <p>Pour réinitialiser ton mot de passe, clique ici :</p>
-            <p><a href='{resetLink}'>Réinitialiser</a></p>";
+            <p>To reset your password, click here:</p>
+            <p><a href='{resetLink}'>Reset Password</a></p>";
 
-        _logger.LogInformation("Mail reset envoyé à {Email} avec lien {Link}", email, resetLink);
-        await Execute(subject, body, email);
+        await SendEmailAsync(email, subject, body);
     }
 
-    public async Task SendPasswordResetCodeAsync(User user, string email, string resetCode)
+    public async Task SendPasswordResetCodeAsync(User _, string email, string resetCode)
     {
-        var subject = "Code de réinitialisation du mot de passe";
-        var body = $"Ton code est : {resetCode}";
+        var subject = "Password Reset Code";
+        var body = $"Your reset code is: {resetCode}";
 
-        _logger.LogInformation("Code reset envoyé à {Email} avec code {Code}", email, resetCode);
-        await Execute(subject, body, email);
+        await SendEmailAsync(email, subject, body);
     }
 }

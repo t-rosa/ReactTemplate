@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ReactTemplate.Server;
+using ReactTemplate.Server.Database;
 using Testcontainers.PostgreSql;
 
 namespace ReactTemplate.Tests;

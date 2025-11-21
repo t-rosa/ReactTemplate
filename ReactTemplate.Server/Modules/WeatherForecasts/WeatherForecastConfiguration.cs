@@ -1,35 +1,36 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ReactTemplate.Server.Modules.Users;
 
 namespace ReactTemplate.Server.Modules.WeatherForecasts;
 
 public sealed class WeatherForecastConfiguration : IEntityTypeConfiguration<WeatherForecast>
 {
-    public void Configure(EntityTypeBuilder<WeatherForecast> builder)
-    {
-        builder.HasOne(e => e.User)
-              .WithMany(u => u.WeatherForecasts)
-              .HasForeignKey(e => e.UserId)
-              .OnDelete(DeleteBehavior.Cascade)
-              .IsRequired();
+      public void Configure(EntityTypeBuilder<WeatherForecast> builder)
+      {
+            builder.HasKey(wf => wf.Id);
 
-        builder.Property(e => e.Date)
-              .IsRequired()
-              .HasColumnType("date");
+            builder
+                  .Property(wf => wf.Id)
+                  .HasMaxLength(500);
 
-        builder.Property(e => e.TemperatureC)
-              .IsRequired();
+            builder
+                  .Property(wf => wf.UserId)
+                  .HasMaxLength(500);
 
-        builder.Property(e => e.Summary)
-              .HasMaxLength(200)
-              .IsRequired(false);
+            builder
+                  .Property(wf => wf.Date);
 
-        builder.Property(e => e.CreatedAt)
-              .IsRequired()
-              .HasColumnType("timestamp with time zone");
+            builder
+                  .Property(wf => wf.TemperatureC);
 
-        builder.Property(e => e.UpdatedAt)
-              .HasColumnType("timestamp with time zone")
-              .IsRequired(false);
-    }
+            builder
+                  .Property(wf => wf.Summary)
+                  .HasMaxLength(100);
+
+            builder
+                  .HasOne<User>()
+                  .WithMany()
+                  .HasForeignKey(wf => wf.UserId);
+      }
 }

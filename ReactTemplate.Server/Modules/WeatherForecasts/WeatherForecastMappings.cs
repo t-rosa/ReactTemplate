@@ -1,29 +1,46 @@
-using ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
+using ReactTemplate.Server.Modules.Users;
+using ReactTemplate.Server.Modules.WeatherForecasts.DTOs;
 
 namespace ReactTemplate.Server.Modules.WeatherForecasts;
 
 internal static class WeatherForecastMappings
 {
-
-    public static WeatherForecastResponse ToWeatherForecastResponse(this WeatherForecast weatherForecast)
+    extension(WeatherForecast weatherForecast)
     {
-        return new WeatherForecastResponse
+        public WeatherForecastResponse ToWeatherForecastResponse()
         {
-            Id = weatherForecast.Id,
-            Date = weatherForecast.Date,
-            TemperatureC = weatherForecast.TemperatureC,
-            Summary = weatherForecast.Summary
-        };
+            return new WeatherForecastResponse
+            {
+                Id = weatherForecast.Id,
+                Date = weatherForecast.Date,
+                TemperatureC = weatherForecast.TemperatureC,
+                Summary = weatherForecast.Summary
+            };
+        }
+
+        public void UpdateFromRequest(UpdateWeatherForecastRequest request, string userId)
+        {
+            weatherForecast.UserId = userId;
+            weatherForecast.Date = request.Date;
+            weatherForecast.TemperatureC = request.TemperatureC;
+            weatherForecast.Summary = request.Summary;
+            weatherForecast.UpdatedAt = DateTime.UtcNow;
+        }
     }
 
-    public static WeatherForecast ToEntity(this CreateWeatherForecastRequest request)
+    extension(CreateWeatherForecastRequest request)
     {
-        return new WeatherForecast
+        public WeatherForecast ToEntity(string userId)
         {
-            Date = request.Date,
-            TemperatureC = request.TemperatureC,
-            Summary = request.Summary,
-            CreatedAt = DateTime.UtcNow,
-        };
+            return new WeatherForecast
+            {
+                Id = $"w_{Guid.CreateVersion7()}",
+                UserId = userId,
+                Date = request.Date,
+                TemperatureC = request.TemperatureC,
+                Summary = request.Summary,
+                CreatedAt = DateTime.UtcNow,
+            };
+        }
     }
 }

@@ -3,14 +3,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ReactTemplate.Server.Database;
+using ReactTemplate.Server.Modules.Auth;
 using ReactTemplate.Server.Modules.Users;
-using ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
+using ReactTemplate.Server.Modules.WeatherForecasts.DTOs;
 
 namespace ReactTemplate.Server.Modules.WeatherForecasts;
 
+[Authorize(Roles = $"{Roles.Member}, {Roles.Admin}")]
 [ApiController]
 [Route("api/weather-forecasts")]
-[Authorize]
 public sealed class WeatherForecastsController(ApplicationDbContext db, UserManager<User> userManager) : ControllerBase
 {
     [HttpGet()]
@@ -32,11 +34,11 @@ public sealed class WeatherForecastsController(ApplicationDbContext db, UserMana
         return Ok(response);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(WeatherForecastResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetWeatherForecast([FromRoute] Guid id)
+    public async Task<IActionResult> GetWeatherForecast([FromRoute] string id)
     {
         var user = await userManager.GetUserAsync(HttpContext.User);
         if (user is null)
@@ -44,15 +46,16 @@ public sealed class WeatherForecastsController(ApplicationDbContext db, UserMana
             return Unauthorized();
         }
 
-        var query = db.WeatherForecasts.Where(e => e.UserId == user.Id)
-                                             .Where(e => e.Id == id)
-                                             .Select((forecast) => new WeatherForecastResponse
-                                             {
-                                                 Id = forecast.Id,
-                                                 Date = forecast.Date,
-                                                 TemperatureC = forecast.TemperatureC,
-                                                 Summary = forecast.Summary
-                                             });
+        var query = db.WeatherForecasts
+            .Where(e => e.UserId == user.Id)
+            .Where(e => e.Id == id)
+            .Select((forecast) => new WeatherForecastResponse
+            {
+                Id = forecast.Id,
+                Date = forecast.Date,
+                TemperatureC = forecast.TemperatureC,
+                Summary = forecast.Summary
+            });
 
         var response = await query.SingleOrDefaultAsync();
         if (response is null)
@@ -71,118 +74,76 @@ public sealed class WeatherForecastsController(ApplicationDbContext db, UserMana
         [FromBody] CreateWeatherForecastRequest request,
         [FromServices] IValidator<CreateWeatherForecastRequest> validator)
     {
-        var user = await userManager.GetUserAsync(HttpContext.User);
-        if (user is null)
+        await validator.ValidateAndThrowAsync(request);
+
+        var user = await userManager.GetUserAsync(User);
+        if (user == null)
         {
-            return Unauthorized();
+            return NotFound();
         }
 
-        var validation = await validator.ValidateAsync(request);
-        if (!validation.IsValid)
-        {
-            var problem = new ValidationProblemDetails(validation.ToDictionary());
-            return ValidationProblem(problem);
-        }
+        WeatherForecast weatherForecast = request.ToEntity(user.Id);
 
-        var forecast = new WeatherForecast()
-        {
-            Date = request.Date,
-            Summary = request.Summary,
-            TemperatureC = request.TemperatureC,
-            UserId = user.Id
-        };
+        db.WeatherForecasts.Add(weatherForecast);
 
-        await db.WeatherForecasts.AddAsync(forecast);
+        await db.SaveChangesAsync();
 
-        try
-        {
-            await db.SaveChangesAsync();
-        }
-        catch (Exception exception)
-        {
-            return StatusCode(500, exception);
-        }
-
-        var response = new WeatherForecastResponse
-        {
-            Id = forecast.Id,
-            Date = forecast.Date,
-            TemperatureC = forecast.TemperatureC,
-            Summary = forecast.Summary
-        };
+        var response = weatherForecast.ToWeatherForecastResponse();
 
         return CreatedAtAction(nameof(GetWeatherForecast), new { id = response.Id }, response);
     }
 
-    [HttpPut("{id:guid}")]
-    [ProducesResponseType(typeof(WeatherForecastResponse), StatusCodes.Status200OK)]
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateWeatherForecast(
-        [FromRoute] Guid id,
+        [FromRoute] string id,
         [FromBody] UpdateWeatherForecastRequest request,
         [FromServices] IValidator<UpdateWeatherForecastRequest> validator)
     {
-        var user = await userManager.GetUserAsync(HttpContext.User);
-        if (user is null)
+        await validator.ValidateAndThrowAsync(request);
+
+        var user = await userManager.GetUserAsync(User);
+        if (user == null)
         {
-            return Unauthorized();
+            return NotFound();
         }
 
-        var validation = await validator.ValidateAsync(request);
-        if (!validation.IsValid)
-        {
-            var problem = new ValidationProblemDetails(validation.ToDictionary());
-            return ValidationProblem(problem);
-        }
+        var forecast = await db.WeatherForecasts
+            .Where(e => e.UserId == user.Id)
+            .Where(e => e.Id == id)
+            .SingleOrDefaultAsync();
 
-        var forecast = await db.WeatherForecasts.Where(e => e.UserId == user.Id)
-                                                      .Where(e => e.Id == id)
-                                                      .SingleOrDefaultAsync();
         if (forecast is null)
         {
             return NotFound();
         }
 
-        db.Entry(forecast).CurrentValues.SetValues(request);
-        db.Entry(forecast).State = EntityState.Modified;
+        forecast.UpdateFromRequest(request, user.Id);
 
-        try
-        {
-            await db.SaveChangesAsync();
-        }
-        catch (Exception exception)
-        {
-            return StatusCode(500, exception);
-        }
+        await db.SaveChangesAsync();
 
-        var response = db.WeatherForecasts.Where(e => e.Id == id)
-                                                .Select((forecast) => new WeatherForecastResponse
-                                                {
-                                                    Id = forecast.Id,
-                                                    Date = forecast.Date,
-                                                    TemperatureC = forecast.TemperatureC,
-                                                    Summary = forecast.Summary
-                                                });
-
-        return Ok(response);
+        return NoContent();
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> RemoveWeatherForecast([FromRoute] Guid id)
+    public async Task<IActionResult> RemoveWeatherForecast([FromRoute] string id)
     {
-        var user = await userManager.GetUserAsync(HttpContext.User);
-        if (user is null)
+        var user = await userManager.GetUserAsync(User);
+        if (user == null)
         {
-            return Unauthorized();
+            return NotFound();
         }
 
-        var forecast = await db.WeatherForecasts.Where(e => e.UserId == user.Id)
-                                                      .Where(e => e.Id == id)
-                                                      .SingleOrDefaultAsync();
+        var forecast = await db.WeatherForecasts
+            .Where(e => e.UserId == user.Id)
+            .Where(e => e.Id == id)
+            .SingleOrDefaultAsync();
+
         if (forecast is null)
         {
             return NotFound();
@@ -190,21 +151,14 @@ public sealed class WeatherForecastsController(ApplicationDbContext db, UserMana
 
         db.WeatherForecasts.Remove(forecast);
 
-        try
-        {
-            await db.SaveChangesAsync();
-        }
-        catch (Exception exception)
-        {
-            return StatusCode(500, exception);
-        }
+        await db.SaveChangesAsync();
 
         return NoContent();
     }
 
     [HttpPost("bulk-delete")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> RemoveWeatherForecasts([FromBody] List<Guid> ids)
+    public async Task<IActionResult> RemoveWeatherForecasts([FromBody] List<string> ids)
     {
         var courses = await db.WeatherForecasts
             .Where(c => ids.Contains(c.Id))

@@ -14,7 +14,6 @@ import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as MarketingHomeRouteImport } from './routes/_marketing/home'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
@@ -43,11 +42,6 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRouteRoute,
-} as any)
-const MarketingHomeRoute = MarketingHomeRouteImport.update({
-  id: '/_marketing/home',
-  path: '/home',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -82,7 +76,6 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
   '/reset-password': typeof AuthResetPasswordRoute
-  '/home': typeof MarketingHomeRoute
   '/admin/': typeof AdminIndexRoute
   '/forecasts': typeof AppForecastsIndexRoute
 }
@@ -92,7 +85,6 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
   '/reset-password': typeof AuthResetPasswordRoute
-  '/home': typeof MarketingHomeRoute
   '/admin': typeof AdminIndexRoute
   '/forecasts': typeof AppForecastsIndexRoute
 }
@@ -106,7 +98,6 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
-  '/_marketing/home': typeof MarketingHomeRoute
   '/admin/': typeof AdminIndexRoute
   '/_app/forecasts/': typeof AppForecastsIndexRoute
 }
@@ -119,7 +110,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
-    | '/home'
     | '/admin/'
     | '/forecasts'
   fileRoutesByTo: FileRoutesByTo
@@ -129,7 +119,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
-    | '/home'
     | '/admin'
     | '/forecasts'
   id:
@@ -142,7 +131,6 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_auth/register'
     | '/_auth/reset-password'
-    | '/_marketing/home'
     | '/admin/'
     | '/_app/forecasts/'
   fileRoutesById: FileRoutesById
@@ -152,7 +140,6 @@ export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
-  MarketingHomeRoute: typeof MarketingHomeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -191,13 +178,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
-    }
-    '/_marketing/home': {
-      id: '/_marketing/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof MarketingHomeRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/_auth/reset-password': {
       id: '/_auth/reset-password'
@@ -284,7 +264,6 @@ const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   AdminRouteRoute: AdminRouteRouteWithChildren,
-  MarketingHomeRoute: MarketingHomeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -5,7 +5,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { ForecastActions } from "../forecast-actions.view";
 
-export const FORECAST_COLUMNS: ColumnDef<components["schemas"]["GetWeatherForecastResponse"]>[] = [
+export const FORECAST_COLUMNS: ColumnDef<components["schemas"]["WeatherForecastResponse"]>[] = [
   {
     id: "select",
     header: ({ table }) => (

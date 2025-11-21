@@ -12,8 +12,10 @@ public interface IProgram
         builder
             .AddControllers()
             .AddDatabase()
+            .AddErrorHandling()
             .AddObservability()
             .AddAuthenticationServices()
+            .AddEmailServices()
             .AddApplicationServices();
 
         var app = builder.Build();
@@ -24,19 +26,15 @@ public interface IProgram
             app.MapScalarApiReference();
 
             await app.ApplyMigrationAsync();
-        }
 
-        await app.SeedRolesAsync();
-        await app.SeedAdminUserAsync();
-
-        if (app.Environment.IsDevelopment())
-        {
-            await app.SeedTestUsersAsync();
+            await app.SeedInitialDataAsync();
         }
 
         app.UseResponseCompression();
 
         app.UseHttpsRedirection();
+
+        app.UseExceptionHandler();
 
         app.UseAuthorization();
 

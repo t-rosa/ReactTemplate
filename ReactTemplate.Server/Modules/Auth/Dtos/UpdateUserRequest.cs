@@ -1,4 +1,4 @@
-namespace ReactTemplate.Server.Modules.Auth.Dtos;
+namespace ReactTemplate.Server.Modules.Auth.DTOs;
 
 public sealed record UpdateUserRequest
 {

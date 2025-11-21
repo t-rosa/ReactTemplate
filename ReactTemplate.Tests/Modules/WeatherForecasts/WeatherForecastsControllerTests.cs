@@ -4,7 +4,7 @@ using Bogus;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
+using ReactTemplate.Server.Modules.WeatherForecasts.DTOs;
 
 namespace ReactTemplate.Tests.Modules.WeatherForecasts;
 
@@ -100,7 +100,7 @@ public class WeatherForecastsControllerTests : IAsyncLifetime
         var updateRequest = _updateWeatherForecastFaker.Generate();
 
         var updateResponse = await _client.PutAsJsonAsync($"/api/weather-forecasts/{created!.Id}", updateRequest);
-        updateResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        updateResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 
     [Fact]

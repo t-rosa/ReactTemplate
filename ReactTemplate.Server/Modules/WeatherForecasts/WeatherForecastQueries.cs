@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
+using ReactTemplate.Server.Modules.WeatherForecasts.DTOs;
 
 namespace ReactTemplate.Server.Modules.WeatherForecasts;
 

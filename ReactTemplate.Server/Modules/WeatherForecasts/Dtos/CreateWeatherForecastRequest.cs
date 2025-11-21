@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace ReactTemplate.Server.Modules.WeatherForecasts.Dtos;
+namespace ReactTemplate.Server.Modules.WeatherForecasts.DTOs;
 
 public sealed record CreateWeatherForecastRequest
 {
-    public required DateOnly Date { get; init; } = DateOnly.FromDateTime(DateTime.UtcNow);
+    public required DateOnly Date { get; init; }
     public required int TemperatureC { get; init; }
     public string? Summary { get; init; }
 }
