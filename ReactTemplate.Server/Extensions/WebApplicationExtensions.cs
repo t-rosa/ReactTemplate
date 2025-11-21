@@ -34,7 +34,6 @@ public static class WebApplicationExtensions
             UserManager<User> userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
             IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
-
             try
             {
                 if (!await roleManager.RoleExistsAsync(Roles.Member))

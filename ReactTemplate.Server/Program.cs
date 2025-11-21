@@ -27,8 +27,8 @@ public interface IProgram
 
             await app.ApplyMigrationAsync();
 
-            await app.SeedInitialDataAsync();
         }
+        await app.SeedInitialDataAsync();
 
         app.UseResponseCompression();
 
