@@ -100,7 +100,7 @@ public class WeatherForecastsControllerTests : IAsyncLifetime
         var updateRequest = _updateWeatherForecastFaker.Generate();
 
         var updateResponse = await _client.PutAsJsonAsync($"/api/weather-forecasts/{created!.Id}", updateRequest);
-        updateResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        updateResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 
     [Fact]
