@@ -51,7 +51,6 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
         }
         catch (Exception ex)
         {
-            // Log the error but don't fail registration
             Console.WriteLine($"Email sending failed: {ex.Message}");
             throw;
         }

@@ -15,6 +15,7 @@ public interface IProgram
             .AddErrorHandling()
             .AddObservability()
             .AddAuthenticationServices()
+            .AddEmailServices()
             .AddApplicationServices();
 
         var app = builder.Build();
