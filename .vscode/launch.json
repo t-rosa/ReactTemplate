@@ -4,7 +4,7 @@
       "name": "Server",
       "type": "dotnet",
       "request": "launch",
-      "projectPath": "${workspaceFolder}/ReactTemplate.Server/ReactTemplate.Server.csproj"
+      "projectPath": "${workspaceFolder}/ReactWeaver.Server/ReactWeaver.Server.csproj"
     },
     {
       "name": "Client",
@@ -13,14 +13,14 @@
       "skipFiles": ["<node_internals>/**"],
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceFolder}/ReactTemplate.Client"
+      "cwd": "${workspaceFolder}/ReactWeaver.Client"
     },
     {
       "name": "Browser",
       "request": "launch",
       "type": "msedge",
       "url": "https://localhost:7000",
-      "webRoot": "${workspaceFolder}/ReactTemplate.Client"
+      "webRoot": "${workspaceFolder}/ReactWeaver.Client"
     }
   ],
   "compounds": [

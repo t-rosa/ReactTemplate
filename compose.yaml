@@ -1,24 +1,24 @@
 services:
-  # react-template.preview:
-  #   image: react-template-server:latest
+  # react-weaver.preview:
+  #   image: react-weaver-server:latest
   #   restart: always
   #   ports:
   #     - 127.0.0.1:3000:8080
   #   environment:
-  #     - CONNECTION_STRING=Host=react-template.db;Port=5432;Database=react-template;Username=postgres;Password=postgres
-  #     - OTEL_EXPORTER_OTLP_ENDPOINT=http://react-template.aspire-dashboard:18889
+  #     - CONNECTION_STRING=Host=react-weaver.db;Port=5432;Database=react-weaver;Username=postgres;Password=postgres
+  #     - OTEL_EXPORTER_OTLP_ENDPOINT=http://react-weaver.aspire-dashboard:18889
   #     - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
   #   depends_on:
-  #     - react-template.db
+  #     - react-weaver.db
   #   volumes:
-  #     - ./ReactTemplate.Server/keys/storage:/app/keys/storage
+  #     - ./ReactWeaver.Server/keys/storage:/app/keys/storage
 
-  react-template.db:
-    image: postgres
+  react-weaver.db:
+    image: postgres:18.1
     restart: always
     user: postgres
     volumes:
-      - react-template.db-data:/var/lib/postgresql/data
+      - react-weaver.db-data:/var/lib/postgresql
     environment:
       - POSTGRES_PASSWORD=postgres
     ports:
@@ -31,7 +31,7 @@ services:
       timeout: 5s
       retries: 5
 
-  react-template.aspire-dashboard:
+  react-weaver.aspire-dashboard:
     image: mcr.microsoft.com/dotnet/aspire-dashboard:9.3
     environment:
       DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: true
@@ -39,4 +39,4 @@ services:
       - 18888:18888
 
 volumes:
-  react-template.db-data:
+  react-weaver.db-data:

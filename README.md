@@ -1,4 +1,4 @@
-# React Template
+# React Weaver
 
 Full-stack starter that ships a production-ready ASP.NET Core API with a modern React front-end, wired together with Identity, EF Core, and a PostgreSQL dev database.
 
@@ -16,7 +16,7 @@ dotnet new install .
 dotnet new full-stack-react -o MyProject
 ```
 
-Every occurrence of `ReactTemplate`/`react-template` is replaced automatically. `MyProject` becomes `my-project`, so the generated README and configuration already point to the correct projects and secrets. Remove this section once you copy the template into a new repository.
+Every occurrence of `ReactWeaver`/`react-weaver` is replaced automatically. `MyProject` becomes `my-project`, so the generated README and configuration already point to the correct projects and secrets. Remove this section once you copy the template into a new repository.
 
 ## Prerequisites
 
@@ -49,31 +49,31 @@ docker compose up -d
 3. Configure required secrets
 
 ```bash
-dotnet user-secrets init --project ReactTemplate.Server
+dotnet user-secrets init --project ReactWeaver.Server
 ```
 
 ```bash
-dotnet user-secrets set "SMTP_USERNAME" "value" --project ReactTemplate.Server
+dotnet user-secrets set "SMTP_USERNAME" "value" --project ReactWeaver.Server
 ```
 
 ```bash
-dotnet user-secrets set "SMTP_PASSWORD" "value" --project ReactTemplate.Server
+dotnet user-secrets set "SMTP_PASSWORD" "value" --project ReactWeaver.Server
 ```
 
 ```bash
-dotnet user-secrets set "ADMIN_EMAIL" "value" --project ReactTemplate.Server
+dotnet user-secrets set "ADMIN_EMAIL" "value" --project ReactWeaver.Server
 ```
 
 ```bash
-dotnet user-secrets set "ADMIN_PASSWORD" "value" --project ReactTemplate.Server
+dotnet user-secrets set "ADMIN_PASSWORD" "value" --project ReactWeaver.Server
 ```
 
 ```bash
-dotnet user-secrets set "CONNECTION_STRING" "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=react-template;" --project ReactTemplate.Server
+dotnet user-secrets set "CONNECTION_STRING" "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=react-weaver;" --project ReactWeaver.Server
 ```
 
 ```bash
-dotnet user-secrets set "OTEL_EXPORTER_OTLP_ENDPOINT" "http://react-template.aspire-dashboard:18889"
+dotnet user-secrets set "OTEL_EXPORTER_OTLP_ENDPOINT" "http://react-weaver.aspire-dashboard:18889"
 ```
 
 ```bash
@@ -83,27 +83,27 @@ dotnet user-secrets set "OTEL_EXPORTER_OTLP_PROTOCOL" "grpc"
 4. Build the app
 
 ```bash
-dotnet publish ReactTemplate.Server -o ReactTemplate.Server/bin/Production
+dotnet publish ReactWeaver.Server -o ReactWeaver.Server/bin/Production
 ```
 
 5. Launch the app
 
 ```bash
-dotnet run --project ReactTemplate.Server
+dotnet run --project ReactWeaver.Server
 ```
 
 - Execute automated tests:
 
-Run the server end-to-end commands from the root, `ReactTemplate` directory.
+Run the server end-to-end commands from the root, `ReactWeaver` directory.
 
 ```bash
-dotnet test ReactTemplate.Tests
+dotnet test ReactWeaver.Tests
 ```
 
-Run the client and end-to-end commands from the `ReactTemplate.Client` directory.
+Run the client and end-to-end commands from the `ReactWeaver.Client` directory.
 
 ```bash
-cd ReactTemplate.Client
+cd ReactWeaver.Client
 npm run test
 npx playwright test
 ```
@@ -120,7 +120,7 @@ npx playwright test
       "name": "Server",
       "type": "dotnet",
       "request": "launch",
-      "projectPath": "${workspaceFolder}/ReactTemplate.Server/ReactTemplate.Server.csproj"
+      "projectPath": "${workspaceFolder}/ReactWeaver.Server/ReactWeaver.Server.csproj"
     },
     {
       "name": "Client",
@@ -129,14 +129,14 @@ npx playwright test
       "skipFiles": ["<node_internals>/**"],
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceFolder}/ReactTemplate.Client"
+      "cwd": "${workspaceFolder}/ReactWeaver.Client"
     },
     {
       "name": "Browser",
       "request": "launch",
       "type": "msedge",
       "url": "https://localhost:7000",
-      "webRoot": "${workspaceFolder}/ReactTemplate.Client"
+      "webRoot": "${workspaceFolder}/ReactWeaver.Client"
     }
   ],
   "compounds": [
@@ -159,7 +159,7 @@ npx playwright test
 1. Publish the container image
 
 ```bash
-rm -rf ReactTemplate.Server/bin/Production/ && dotnet publish ReactTemplate.Server -t:PublishContainer -p ContainerArchiveOutputPath=../server.tar.gz -o ReactTemplate.Server/bin/Production
+rm -rf ReactWeaver.Server/bin/Production/ && dotnet publish ReactWeaver.Server -t:PublishContainer -p ContainerArchiveOutputPath=../server.tar.gz -o ReactWeaver.Server/bin/Production
 ```
 
 2. Load the Docker image
@@ -187,15 +187,15 @@ docker compose up -d
 ## Deployment
 
 ```bash
-rm -rf ReactTemplate.Server/bin/Publish && dotnet publish ReactTemplate.Server -t:PublishContainer -p ContainerArchiveOutputPath=../react-template.tar.gz -o ReactTemplate.Server/bin/Publish
+rm -rf ReactWeaver.Server/bin/Publish && dotnet publish ReactWeaver.Server -t:PublishContainer -p ContainerArchiveOutputPath=../react-weaver.tar.gz -o ReactWeaver.Server/bin/Publish
 ```
 
 ## Migrations
 
-From ReactTemplate.Server
+From ReactWeaver.Server
 
 ```bash
-dotnet ef migrations add MigrationName --project ReactTemplate.Server
+dotnet ef migrations add MigrationName --project ReactWeaver.Server
 ```
 
 ## Technologies

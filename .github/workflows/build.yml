@@ -22,13 +22,13 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore
-        run: dotnet restore ReactTemplate.slnx
+        run: dotnet restore ReactWeaver.slnx
 
       - name: Build
-        run: dotnet build ReactTemplate.slnx --configuration Release --no-restore
+        run: dotnet build ReactWeaver.slnx --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test ReactTemplate.slnx --configuration Release --no-restore --no-build
+        run: dotnet test ReactWeaver.slnx --configuration Release --no-restore --no-build
 
       - name: Publish
-        run: dotnet publish ReactTemplate.slnx --configuration Release --no-restore --no-build
+        run: dotnet publish ReactWeaver.slnx --configuration Release --no-restore --no-build

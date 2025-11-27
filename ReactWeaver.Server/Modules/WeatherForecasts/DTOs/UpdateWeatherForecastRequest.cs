@@ -1,0 +1,19 @@
+using FluentValidation;
+
+namespace ReactWeaver.Server.Modules.WeatherForecasts.DTOs;
+
+public sealed record UpdateWeatherForecastRequest
+{
+    public required DateOnly Date { get; init; }
+    public required int TemperatureC { get; init; }
+    public string? Summary { get; init; }
+}
+
+public class UpdateWeatherForecastRequestValidator : AbstractValidator<UpdateWeatherForecastRequest>
+{
+    public UpdateWeatherForecastRequestValidator()
+    {
+        RuleFor(e => e.Date).NotEmpty().WithMessage("Date is required.");
+        RuleFor(e => e.TemperatureC).NotEmpty().WithMessage("Temperature is required.");
+    }
+}
