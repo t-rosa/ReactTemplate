@@ -12,8 +12,8 @@ public sealed class EmailSender(IOptions<SmtpOptions> options, IConfiguration co
 
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
-        var username = configuration["SMTP_USERNAME"];
-        var password = configuration["SMTP_PASSWORD"];
+        string? username = configuration["SMTP_USERNAME"];
+        string? password = configuration["SMTP_PASSWORD"];
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
@@ -35,8 +35,8 @@ public sealed class EmailSender(IOptions<SmtpOptions> options, IConfiguration co
 
     public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
     {
-        var subject = "Welcome! Confirm your account";
-        var body = $@"
+        string subject = "Welcome! Confirm your account";
+        string body = $@"
             <h1>Hello {user.UserName},</h1>
             <p>Thank you for signing up. Click the link below to activate your account:</p>
             <p><a href='{confirmationLink}'>Confirm my account</a></p>";
@@ -46,8 +46,8 @@ public sealed class EmailSender(IOptions<SmtpOptions> options, IConfiguration co
 
     public async Task SendPasswordResetLinkAsync(User _, string email, string resetLink)
     {
-        var subject = "Password Reset";
-        var body = $@"
+        string subject = "Password Reset";
+        string body = $@"
             <p>To reset your password, click here:</p>
             <p><a href='{resetLink}'>Reset Password</a></p>";
 
@@ -56,8 +56,8 @@ public sealed class EmailSender(IOptions<SmtpOptions> options, IConfiguration co
 
     public async Task SendPasswordResetCodeAsync(User _, string email, string resetCode)
     {
-        var subject = "Password Reset Code";
-        var body = $"Your reset code is: {resetCode}";
+        string subject = "Password Reset Code";
+        string body = $"Your reset code is: {resetCode}";
 
         await SendEmailAsync(email, subject, body);
     }

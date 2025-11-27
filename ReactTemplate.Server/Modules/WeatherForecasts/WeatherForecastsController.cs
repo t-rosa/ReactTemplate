@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReactTemplate.Server.Database;
-using ReactTemplate.Server.Modules.Auth;
 using ReactTemplate.Server.Modules.Users;
 using ReactTemplate.Server.Modules.WeatherForecasts.DTOs;
 
 namespace ReactTemplate.Server.Modules.WeatherForecasts;
 
-[Authorize(Roles = $"{Roles.Member}, {Roles.Admin}")]
+[Authorize()]
 [ApiController]
 [Route("api/weather-forecasts")]
 public sealed class WeatherForecastsController(ApplicationDbContext db, UserManager<User> userManager) : ControllerBase
@@ -20,13 +19,13 @@ public sealed class WeatherForecastsController(ApplicationDbContext db, UserMana
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetWeatherForecasts()
     {
-        var user = await userManager.GetUserAsync(HttpContext.User);
+        User? user = await userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
             return Unauthorized();
         }
 
-        var response = db.WeatherForecasts
+        IQueryable<WeatherForecastResponse> response = db.WeatherForecasts
             .AsNoTracking()
             .Where(e => e.UserId == user.Id)
             .Select(WeatherForecastQueries.ProjectToResponse());
@@ -40,13 +39,13 @@ public sealed class WeatherForecastsController(ApplicationDbContext db, UserMana
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetWeatherForecast([FromRoute] string id)
     {
-        var user = await userManager.GetUserAsync(HttpContext.User);
+        User? user = await userManager.GetUserAsync(HttpContext.User);
         if (user is null)
         {
             return Unauthorized();
         }
 
-        var query = db.WeatherForecasts
+        IQueryable<WeatherForecastResponse> query = db.WeatherForecasts
             .Where(e => e.UserId == user.Id)
             .Where(e => e.Id == id)
             .Select((forecast) => new WeatherForecastResponse
@@ -57,7 +56,7 @@ public sealed class WeatherForecastsController(ApplicationDbContext db, UserMana
                 Summary = forecast.Summary
             });
 
-        var response = await query.SingleOrDefaultAsync();
+        WeatherForecastResponse? response = await query.SingleOrDefaultAsync();
         if (response is null)
         {
             return NotFound();
@@ -76,7 +75,7 @@ public sealed class WeatherForecastsController(ApplicationDbContext db, UserMana
     {
         await validator.ValidateAndThrowAsync(request);
 
-        var user = await userManager.GetUserAsync(User);
+        User? user = await userManager.GetUserAsync(User);
         if (user == null)
         {
             return NotFound();
@@ -104,13 +103,13 @@ public sealed class WeatherForecastsController(ApplicationDbContext db, UserMana
     {
         await validator.ValidateAndThrowAsync(request);
 
-        var user = await userManager.GetUserAsync(User);
+        User? user = await userManager.GetUserAsync(User);
         if (user == null)
         {
             return NotFound();
         }
 
-        var forecast = await db.WeatherForecasts
+        WeatherForecast? forecast = await db.WeatherForecasts
             .Where(e => e.UserId == user.Id)
             .Where(e => e.Id == id)
             .SingleOrDefaultAsync();
@@ -133,13 +132,13 @@ public sealed class WeatherForecastsController(ApplicationDbContext db, UserMana
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RemoveWeatherForecast([FromRoute] string id)
     {
-        var user = await userManager.GetUserAsync(User);
+        User? user = await userManager.GetUserAsync(User);
         if (user == null)
         {
             return NotFound();
         }
 
-        var forecast = await db.WeatherForecasts
+        WeatherForecast? forecast = await db.WeatherForecasts
             .Where(e => e.UserId == user.Id)
             .Where(e => e.Id == id)
             .SingleOrDefaultAsync();
@@ -160,7 +159,7 @@ public sealed class WeatherForecastsController(ApplicationDbContext db, UserMana
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> RemoveWeatherForecasts([FromBody] List<string> ids)
     {
-        var courses = await db.WeatherForecasts
+        List<WeatherForecast> courses = await db.WeatherForecasts
             .Where(c => ids.Contains(c.Id))
             .ToListAsync();
 

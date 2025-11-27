@@ -34,7 +34,7 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
         await userManager.SetUserNameAsync(user, registration.Email);
         await userManager.SetEmailAsync(user, registration.Email);
 
-        var result = await userManager.CreateAsync(user, registration.Password);
+        IdentityResult result = await userManager.CreateAsync(user, registration.Password);
         if (!result.Succeeded)
         {
             return ValidationProblem();
@@ -63,13 +63,13 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Login([FromBody] LoginRequest login, [FromQuery] bool? useCookies, [FromQuery] bool? useSessionCookies)
     {
-        var useCookieScheme = useCookies == true || useSessionCookies == true;
-        var isPersistent = useCookies == true && useSessionCookies != true;
+        bool useCookieScheme = useCookies == true || useSessionCookies == true;
+        bool isPersistent = useCookies == true && useSessionCookies != true;
         signInManager.AuthenticationScheme = useCookieScheme
             ? IdentityConstants.ApplicationScheme
             : IdentityConstants.BearerScheme;
 
-        var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent, lockoutOnFailure: true);
+        Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent, lockoutOnFailure: true);
 
         if (result.RequiresTwoFactor)
         {
@@ -104,7 +104,7 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
     [ProducesResponseType(StatusCodes.Status302Found)]
     public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string code, [FromQuery] string? changedEmail)
     {
-        var user = await userManager.FindByIdAsync(userId);
+        User? user = await userManager.FindByIdAsync(userId);
         if (user == null)
         {
             return Unauthorized();
@@ -141,7 +141,7 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequest resendRequest)
     {
-        var user = await userManager.FindByEmailAsync(resendRequest.Email);
+        User? user = await userManager.FindByEmailAsync(resendRequest.Email);
         if (user == null)
         {
             return Ok();
@@ -156,10 +156,10 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest resetRequest)
     {
-        var user = await userManager.FindByEmailAsync(resetRequest.Email);
+        User? user = await userManager.FindByEmailAsync(resetRequest.Email);
         if (user != null && await userManager.IsEmailConfirmedAsync(user))
         {
-            var code = await userManager.GeneratePasswordResetTokenAsync(user);
+            string code = await userManager.GeneratePasswordResetTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             await emailSender.SendPasswordResetCodeAsync(user, resetRequest.Email, HtmlEncoder.Default.Encode(code));
         }
@@ -171,7 +171,7 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest resetRequest)
     {
-        var user = await userManager.FindByEmailAsync(resetRequest.Email);
+        User? user = await userManager.FindByEmailAsync(resetRequest.Email);
         if (user == null || !await userManager.IsEmailConfirmedAsync(user))
         {
             return ValidationProblem();
@@ -180,7 +180,7 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
         IdentityResult result;
         try
         {
-            var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(resetRequest.ResetCode));
+            string code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(resetRequest.ResetCode));
             result = await userManager.ResetPasswordAsync(user, code, resetRequest.NewPassword);
         }
         catch (FormatException)
@@ -200,7 +200,7 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
     [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateInfo([FromBody] UpdateUserRequest infoRequest)
     {
-        var user = await userManager.GetUserAsync(User);
+        User? user = await userManager.GetUserAsync(User);
         if (user == null)
         {
             return NotFound();
@@ -218,7 +218,7 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
                 return ValidationProblem();
             }
 
-            var pwdResult = await userManager.ChangePasswordAsync(user, infoRequest.OldPassword, infoRequest.NewPassword);
+            IdentityResult pwdResult = await userManager.ChangePasswordAsync(user, infoRequest.OldPassword, infoRequest.NewPassword);
             if (!pwdResult.Succeeded)
             {
                 return ValidationProblem();
@@ -227,7 +227,7 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
 
         if (!string.IsNullOrEmpty(infoRequest.NewEmail))
         {
-            var current = await userManager.GetEmailAsync(user);
+            string? current = await userManager.GetEmailAsync(user);
             if (current != infoRequest.NewEmail)
             {
                 await SendConfirmationEmailAsync(user, infoRequest.NewEmail, isChange: true);
@@ -247,14 +247,14 @@ public class AuthController(UserManager<User> userManager, SignInManager<User> s
 
     private async Task SendConfirmationEmailAsync(User user, string email, bool isChange = false)
     {
-        var code = isChange
+        string code = isChange
             ? await userManager.GenerateChangeEmailTokenAsync(user, email)
             : await userManager.GenerateEmailConfirmationTokenAsync(user);
 
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        var userId = await userManager.GetUserIdAsync(user);
+        string userId = await userManager.GetUserIdAsync(user);
 
-        var url = Url.Action(nameof(ConfirmEmail), "Auth", new { userId, code, changedEmail = isChange ? email : null }, Request.Scheme);
+        string? url = Url.Action(nameof(ConfirmEmail), "Auth", new { userId, code, changedEmail = isChange ? email : null }, Request.Scheme);
         if (string.IsNullOrEmpty(url))
         {
             throw new InvalidOperationException("Failed to generate confirmation email URL.");

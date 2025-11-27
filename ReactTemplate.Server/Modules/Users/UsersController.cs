@@ -14,7 +14,7 @@ public class UsersController(UserManager<User> userManager) : ControllerBase
     [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCurrentUser()
     {
-        var user = await userManager.GetUserAsync(User);
+        User? user = await userManager.GetUserAsync(User);
         if (user == null)
         {
             return NotFound();

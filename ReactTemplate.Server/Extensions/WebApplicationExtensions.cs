@@ -67,7 +67,7 @@ public static class WebApplicationExtensions
                         EmailConfirmed = true,
                     };
 
-                    var result = await userManager.CreateAsync(admin, adminPassword);
+                    IdentityResult result = await userManager.CreateAsync(admin, adminPassword);
                     if (result.Succeeded)
                     {
                         await userManager.AddToRoleAsync(admin, Roles.Admin);

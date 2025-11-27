@@ -7,7 +7,7 @@ public interface IProgram
 {
     private static async Task Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
         builder
             .AddControllers()
@@ -18,7 +18,7 @@ public interface IProgram
             .AddEmailServices()
             .AddApplicationServices();
 
-        var app = builder.Build();
+        WebApplication app = builder.Build();
 
         if (app.Environment.IsDevelopment())
         {
